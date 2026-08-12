@@ -1,5 +1,7 @@
 .venv/
 mp3/
+cookies.txt
+downloaded.txt
 __pycache__/
 *.pyc
 .DS_Store

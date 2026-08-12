@@ -2,7 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "YouTube Likes MP3",
+      "name": "YouTube Likes MP3 (une fois)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/youtube_likes_mp3.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "args": ["--once"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "YouTube Likes MP3 (boucle)",
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/youtube_likes_mp3.py",
