@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "YouTube Likes MP3",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/youtube_likes_mp3.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}
