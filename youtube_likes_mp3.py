@@ -19,6 +19,22 @@ LIKED_PLAYLIST = "https://www.youtube.com/playlist?list=LL"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
+def find_ffmpeg_dir() -> str | None:
+    """Trouve le dossier contenant ffmpeg.exe (PATH ou install winget)."""
+    from shutil import which
+
+    found = which("ffmpeg")
+    if found:
+        return str(Path(found).parent)
+
+    winget_root = Path.home() / "AppData/Local/Microsoft/WinGet/Packages"
+    if winget_root.is_dir():
+        matches = sorted(winget_root.glob("Gyan.FFmpeg*/ffmpeg-*/bin/ffmpeg.exe"))
+        if matches:
+            return str(matches[-1].parent)
+    return None
+
+
 def ydl_options() -> dict:
     if not COOKIES_FILE.is_file():
         raise FileNotFoundError(
@@ -29,13 +45,21 @@ def ydl_options() -> dict:
             "3) Place le fichier ici sous le nom cookies.txt"
         )
 
-    return {
+    ffmpeg_dir = find_ffmpeg_dir()
+    if not ffmpeg_dir:
+        raise FileNotFoundError(
+            "ffmpeg introuvable. Installe-le (ex: winget install Gyan.FFmpeg) "
+            "puis relance Cursor pour rafraichir le PATH."
+        )
+
+    opts = {
         "cookiefile": str(COOKIES_FILE),
         "paths": {"home": str(OUTPUT_DIR)},
         "outtmpl": {"default": "%(title)s.%(ext)s"},
         "format": "bestaudio/best",
         # YouTube exige un runtime JS pour resoudre les challenges (sinon seuls des images)
         "js_runtimes": {"node": {}},
+        "ffmpeg_location": ffmpeg_dir,
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -51,13 +75,16 @@ def ydl_options() -> dict:
         "quiet": False,
         "no_warnings": False,
     }
+    return opts
 
 
 def download_liked_videos() -> None:
+    opts = ydl_options()
     print("\nVerification de tes videos J'aime...")
     print(f"Cookies : {COOKIES_FILE.resolve()}")
+    print(f"FFmpeg  : {opts['ffmpeg_location']}")
 
-    with yt_dlp.YoutubeDL(ydl_options()) as ydl:
+    with yt_dlp.YoutubeDL(opts) as ydl:
         ydl.download([LIKED_PLAYLIST])
 
 
