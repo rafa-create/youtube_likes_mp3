@@ -196,6 +196,8 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
     th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); }
     th { color: var(--muted); font-weight: 500; font-size: 0.78rem; }
+    a.yt { color: var(--accent); text-decoration: none; }
+    a.yt:hover { text-decoration: underline; }
     @media (max-width: 700px) {
       .table-wrap { overflow: visible; }
       .table-wrap thead { display: none; }
@@ -381,7 +383,7 @@
   <div class="wrap" id="app">
     <p class="sub">Chargement…</p>
   </div>
-  <script src="./i18n.js?v=4"></script>
+  <script src="./i18n.js?v=5"></script>
   <script>
     const accent = "#5b9fd4";
     const muted = "#8b9aab";
@@ -495,6 +497,9 @@
         <thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead>
         <tbody>${rows.map((r) => `<tr>${r.map((c, i) => `<td data-col="${col(i)}">${c}</td>`).join("")}</tr>`).join("")}</tbody>
       </table></div>`;
+    }
+    function yt(label, videoId) {
+      return `<a class="yt" href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">${label}</a>`;
     }
     const BRIEFS = {};
     const LIST_CACHE = {};
@@ -680,11 +685,11 @@
             <h2 class="sec">${t("Hors likes — paris")} <span class="badge">${t("estimé")}</span></h2>
             <p class="hint">${t("Probabilité musicale, pas une certitude. Déjà dans les likes (exclus) : SYML, AURORA, Sleeping At Last, London Grammar, M83.")}</p>
             ${tbl(["#", t("Artiste"), t("Test"), t("Pourquoi")], [
-              ["1", "Ólafur Arnalds · 95%", "Near Light", t("Pont Einaudi / ambient / ciné + électro discrète")],
-              ["2", "RY X · 94%", "—", t("Voix intime, aérien, presque cinématographique")],
-              ["3", "Ben Howard · 92%", "Old Pine", t("Folk atmosphérique — pont acoustique (aussi Bram)")],
-              ["4", "Novo Amor · 91%", "—", t("Voix fragile + réverb + paysage")],
-              ["5", "Max Richter · 82%", "—", t("Récit sans paroles, côté Zimmer / Einaudi")],
+              ["1", "Ólafur Arnalds · 95%", yt("Near Light", "sxWE57RrsTw"), t("Pont Einaudi / ambient / ciné + électro discrète")],
+              ["2", "RY X · 94%", yt("Only", "bbokXheXhxY"), t("Voix intime, aérien, presque cinématographique")],
+              ["3", "Ben Howard · 92%", yt("Old Pine", "x8ccDb6n5Wg"), t("Folk atmosphérique — pont acoustique (aussi Bram)")],
+              ["4", "Novo Amor · 91%", yt("Anchor", "OmKAn8rNbKg"), t("Voix fragile + réverb + paysage")],
+              ["5", "Max Richter · 82%", yt("On The Nature of Daylight", "InyT9Gyoz_o"), t("Récit sans paroles, côté Zimmer / Einaudi")],
             ])}
           </div>
 
@@ -798,11 +803,11 @@
             <h2 class="sec">${t("Hors playlist — paris")} <span class="badge">${t("estimé")}</span></h2>
             <p class="hint">${t("Pari #1 réel (absent) : Ben Howard. Harper / Bridges = approfondir, pas découvrir.")}</p>
             ${tbl(["#", t("Artiste"), t("Test"), t("Pourquoi")], [
-              ["1", "Ben Howard · 93%", "Old Pine", t("Folk / nature — croise González, Rudd, Johnson (aussi Rafael)")],
-              ["2", "Angus & Julia Stone · 92%", "Big Jet Plane", t("Été AU, douceur, mélancolie (Julia Stone déjà en collab)")],
-              ["3", "John Butler Trio · 91%", "Better Than", t("Guitare, voyage, groove organique")],
-              ["4", "Amos Lee · 90%", "—", t("Soul + folk, dimanche → coucher de soleil")],
-              ["5", "Durand Jones & The Indications · 86%", "—", t("Soul / funk chaleureux, pas seulement triste")],
+              ["1", "Ben Howard · 93%", yt("Old Pine", "x8ccDb6n5Wg"), t("Folk / nature — croise González, Rudd, Johnson (aussi Rafael)")],
+              ["2", "Angus & Julia Stone · 92%", yt("Big Jet Plane", "yFTvbcNhEgc"), t("Été AU, douceur, mélancolie (Julia Stone déjà en collab)")],
+              ["3", "John Butler Trio · 91%", yt("Better Than", "79cG_F1GxfI"), t("Guitare, voyage, groove organique")],
+              ["4", "Amos Lee · 90%", yt("Windows Are Rolled Down", "F4xY__FoDzY"), t("Soul + folk, dimanche → coucher de soleil")],
+              ["5", "Durand Jones & The Indications · 86%", yt("Witchoo", "d7vTtnevlO4"), t("Soul / funk chaleureux, pas seulement triste")],
             ])}
           </div>
 
@@ -889,7 +894,7 @@
             </div>
             <div class="card">
               <h3>${t("Pont hors listes")}</h3>
-              <p>${t("<strong>Ben Howard</strong> est le seul pari fort des deux côtés : atmosphère (Rafael) × nature / guitare (Bram). Test commun : <em>Old Pine</em>.")}</p>
+              <p>${t("<strong>Ben Howard</strong> est le seul pari fort des deux côtés : atmosphère (Rafael) × nature / guitare (Bram). Test commun :")} ${yt("Old Pine", "x8ccDb6n5Wg")}.</p>
             </div>
           </div>
 
