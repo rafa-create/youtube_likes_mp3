@@ -593,9 +593,10 @@
               </div>
             </div>
             <h2 class="sec">Harmonie détectée (617/703 filtrées) <span class="badge ok">mesuré</span></h2>
+            <p class="hint">À gauche : les suites telles quelles (Cm–G#–D#–A#, etc.). À droite : la même chose <strong>indépendamment de la tonalité</strong> — I = accord « maison » de la chanson, vi = relatif mineur, IV et V = les deux autres piliers pop. Ça sert à voir que Rafael n’a pas 6 recettes : c’est <strong>une seule boucle</strong> (vi–IV–I–V), commencée à des endroits différents. Couplet vs refrain = changer le point d’entrée, pas la grille.</p>
             <div class="grid-2">
-              <div class="card"><h3>Suites absolues</h3>${rankHtml(loops.map((x) => ({ name: x.name, n: x.count })))}</div>
-              <div class="card"><h3>Degrés romains</h3>${rankHtml(romans.map((x) => ({ name: x.name, n: x.count })))}<p class="hint">Top 4 = rotations du même cycle pop</p></div>
+              <div class="card"><h3>Suites en notes</h3>${rankHtml(loops.map((x) => ({ name: x.name, n: x.count })))}</div>
+              <div class="card"><h3>Même boucle, autre départ</h3>${rankHtml(romans.map((x) => ({ name: x.name, n: x.count })))}<p class="hint">vi–IV–I–V, IV–I–V–vi… = rotations du même cycle. Les chiffres romains (I, IV, V, vi) sont juste des numéros de marche dans la tonalité.</p></div>
             </div>
             <div class="card"><h3>Langues</h3>${rankHtml(langs.map((x) => ({ name: x.name, n: x.count })))}</div>
             <div class="card"><h3>Exemples piste → suite</h3>
@@ -626,20 +627,20 @@
           <div class="subpanel active" id="rafael-creation">
             <div class="callout">
               <h2>Brief studio Rafael — priorité #1</h2>
-              <p>Écris une chanson qui <strong>absorbe</strong> : intimité → espace → montée. EN, <strong>Cm–G#–D#–A#</strong> (vi–IV–I–V), <strong>116–120 BPM</strong>, voix vulnérable + pad (ou piano sparse). Électro mélodique, pas club. La prod doit <strong>ouvrir un espace</strong>, pas seulement remplir.</p>
+              <p>Écris une chanson qui <strong>absorbe</strong> : intimité → espace → montée. EN, <strong>Cm–G#–D#–A#</strong>, <strong>116–120 BPM</strong>, voix vulnérable + pad. Électro mélodique, pas club. G#–D#–A#–Cm = les <strong>mêmes 4 accords</strong>, commencés ailleurs (refrain vs couplet). La prod doit <strong>ouvrir un espace</strong>.</p>
             </div>
             <h2 class="sec">4 lanes de création</h2>
             <div class="grid-3">
-              <div class="card lane"><h3>#1 Pop mineure brillante</h3><strong>Cm – G# – D# – A#</strong><p class="hint">~118 BPM · EN · D# · voix vulnérable + pad. Hook sur D#/A# · couplet plus sombre sur Cm. Lyric : distance / nuit / désir contenu.</p>${copyBtn("r1", "Rafael #1 — Pop mineure brillante\nCm–G#–D#–A# (vi–IV–I–V)\n~118 BPM · EN · D#\nVoix vulnérable + pad. Hook sur D#/A#, couplet plus sombre sur Cm.\nLyric : distance / nuit / désir contenu.")}</div>
+              <div class="card lane"><h3>#1 Pop mineure brillante</h3><strong>Cm – G# – D# – A#</strong><p class="hint">~118 BPM · EN · D# · voix vulnérable + pad. Hook sur D#/A# · couplet plus sombre sur Cm. Lyric : distance / nuit / désir contenu.</p>${copyBtn("r1", "Rafael #1 — Pop mineure brillante\nCm–G#–D#–A#\n~118 BPM · EN · D#\nMêmes 4 accords que G#–D#–A#–Cm : couplet vs refrain = autre départ.\nVoix vulnérable + pad. Hook sur D#/A#, couplet plus sombre sur Cm.\nLyric : distance / nuit / désir contenu.")}</div>
               <div class="card lane"><h3>#2 Piano / paysage</h3><strong>Fm – C# – G# – D#</strong><p class="hint">~90–110 BPM · instrumental d’abord (Einaudi / Ólafur Arnalds / Tony Ann / Zimmer). Piano minimal → légèrement dramatique. Voix optionnelle, très sparse.</p>${copyBtn("r2", "Rafael #2 — Piano / paysage\nFm–C#–G#–D#\n~90–110 BPM · instrumental d’abord\nPiano minimaliste → mélodique → un peu dramatique (Einaudi / Ólafur / Tony Ann / Zimmer).\nVoix optionnelle, sparse.")}</div>
               <div class="card lane"><h3>#3 Électro mélodique</h3><strong>C#m – A – E – B</strong><p class="hint">~121 BPM · EN. Walker / Lost Freq. : filter, nostalgie, pas de drop club. Lyric : escape / neon / running — toujours de l’espace.</p>${copyBtn("r3", "Rafael #3 — Électro mélodique\nC#m–A–E–B\n~121 BPM · EN\nFilter, nostalgie, pas de drop club (Walker / Lost Frequencies).\nLyric : escape / neon / running — garder de l’espace.")}</div>
               <div class="card lane"><h3>#4 Pop / folk D</h3><strong>G – D – A – Bm</strong><p class="hint">~112 BPM · EN · D major. Refrain anthem, couplet Bm. Lyric : route / promesse / light after rain.</p>${copyBtn("r4", "Rafael #4 — Pop / folk D\nG–D–A–Bm\n~112 BPM · EN · D major\nRefrain anthem, couplet Bm.\nLyric : route / promesse / light after rain.")}</div>
             </div>
             <div class="card"><h3>Recettes suite × tempo × langue</h3>
-              ${tbl(["Suite", "Degrés", "BPM", "Langue", "Vu"], recipes.map((r) => [
+              ${tbl(["Suite", "Cycle", "BPM", "Langue", "Vu"], recipes.map((r) => [
                 `<strong>${esc(r.chords)}</strong>`, esc(r.degrees || "—"), esc(r.bpm_median ?? "—"), esc(r.language || "—"), esc(r.count) + "×",
               ]))}
-              <p class="hint">${esc(chords.coverage_note || "")}</p>
+              <p class="hint">Colonne Cycle = degrés (I = maison, vi = mineur relatif). Plusieurs lignes = la même boucle, autre note de départ. ${esc(chords.coverage_note || "")}</p>
             </div>
             <h2 class="sec">Checklist DAW (45–90 min)</h2>
             ${tbl(["Étape", "Action concrète", "Critère OK"], [
@@ -885,7 +886,7 @@
               ["Tempo", "~118 (100–140)", "~90 (80–100)", "100–108 BPM"],
               ["Langue", "EN + poche FR", "NL (écoute aussi EN/DE)", "EN ensemble · NL Bram · FR Rafael"],
               ["Timbre", "piano / synth · ouvre l’espace", "guitare · donne du corps", "guitare + pad"],
-              ["Harmonie", "vi–IV–I–V (D#/E)", "I–IV–V–vi / campfire", "C–G–Am–F · Am–F–C–G"],
+              ["Harmonie", "4 accords, plusieurs départs (D#/E)", "campfire I–IV–V", "C–G–Am–F · Am–F–C–G"],
               ["Mood", "nuit / étoiles / introspection", "soleil / mer / route / présent", "mélancolie chaude"],
               ["Densité", "plus produite", "organique / room", "dry verse → wet chorus"],
               ["Risque", "trop EDM", "trop plat / demo", "garder les 2 tests"],
@@ -893,8 +894,8 @@
             <div class="grid-2">
               <div class="card"><h3>Tempo — zone de rencontre</h3><div class="chart-box"><canvas id="duoBpm"></canvas></div><p class="hint">Rafael mesuré · Bram estimé · pont 100–108</p></div>
               <div class="card"><h3>Grilles communes</h3>
-                <p><strong>C – G – Am – F</strong><br><span class="hint">Bram campfire · Rafael I–V–vi–IV</span></p>
-                <p><strong>Am – F – C – G</strong><br><span class="hint">Rafael vi–IV–I–V · Bram ballade mineure</span></p>
+                <p><strong>C – G – Am – F</strong><br><span class="hint">Bram campfire · Rafael, même 4 accords en C</span></p>
+                <p><strong>Am – F – C – G</strong><br><span class="hint">Même boucle, départ mineur · Bram ballade</span></p>
                 <p><strong>G – Em – C – D</strong><br><span class="hint">Bram island · Rafael arpèges synth</span></p>
               </div>
             </div>
