@@ -115,12 +115,28 @@ def analyze_audio(path: str | Path, duration: float = 60.0) -> dict | None:
         else:
             tempo = float(tempo)
         key, mode, conf = estimate_key(y, sr)
+
+        rms = float(np.mean(librosa.feature.rms(y=y)[0]))
+        centroid = float(np.mean(librosa.feature.spectral_centroid(y=y, sr=sr)[0]))
+        # Normalize-ish features to 0..1 for mood axes
+        energy = float(np.clip((rms - 0.02) / 0.18, 0, 1))
+        brightness = float(np.clip((centroid - 800) / 3200, 0, 1))
+        tempo_n = float(np.clip((tempo - 60) / 100, 0, 1))
+        mode_n = 1.0 if mode == "major" else 0.25
+        # valence ~ major + brightness + mid tempo; energy ~ loudness + tempo
+        valence = float(np.clip(0.45 * mode_n + 0.30 * brightness + 0.25 * tempo_n, 0, 1))
+        energy_score = float(np.clip(0.55 * energy + 0.45 * tempo_n, 0, 1))
+
         return {
             "file": path.name,
             "bpm": round(tempo, 1),
             "key": key,
             "mode": mode,
             "key_confidence": round(conf, 3),
+            "energy": round(energy_score, 3),
+            "valence": round(valence, 3),
+            "rms": round(rms, 4),
+            "brightness": round(brightness, 3),
         }
     except Exception as exc:
         return {"file": path.name, "error": str(exc)}
@@ -143,6 +159,106 @@ def bpm_bucket(bpm: float) -> str:
     if bpm < 150:
         return "130–150 (dance / uptempo)"
     return "150+ (rapide / EDM)"
+
+
+def mood_label(energy: float, valence: float) -> str:
+    if energy >= 0.6 and valence >= 0.55:
+        return "uplift / dance"
+    if energy >= 0.6 and valence < 0.55:
+        return "électro-mélancolie"
+    if energy < 0.45 and valence < 0.5:
+        return "intime / sombre"
+    if energy < 0.45 and valence >= 0.5:
+        return "doux / lumineux"
+    return "équilibré / mid"
+
+
+def build_mood_and_clusters(audio_rows: list[dict], k: int = 4) -> tuple[dict, list[dict]]:
+    """Simple mood aggregates + numpy k-means on [bpm_n, energy, valence]."""
+    if not audio_rows:
+        return {}, []
+
+    energies = [r["energy"] for r in audio_rows if "energy" in r]
+    valences = [r["valence"] for r in audio_rows if "valence" in r]
+    mood_counts = Counter(
+        mood_label(r.get("energy", 0.5), r.get("valence", 0.5)) for r in audio_rows
+    )
+
+    mood = {
+        "energy_mean": round(float(np.mean(energies)), 3) if energies else None,
+        "energy_median": round(float(np.median(energies)), 3) if energies else None,
+        "valence_mean": round(float(np.mean(valences)), 3) if valences else None,
+        "valence_median": round(float(np.median(valences)), 3) if valences else None,
+        "quadrants": [{"name": n, "count": c} for n, c in mood_counts.most_common()],
+        "method": "heuristique BPM + mode + RMS + spectral centroid",
+    }
+
+    # Features for clustering
+    X = []
+    for r in audio_rows:
+        bpm_n = float(np.clip((r.get("bpm", 120) - 60) / 100, 0, 1))
+        X.append([bpm_n, r.get("energy", 0.5), r.get("valence", 0.5)])
+    X = np.asarray(X, dtype=float)
+    k = min(k, len(X))
+    if k < 2:
+        return mood, []
+
+    rng = np.random.default_rng(42)
+    centroids = X[rng.choice(len(X), size=k, replace=False)]
+    labels = np.zeros(len(X), dtype=int)
+    for _ in range(25):
+        dists = ((X[:, None, :] - centroids[None, :, :]) ** 2).sum(axis=2)
+        labels = dists.argmin(axis=1)
+        new_centroids = np.array(
+            [
+                X[labels == i].mean(axis=0) if np.any(labels == i) else centroids[i]
+                for i in range(k)
+            ]
+        )
+        if np.allclose(new_centroids, centroids):
+            break
+        centroids = new_centroids
+
+    CLUSTER_NAMES = {
+        "électro-mélancolie": "Électro mélancolique",
+        "uplift / dance": "Uplift / dance",
+        "intime / sombre": "Intime / sombre",
+        "doux / lumineux": "Doux / lumineux",
+        "équilibré / mid": "Équilibré midtempo",
+    }
+
+    clusters = []
+    for i in range(k):
+        members = [audio_rows[j] for j in range(len(audio_rows)) if labels[j] == i]
+        if not members:
+            continue
+        e = float(np.mean([m["energy"] for m in members]))
+        v = float(np.mean([m["valence"] for m in members]))
+        bpm = float(np.mean([m["bpm"] for m in members]))
+        minor_share = sum(1 for m in members if m.get("mode") == "minor") / len(members)
+        label = mood_label(e, v)
+        # representative tracks: closest to centroid
+        idxs = [j for j in range(len(audio_rows)) if labels[j] == i]
+        sub = X[idxs]
+        c = centroids[i]
+        order = np.argsort(((sub - c) ** 2).sum(axis=1))
+        examples = [members[int(o)]["file"] for o in order[:4]]
+        clusters.append(
+            {
+                "id": i,
+                "name": CLUSTER_NAMES.get(label, label),
+                "count": len(members),
+                "share_pct": round(100 * len(members) / len(audio_rows), 1),
+                "bpm_mean": round(bpm, 1),
+                "energy_mean": round(e, 3),
+                "valence_mean": round(v, 3),
+                "minor_pct": round(100 * minor_share, 1),
+                "examples": examples,
+            }
+        )
+
+    clusters.sort(key=lambda c: c["count"], reverse=True)
+    return mood, clusters
 
 
 def main() -> None:
@@ -254,6 +370,20 @@ def main() -> None:
     ]
     preferred = instruments_payload[0] if instruments_payload else None
 
+    mood, clusters = build_mood_and_clusters(audio_rows, k=4)
+
+    # Sort sample tracks by "representativeness" = distance to global mean mood
+    if audio_rows and "energy" in audio_rows[0]:
+        ge = float(np.mean([r["energy"] for r in audio_rows]))
+        gv = float(np.mean([r["valence"] for r in audio_rows]))
+        scored = sorted(
+            audio_rows,
+            key=lambda r: (r.get("energy", 0.5) - ge) ** 2 + (r.get("valence", 0.5) - gv) ** 2,
+        )
+        sample_tracks = scored[:12]
+    else:
+        sample_tracks = audio_rows[:12]
+
     profile = {
         "playlist_count": len(titles),
         "mp3_count": len(files),
@@ -269,6 +399,8 @@ def main() -> None:
             "share_tagged_pct": preferred["share_tagged_pct"] if preferred else 0,
             "method": "heuristique titres/artistes (pas classification audio timbre)",
         },
+        "mood": mood,
+        "clusters": clusters,
         "modes": [{"name": n, "count": c} for n, c in mode_counts.most_common()],
         "keys": [{"name": n, "count": c} for n, c in top_keys],
         "bpm_buckets": [{"name": n, "count": c} for n, c in bpm_counts.most_common()],
@@ -278,7 +410,7 @@ def main() -> None:
             "p25": round(float(np.percentile(bpms, 25)), 1) if bpms else None,
             "p75": round(float(np.percentile(bpms, 75)), 1) if bpms else None,
         },
-        "sample_tracks": audio_rows[:25],
+        "sample_tracks": sample_tracks,
         "insights": [],
     }
 
@@ -287,6 +419,18 @@ def main() -> None:
         f"Couverture audio : {len(audio_rows)}/{len(files)} MP3 "
         f"({round(100 * len(audio_rows) / max(1, len(files)), 1)}%)."
     )
+    if mood.get("quadrants"):
+        top_q = mood["quadrants"][0]
+        insights.append(
+            f"Mood dominant : {top_q['name']} ({top_q['count']} pistes) · "
+            f"énergie moy. {mood.get('energy_mean')} · valence moy. {mood.get('valence_mean')}."
+        )
+    if clusters:
+        insights.append(
+            "Clusters de goût : "
+            + ", ".join(f"{c['name']} ({c['share_pct']}%)" for c in clusters[:4])
+            + "."
+        )
     if preferred:
         line = (
             f"Instrument préféré probable : {preferred['name']} "

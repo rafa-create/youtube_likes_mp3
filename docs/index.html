@@ -181,14 +181,6 @@
       const genres = (p.genre_signals || []).filter((g) => g.name !== "autre / non classé").slice(0, 7);
       const instruments = (p.instruments || []).slice(0, 7);
       const bpmBuckets = p.bpm_buckets || [];
-      const bpmOrder = ["<70", "70–90", "90–110", "110–130", "130–150", "150+"];
-      const bpmMap = Object.fromEntries(
-        bpmBuckets.map((b) => {
-          const short = (b.name || "").split(" ")[0];
-          return [short, b.count];
-        })
-      );
-      // normalize bucket labels
       const bpmLabels = [];
       const bpmData = [];
       for (const b of bpmBuckets) {
@@ -197,44 +189,82 @@
         bpmData.push(b.count);
       }
       const pref = p.preferred_instrument || {};
+      const mood = p.mood || {};
+      const quadrants = mood.quadrants || [];
+      const clusters = p.clusters || [];
       const insights = p.insights || [];
       const samples = (p.sample_tracks || []).slice(0, 8);
       const minor = modes.find((m) => m.name === "minor")?.count || 0;
       const major = modes.find((m) => m.name === "major")?.count || 0;
       const minorPct = minor + major ? Math.round((100 * minor) / (minor + major)) : 0;
+      const topMood = quadrants[0]?.name || "—";
 
       document.getElementById("app").innerHTML = `
         <h1>Profil musical — likes YouTube</h1>
         <p class="sub">
           ${esc(p.playlist_count)} likes / ${esc(p.mp3_count)} MP3 ·
-          librosa sur ${esc(p.audio_sample_size)} pistes ·
-          page dynamique (lit <code>music_profile.json</code> sur main)
+          audio ${esc(p.audio_sample_size)} pistes (${esc(p.audio_coverage_pct)}%) ·
+          page dynamique (<code>music_profile.json</code>)
         </p>
 
         <div class="stats">
-          <div class="stat"><strong>${esc(p.playlist_count)}</strong><span>Vidéos aimées</span></div>
-          <div class="stat"><strong>${esc(p.mp3_count)}</strong><span>MP3 locaux</span></div>
           <div class="stat"><strong>${esc(p.bpm_stats?.median ?? "—")}</strong><span>BPM médian</span></div>
-          <div class="stat"><strong>${esc(pref.name || "—")}</strong><span>Instrument préféré probable</span></div>
+          <div class="stat"><strong>${esc(pref.name || "—")}</strong><span>Instrument préféré</span></div>
+          <div class="stat"><strong>${esc(topMood)}</strong><span>Mood dominant</span></div>
+          <div class="stat"><strong>${esc(mood.energy_mean ?? "—")}</strong><span>Énergie moy. (0–1)</span></div>
         </div>
 
         <div class="callout">
           <h2>Verdict rapide</h2>
           <ul>
-            ${insights.slice(0, 5).map((i) => `<li>${esc(i)}</li>`).join("")}
+            ${insights.slice(0, 6).map((i) => `<li>${esc(i)}</li>`).join("")}
           </ul>
         </div>
 
         <div class="grid-2">
           <div class="card">
-            <h3>Mode (échantillon audio)</h3>
+            <h3>Mood (quadrants)</h3>
+            <div class="chart-box"><canvas id="moodChart"></canvas></div>
+            <p class="hint">Valence moy. ${esc(mood.valence_mean)} · ${esc(mood.method || "")}</p>
+          </div>
+          <div class="card">
+            <h3>Clusters de goût</h3>
+            <div class="chart-box"><canvas id="clusterChart"></canvas></div>
+            <p class="hint">k-means sur BPM / énergie / valence</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Détail des clusters</h3>
+          <table>
+            <thead>
+              <tr><th>Cluster</th><th>Part</th><th>BPM</th><th>Énergie</th><th>Valence</th><th>% mineur</th><th>Exemples</th></tr>
+            </thead>
+            <tbody>
+              ${clusters.map((c) => `
+                <tr>
+                  <td>${esc(c.name)}</td>
+                  <td>${esc(c.share_pct)}% (${esc(c.count)})</td>
+                  <td>${esc(c.bpm_mean)}</td>
+                  <td>${esc(c.energy_mean)}</td>
+                  <td>${esc(c.valence_mean)}</td>
+                  <td>${esc(c.minor_pct)}%</td>
+                  <td>${esc((c.examples || []).slice(0, 2).map((f) => f.replace(/\\.mp3$/i, "")).join(" · "))}</td>
+                </tr>`).join("")}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Mode</h3>
             <div class="chart-box"><canvas id="modeChart"></canvas></div>
             <p class="hint">${minor} mineur / ${major} majeur · ${minorPct}% mineur</p>
           </div>
           <div class="card">
             <h3>Instrument préféré probable</h3>
             <div class="chart-box"><canvas id="instChart"></canvas></div>
-            <p class="hint">Heuristique titres/artistes · ${esc(p.instruments_untagged || 0)} titres non taggés</p>
+            <p class="hint">Heuristique titres · ${esc(p.instruments_untagged || 0)} non taggés</p>
           </div>
         </div>
 
@@ -263,20 +293,22 @@
         </div>
 
         <div class="warn">
-          Instrument = détection par mots-clés des titres (pas un classifieur audio de timbre).
+          Mood / clusters = heuristiques audio (pas Spotify). Instruments = mots-clés titres.
           Accords exacts : Chordify / Mixed In Key / Cyanite.
         </div>
 
         <div class="card">
-          <h3>Exemples du sample audio</h3>
+          <h3>Titres représentatifs du profil</h3>
           <table>
-            <thead><tr><th>Piste</th><th>Tonalité</th><th>BPM</th></tr></thead>
+            <thead><tr><th>Piste</th><th>Tonalité</th><th>BPM</th><th>Énergie</th><th>Valence</th></tr></thead>
             <tbody>
               ${samples.map((t) => `
                 <tr>
                   <td>${esc((t.file || "").replace(/\\.mp3$/i, ""))}</td>
                   <td>${esc(t.key)} ${esc(t.mode)}</td>
                   <td>${esc(t.bpm)}</td>
+                  <td>${esc(t.energy ?? "—")}</td>
+                  <td>${esc(t.valence ?? "—")}</td>
                 </tr>`).join("")}
             </tbody>
           </table>
@@ -298,6 +330,12 @@
         options: { plugins: { legend: { position: "bottom" } }, cutout: "58%" },
       });
 
+      if (quadrants.length) {
+        bar("moodChart", quadrants.map((q) => q.name), quadrants.map((q) => q.count), true);
+      }
+      if (clusters.length) {
+        bar("clusterChart", clusters.map((c) => c.name), clusters.map((c) => c.count), true);
+      }
       bar("instChart", instruments.map((i) => i.name), instruments.map((i) => i.count), true);
       bar("bpmChart", bpmLabels, bpmData, false);
       bar("keyChart", keys.map((k) => k.name), keys.map((k) => k.count), true);

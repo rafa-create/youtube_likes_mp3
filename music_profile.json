@@ -151,266 +151,320 @@
     "share_tagged_pct": 37.6,
     "method": "heuristique titres/artistes (pas classification audio timbre)"
   },
+  "mood": {
+    "energy_mean": 0.535,
+    "energy_median": 0.525,
+    "valence_mean": 0.47,
+    "valence_median": 0.421,
+    "quadrants": [
+      {
+        "name": "équilibré / mid",
+        "count": 183
+      },
+      {
+        "name": "intime / sombre",
+        "count": 165
+      },
+      {
+        "name": "électro-mélancolie",
+        "count": 159
+      },
+      {
+        "name": "uplift / dance",
+        "count": 122
+      },
+      {
+        "name": "doux / lumineux",
+        "count": 97
+      }
+    ],
+    "method": "heuristique BPM + mode + RMS + spectral centroid"
+  },
+  "clusters": [
+    {
+      "id": 1,
+      "name": "Équilibré midtempo",
+      "count": 234,
+      "share_pct": 32.2,
+      "bpm_mean": 109.4,
+      "energy_mean": 0.453,
+      "valence_mean": 0.408,
+      "minor_pct": 71.8,
+      "examples": [
+        "Louane - JOUR 1 (vidéo officielle).mp3",
+        "[Ghost] Riders in the Sky.mp3",
+        "Sia - I'm Still Here ( Music Video ).mp3",
+        "VITAA - Je te le donne - En duo avec Slimane (Clip Officiel).mp3"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Uplift / dance",
+      "count": 177,
+      "share_pct": 24.4,
+      "bpm_mean": 136.6,
+      "energy_mean": 0.671,
+      "valence_mean": 0.716,
+      "minor_pct": 0.0,
+      "examples": [
+        "Lost.mp3",
+        "Камин - EMIN & JONY ( Slowed Reverb - Deep Version ).mp3",
+        "Violent - CarolesDaughter - vocal ⧸ acoustic guitar cover.mp3",
+        "Tate McRae - you broke me first (Official Video).mp3"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Électro mélancolique",
+      "count": 173,
+      "share_pct": 23.8,
+      "bpm_mean": 142.4,
+      "energy_mean": 0.717,
+      "valence_mean": 0.396,
+      "minor_pct": 100.0,
+      "examples": [
+        "Sixteen Tons - Southern Raised (low bass singer cover).mp3",
+        "Columbine - C'est pas Grave (Clip Officiel).mp3",
+        "DRALMS - Shook [Official Audio].mp3",
+        "patrice - soulstorm.mp3"
+      ]
+    },
+    {
+      "id": 0,
+      "name": "Intime / sombre",
+      "count": 142,
+      "share_pct": 19.6,
+      "bpm_mean": 77.3,
+      "energy_mean": 0.282,
+      "valence_mean": 0.357,
+      "minor_pct": 57.7,
+      "examples": [
+        "B.o.B - Ghost In The Machine (Musikal Tube) ｜ Lyrics.mp3",
+        "Ghost in the Machine.mp3",
+        "Nightcore - Princesses Don't Cry (Lyrics).mp3",
+        "Médine - Allons Zenfants (Clip Officiel).mp3"
+      ]
+    }
+  ],
   "modes": [
     {
       "name": "minor",
-      "count": 392
+      "count": 423
     },
     {
       "name": "major",
-      "count": 334
+      "count": 303
     }
   ],
   "keys": [
     {
-      "name": "C major",
-      "count": 50
-    },
-    {
       "name": "A minor",
-      "count": 50
-    },
-    {
-      "name": "D major",
-      "count": 41
+      "count": 57
     },
     {
       "name": "G minor",
-      "count": 41
+      "count": 47
     },
     {
-      "name": "F# minor",
-      "count": 38
+      "name": "C major",
+      "count": 43
     },
     {
-      "name": "E minor",
+      "name": "C# minor",
+      "count": 40
+    },
+    {
+      "name": "B minor",
       "count": 38
     },
     {
       "name": "D minor",
-      "count": 35
+      "count": 37
     },
     {
-      "name": "C# minor",
-      "count": 33
+      "name": "F# minor",
+      "count": 37
+    },
+    {
+      "name": "D major",
+      "count": 37
     }
   ],
   "bpm_buckets": [
     {
       "name": "110–130 (pop / groove)",
-      "count": 273
+      "count": 272
     },
     {
       "name": "90–110 (midtempo)",
-      "count": 131
-    },
-    {
-      "name": "150+ (rapide / EDM)",
-      "count": 110
+      "count": 125
     },
     {
       "name": "70–90 (lent / ballade)",
       "count": 110
     },
     {
+      "name": "150+ (rapide / EDM)",
+      "count": 107
+    },
+    {
       "name": "130–150 (dance / uptempo)",
-      "count": 79
+      "count": 78
     },
     {
       "name": "<70 (très lent)",
-      "count": 23
+      "count": 34
     }
   ],
   "bpm_stats": {
-    "mean": 118.1,
+    "mean": 117.6,
     "median": 117.5,
-    "p25": 99.4,
+    "p25": 95.7,
     "p75": 136.0
   },
   "sample_tracks": [
     {
-      "file": "'Reminiscence' by Travis A. King (Epic Fantasy Piano Music).mp3",
+      "file": "London Grammar - Lord It's A Feeling Orchestral (Amazon Original).mp3",
       "bpm": 161.5,
-      "key": "C",
+      "key": "E",
       "mode": "minor",
-      "key_confidence": 0.842
-    },
-    {
-      "file": "10 Pieces by Ludovico Einaudi ⧹⧹ Relaxing Piano [1 HOUR].mp3",
-      "bpm": 92.3,
-      "key": "C#",
-      "mode": "minor",
-      "key_confidence": 0.707
-    },
-    {
-      "file": "'Remembrance' by Travis A. King (Violin & Harp Instrumental Music).mp3",
-      "bpm": 161.5,
-      "key": "D",
-      "mode": "major",
-      "key_confidence": 0.778
-    },
-    {
-      "file": "1 HOUR ORIGINAL RELAXING PIANO ⧹⧹ Jacob's Piano.mp3",
-      "bpm": 152.0,
-      "key": "B",
-      "mode": "minor",
-      "key_confidence": 0.806
-    },
-    {
-      "file": "2Frères - Nous Autres Clip ｜ Officiel.mp3",
-      "bpm": 99.4,
-      "key": "F",
-      "mode": "major",
-      "key_confidence": 0.906
-    },
-    {
-      "file": "#833 Pomme - Umbrella (Reprise acoustique de Rihanna).mp3",
-      "bpm": 99.4,
-      "key": "C",
-      "mode": "major",
-      "key_confidence": 0.792
-    },
-    {
-      "file": "417Hz ｜ CLEANSE NEGATIVE ENERGY with Tibetan Singing Bowls Music ｜ 9 Hours.mp3",
-      "bpm": 117.5,
-      "key": "C#",
-      "mode": "major",
-      "key_confidence": 0.816
-    },
-    {
-      "file": "6ix9ine - Bori feat. Lenier (Official Music Video).mp3",
-      "bpm": 80.7,
-      "key": "C",
-      "mode": "minor",
-      "key_confidence": 0.809
-    },
-    {
-      "file": "[1 Hour] Kygo - Piano Jam 1.mp3",
-      "bpm": 83.4,
-      "key": "A",
-      "mode": "minor",
-      "key_confidence": 0.926
-    },
-    {
-      "file": "[Ghost] Riders in the Sky.mp3",
-      "bpm": 107.7,
-      "key": "A#",
-      "mode": "minor",
-      "key_confidence": 0.746
+      "key_confidence": 0.899,
+      "energy": 0.556,
+      "valence": 0.454,
+      "rms": 0.0545,
+      "brightness": 0.306
     },
     {
       "file": "[KPOP IN PUBLIC ｜ ONE TAKE] KAI (카이) - ‘Rover’ + ‘Bomba’ ｜ 5 MAIN DANCERS ｜ Dance Cover by NyuV.mp3",
       "bpm": 172.3,
-      "key": "A#",
-      "mode": "major",
-      "key_confidence": 0.39
-    },
-    {
-      "file": "a cover of “Atlantis” on a slow morning at the cottage.mp3",
-      "bpm": 136.0,
-      "key": "D",
-      "mode": "major",
-      "key_confidence": 0.51
-    },
-    {
-      "file": "A playlist for quiet hearts...mp3",
-      "bpm": 198.8,
-      "key": "B",
+      "key": "E",
       "mode": "minor",
-      "key_confidence": 0.853
+      "key_confidence": 0.422,
+      "energy": 0.57,
+      "valence": 0.455,
+      "rms": 0.0592,
+      "brightness": 0.308
     },
     {
-      "file": "A deer turned my harp session into a Disney movie.mp3",
-      "bpm": 107.7,
-      "key": "A",
+      "file": "B.o.B - Don't Let Me Fall (Official Video).mp3",
+      "bpm": 152.0,
+      "key": "C#",
       "mode": "minor",
-      "key_confidence": 0.724
+      "key_confidence": 0.83,
+      "energy": 0.574,
+      "valence": 0.477,
+      "rms": 0.0723,
+      "brightness": 0.448
     },
     {
-      "file": "Adele - Rolling in the Deep ⧸ Jupiter Suite (Piano & Cello Cover) - The Piano Guys.mp3",
-      "bpm": 107.7,
-      "key": "C",
-      "mode": "minor",
-      "key_confidence": 0.727
-    },
-    {
-      "file": "Adele - Relaxing Piano [sleep, study, relax, calm, chill, no mid-roll ads, instrumental, playlist].mp3",
-      "bpm": 129.2,
-      "key": "G#",
-      "mode": "major",
-      "key_confidence": 0.82
-    },
-    {
-      "file": "Adieu mon homme.mp3",
-      "bpm": 107.7,
-      "key": "F#",
-      "mode": "minor",
-      "key_confidence": 0.906
-    },
-    {
-      "file": "Adèle Castillon - À la folie (clip officiel).mp3",
-      "bpm": 99.4,
+      "file": "Mark Ronson - Nothing Breaks Like A Heart in the Live Lounge ft. Miley Cyrus.mp3",
+      "bpm": 152.0,
       "key": "G",
       "mode": "minor",
-      "key_confidence": 0.886
+      "key_confidence": 0.852,
+      "energy": 0.576,
+      "valence": 0.466,
+      "rms": 0.0731,
+      "brightness": 0.413
     },
     {
-      "file": "After movie des campagnes ENSEM 2021.mp3",
-      "bpm": 129.2,
+      "file": "Nightcore - My pain locked away (fabian secon) - Lyrics.mp3",
+      "bpm": 152.0,
+      "key": "F",
+      "mode": "minor",
+      "key_confidence": 0.889,
+      "energy": 0.569,
+      "valence": 0.446,
+      "rms": 0.0708,
+      "brightness": 0.345
+    },
+    {
+      "file": "The Police - Roxanne (Official Music Video).mp3",
+      "bpm": 136.0,
       "key": "G",
       "mode": "minor",
-      "key_confidence": 0.6
+      "key_confidence": 0.588,
+      "energy": 0.583,
+      "valence": 0.488,
+      "rms": 0.0989,
+      "brightness": 0.617
     },
     {
-      "file": "Ajeet Kaur - Peace [Official Music Video].mp3",
-      "bpm": 136.0,
+      "file": "MARO - saudade, saudade (Live in Avinyó).mp3",
+      "bpm": 161.5,
+      "key": "A#",
+      "mode": "minor",
+      "key_confidence": 0.893,
+      "energy": 0.509,
+      "valence": 0.424,
+      "rms": 0.0392,
+      "brightness": 0.205
+    },
+    {
+      "file": "Les saints et les saintes de Dieu.mp3",
+      "bpm": 184.6,
+      "key": "E",
+      "mode": "minor",
+      "key_confidence": 0.869,
+      "energy": 0.523,
+      "valence": 0.415,
+      "rms": 0.0439,
+      "brightness": 0.173
+    },
+    {
+      "file": "Meteor Airlines - The Antidote (Official Lyric Video).mp3",
+      "bpm": 129.2,
+      "key": "C#",
+      "mode": "minor",
+      "key_confidence": 0.762,
+      "energy": 0.527,
+      "valence": 0.414,
+      "rms": 0.0907,
+      "brightness": 0.427
+    },
+    {
+      "file": "Meno - We Follow (Official).mp3",
+      "bpm": 143.6,
       "key": "D",
       "mode": "minor",
-      "key_confidence": 0.784
+      "key_confidence": 0.784,
+      "energy": 0.597,
+      "valence": 0.469,
+      "rms": 0.0925,
+      "brightness": 0.491
     },
     {
-      "file": "Akon - Right Now (Na Na Na) (Official Video).mp3",
-      "bpm": 117.5,
-      "key": "G#",
-      "mode": "major",
-      "key_confidence": 0.433
-    },
-    {
-      "file": "Alan Walker & Sasha Alex Sloan - Hero (Official Music Video).mp3",
-      "bpm": 129.2,
+      "file": "Prank interview with Elijah Wood.mp3",
+      "bpm": 161.5,
       "key": "C",
-      "mode": "major",
-      "key_confidence": 0.699
+      "mode": "minor",
+      "key_confidence": 0.387,
+      "energy": 0.472,
+      "valence": 0.475,
+      "rms": 0.0273,
+      "brightness": 0.375
     },
     {
-      "file": "Alan Walker (upscaled to 4K), Sabrina Carpenter singing ＂On My Way＂, GMA with subtitles.mp3",
-      "bpm": 112.3,
+      "file": "Marina Kaye - Heavenbound (Clip officiel).mp3",
+      "bpm": 161.5,
       "key": "D",
-      "mode": "major",
-      "key_confidence": 0.873
-    },
-    {
-      "file": "Alan Walker - Alone (Lyrics).mp3",
-      "bpm": 95.7,
-      "key": "A#",
-      "mode": "major",
-      "key_confidence": 0.81
-    },
-    {
-      "file": "Alan Walker - Alone.mp3",
-      "bpm": 95.7,
-      "key": "A#",
-      "mode": "major",
-      "key_confidence": 0.827
+      "mode": "minor",
+      "key_confidence": 0.782,
+      "energy": 0.6,
+      "valence": 0.438,
+      "rms": 0.069,
+      "brightness": 0.251
     }
   ],
   "insights": [
     "Couverture audio : 726/726 MP3 (100.0%).",
+    "Mood dominant : équilibré / mid (183 pistes) · énergie moy. 0.535 · valence moy. 0.47.",
+    "Clusters de goût : Équilibré midtempo (32.2%), Uplift / dance (24.4%), Électro mélancolique (23.8%), Intime / sombre (19.6%).",
     "Instrument préféré probable : voix / chant (~37.6% des titres taggés). Secondaire fort : synth / prod. electro.",
-    "Équilibre majeur/mineur : tu mixes lumière et tension.",
+    "Dominance mineure (~58%) : couleurs mélancoliques / introspectives plus que joyeuses.",
     "Tempo médian ~118 BPM : zone pop / groove confortable.",
-    "Tonalités fréquentes : C major (50), A minor (50), D major (41), G minor (41), F# minor (38).",
-    "Centres tonals récurrents : D, C, A, G (utile pour improviser dans ces familles d'accords).",
+    "Tonalités fréquentes : A minor (57), G minor (47), C major (43), C# minor (40), B minor (38).",
+    "Centres tonals récurrents : D, A, G, C (utile pour improviser dans ces familles d'accords).",
     "Styles détectés dans les titres : autre / non classé, electronic / EDM, piano / neo-classical, pop, french chanson / pop FR.",
     "Pour les progressions d'accords exactes (I–V–vi–IV, ii–V–I…), un outil dédié type Chordify / Mixed In Key / Cyanite est plus précis que l'estimation chroma seule."
   ]
