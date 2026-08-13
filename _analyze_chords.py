@@ -99,16 +99,18 @@ def smooth_labels(labels: list[int], min_run: int = 4) -> list[int]:
     return out
 
 
-def extract_progressions(romans: list[str], n: int = 4) -> list[str]:
-    # collapse consecutive duplicates
-    seq = []
-    for r in romans:
-        if not seq or seq[-1] != r:
-            seq.append(r)
-    grams = []
-    for i in range(len(seq) - n + 1):
-        grams.append("-".join(seq[i : i + n]))
-    return grams
+def pretty_chord(chord: str) -> str:
+    """C:maj -> C, A:min -> Am"""
+    name, qual = chord.split(":")
+    return name if qual == "maj" else f"{name}m"
+
+
+def extract_progressions(seq: list[str], n: int = 4) -> list[str]:
+    collapsed = []
+    for r in seq:
+        if not collapsed or collapsed[-1] != r:
+            collapsed.append(r)
+    return ["-".join(collapsed[i : i + n]) for i in range(len(collapsed) - n + 1)]
 
 
 def analyze_chords(path: str, duration: float = 90.0) -> dict:
@@ -121,35 +123,50 @@ def analyze_chords(path: str, duration: float = 90.0) -> dict:
             return {"file": p.name, "error": "too_short"}
 
         chroma = librosa.feature.chroma_cqt(y=y, sr=sr, hop_length=2048)
-        # cosine similarity vs templates
         norms = np.linalg.norm(chroma, axis=0, keepdims=True) + 1e-9
         cnorm = chroma / norms
-        scores = CHORD_TEMPLATES @ cnorm  # (24, T)
-        labels = scores.argmax(axis=0).tolist()
-        labels = smooth_labels(labels, min_run=3)
+        scores = CHORD_TEMPLATES @ cnorm
+        labels = smooth_labels(scores.argmax(axis=0).tolist(), min_run=3)
 
         chroma_avg = chroma.mean(axis=1)
         key_root, key_mode = estimate_key_from_chroma(chroma_avg)
         key_name = f"{NOTES[key_root]} {'major' if key_mode == 'maj' else 'minor'}"
 
         chord_seq = [CHORD_NAMES[i] for i in labels]
-        # downsample to ~1 label / 1.5s after smooth (hop 2048 @ 22050 ≈ 0.093s)
         step = max(1, int(1.2 / (2048 / sr)))
         chord_ds = [chord_seq[i] for i in range(0, len(chord_seq), step)]
+        absolutes = [pretty_chord(c) for c in chord_ds]
         romans = [to_roman(c, key_root, key_mode) for c in chord_ds]
-        grams = extract_progressions(romans, n=4)
 
-        # confidence: mean margin best vs 2nd
+        grams_roman = extract_progressions(romans, n=4)
+        grams_abs = extract_progressions(absolutes, n=4)
+
+        # most common loop in this track (absolute)
+        abs_top = Counter(grams_abs).most_common(3)
+        roman_top = Counter(grams_roman).most_common(3)
+        chord_hist = Counter(absolutes)
+
+        # representative loop: first occurrence of the top absolute gram, else first 8 unique-collapsed
+        collapsed_abs = []
+        for a in absolutes:
+            if not collapsed_abs or collapsed_abs[-1] != a:
+                collapsed_abs.append(a)
+        main_loop = abs_top[0][0] if abs_top else "-".join(collapsed_abs[:6])
+
         part = np.partition(scores, -2, axis=0)
         margin = float(np.mean(part[-1] - part[-2]))
 
         return {
             "file": p.name,
             "key": key_name,
-            "n_chords": len(set(romans)),
-            "progression_top": Counter(grams).most_common(3),
+            "n_chords": len(set(absolutes)),
+            "progression_top": roman_top,
+            "absolute_top": abs_top,
+            "chord_counts": chord_hist.most_common(8),
+            "main_loop": main_loop,
             "confidence": round(margin, 4),
-            "grams": grams,
+            "grams": grams_roman,
+            "grams_abs": grams_abs,
         }
     except Exception as exc:
         return {"file": p.name, "error": str(exc)}
@@ -184,29 +201,45 @@ def main() -> None:
             results.append(fut.result())
 
     ok = [r for r in results if "error" not in r and r.get("grams")]
-    # keep reasonably confident
     ok_conf = [r for r in ok if r.get("confidence", 0) >= 0.02] or ok
 
-    prog = Counter()
-    for r in ok_conf:
-        # weight by occurrences in track but cap
-        local = Counter(dict(r["progression_top"]))
-        for g, c in local.items():
-            prog[g] += min(c, 8)
-
-    # also global count of all grams
     prog_all = Counter()
+    abs_all = Counter()
+    chord_all = Counter()
     for r in ok_conf:
         prog_all.update(r["grams"])
+        abs_all.update(r.get("grams_abs") or [])
+        chord_all.update(dict(r.get("chord_counts") or []))
 
     top = [{"name": g, "count": c} for g, c in prog_all.most_common(12)]
+    top_abs = [{"name": g, "count": c} for g, c in abs_all.most_common(12)]
+    top_chords = [{"name": g, "count": c} for g, c in chord_all.most_common(12)]
+
     examples = []
     for g, _ in prog_all.most_common(5):
-        files = [r["file"] for r in ok_conf if g in r["grams"]][:3]
-        examples.append({"progression": g, "examples": files})
+        matches = [r for r in ok_conf if g in r["grams"]]
+        files = [r["file"] for r in matches][:3]
+        # most common absolute realization of this roman progression among matches
+        abs_real = Counter()
+        for r in matches:
+            for ag, _ac in r.get("absolute_top") or []:
+                # keep abs loops that appear in same track
+                abs_real[ag] += 1
+        realization = abs_real.most_common(1)[0][0] if abs_real else None
+        # better: for tracks containing roman g, pick their main_loop if related
+        loops = Counter(r.get("main_loop") for r in matches if r.get("main_loop"))
+        if loops:
+            realization = loops.most_common(1)[0][0]
+        examples.append(
+            {
+                "progression": g,
+                "chords": realization,
+                "examples": files,
+            }
+        )
 
     payload = {
-        "method": "librosa chroma triad templates + Roman numerals (pilot)",
+        "method": "librosa chroma triad templates → accords absolus + degrés romains (pilote)",
         "tracks_considered": len(tracks),
         "tracks_ok": len(ok_conf),
         "tracks_failed": len(results) - len(ok),
@@ -214,6 +247,8 @@ def main() -> None:
             f"Pilote sur {len(ok_conf)}/{len(tracks)} pistes filtrées "
             "(hors tutos/mix longs/highlights) — estimation bruitée."
         ),
+        "top_chords": top_chords,
+        "top_chord_loops": top_abs,
         "top_progressions": top,
         "examples": examples,
         "sample_track_results": [
@@ -221,9 +256,11 @@ def main() -> None:
                 "file": r["file"],
                 "key": r["key"],
                 "confidence": r["confidence"],
+                "chords": r.get("main_loop"),
+                "top_chords": [{"name": n, "count": c} for n, c in (r.get("chord_counts") or [])[:5]],
                 "top": [{"name": g, "count": c} for g, c in r["progression_top"]],
             }
-            for r in sorted(ok_conf, key=lambda x: -x["confidence"])[:15]
+            for r in sorted(ok_conf, key=lambda x: -x["confidence"])[:20]
         ],
     }
 
@@ -232,18 +269,33 @@ def main() -> None:
         profile = json.loads(PROFILE.read_text(encoding="utf-8"))
     profile["chord_progressions"] = payload
     insights = profile.get("insights") or []
-    insights = [i for i in insights if "progression" not in i.casefold() and "I–V–vi–IV" not in i and "accords" not in i.casefold()]
+    insights = [
+        i
+        for i in insights
+        if "progression" not in i.casefold()
+        and "I–V–vi–IV" not in i
+        and "accords" not in i.casefold()
+    ]
+    if top_abs:
+        insights.append(
+            "Boucles d'accords fréquentes (pilote) : "
+            + ", ".join(f"{t['name']} ({t['count']})" for t in top_abs[:4])
+            + f" · n={payload['tracks_ok']}."
+        )
     if top:
         insights.append(
-            "Progressions fréquentes (pilote accords) : "
-            + ", ".join(f"{t['name']} ({t['count']})" for t in top[:5])
-            + f" · n={payload['tracks_ok']}."
+            "Même chose en degrés : "
+            + ", ".join(f"{t['name']} ({t['count']})" for t in top[:4])
+            + "."
         )
     profile["insights"] = insights
     PROFILE.write_text(json.dumps(profile, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"OK tracks={len(ok_conf)} failed={payload['tracks_failed']}")
-    print("Top progressions:")
-    for t in top[:8]:
+    print("Top absolute loops:")
+    for t in top_abs[:8]:
+        print(f"  {t['name']}: {t['count']}")
+    print("Top chords:")
+    for t in top_chords[:8]:
         print(f"  {t['name']}: {t['count']}")
     print(f"Wrote {PROFILE}")
 

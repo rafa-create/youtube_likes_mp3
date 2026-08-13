@@ -195,14 +195,17 @@
       const clusters = p.clusters || [];
       const chords = p.chord_progressions || {};
       const progressions = (chords.top_progressions || []).slice(0, 8);
-      const chordExamples = (chords.examples || []).slice(0, 4);
+      const chordLoops = (chords.top_chord_loops || []).slice(0, 8);
+      const topChords = (chords.top_chords || []).slice(0, 10);
+      const chordExamples = (chords.examples || []).slice(0, 5);
+      const trackChordSamples = (chords.sample_track_results || []).slice(0, 10);
       const insights = p.insights || [];
       const samples = (p.sample_tracks || []).slice(0, 8);
       const minor = modes.find((m) => m.name === "minor")?.count || 0;
       const major = modes.find((m) => m.name === "major")?.count || 0;
       const minorPct = minor + major ? Math.round((100 * minor) / (minor + major)) : 0;
       const topMood = quadrants[0]?.name || "—";
-      const topProg = progressions[0]?.name || "—";
+      const topProg = chordLoops[0]?.name || progressions[0]?.name || "—";
 
       document.getElementById("app").innerHTML = `
         <h1>Profil musical — likes YouTube</h1>
@@ -216,7 +219,7 @@
           <div class="stat"><strong>${esc(p.bpm_stats?.median ?? "—")}</strong><span>BPM médian</span></div>
           <div class="stat"><strong>${esc(pref.name || "—")}</strong><span>Instrument préféré</span></div>
           <div class="stat"><strong>${esc(topMood)}</strong><span>Mood dominant</span></div>
-          <div class="stat"><strong>${esc(topProg)}</strong><span>Progression top (pilote)</span></div>
+          <div class="stat"><strong>${esc(topProg)}</strong><span>Boucle d'accords top</span></div>
         </div>
 
         <div class="callout">
@@ -260,27 +263,56 @@
           </table>
         </div>
 
-        ${progressions.length ? `
+        ${(chordLoops.length || progressions.length) ? `
         <div class="grid-2">
           <div class="card">
-            <h3>Progressions d'accords (pilote)</h3>
-            <div class="chart-box tall"><canvas id="chordChart"></canvas></div>
+            <h3>Suites d'accords (Am–F–C–G…)</h3>
+            <div class="chart-box tall"><canvas id="chordLoopChart"></canvas></div>
             <p class="hint">${esc(chords.coverage_note || "")}</p>
           </div>
           <div class="card">
-            <h3>Exemples par progression</h3>
+            <h3>Accords les plus joués</h3>
+            <div class="chart-box tall"><canvas id="chordFreqChart"></canvas></div>
+            <p class="hint">Fréquence brute des accords détectés</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Même chose en degrés (I–V–vi–IV)</h3>
+            <div class="chart-box tall"><canvas id="chordChart"></canvas></div>
+            <p class="hint">${esc(chords.method || "")}</p>
+          </div>
+          <div class="card">
+            <h3>Degré → accords concrets</h3>
             <table>
-              <thead><tr><th>Grille</th><th>Titres</th></tr></thead>
+              <thead><tr><th>Degrés</th><th>Accords</th><th>Exemples</th></tr></thead>
               <tbody>
                 ${chordExamples.map((e) => `
                   <tr>
                     <td><strong>${esc(e.progression)}</strong></td>
+                    <td>${esc(e.chords || "—")}</td>
                     <td>${esc((e.examples || []).slice(0, 2).map((f) => f.replace(/\\.mp3$/i, "")).join(" · "))}</td>
                   </tr>`).join("")}
               </tbody>
             </table>
-            <p class="hint">${esc(chords.method || "")} · ok ${esc(chords.tracks_ok)}/${esc(chords.tracks_considered)}</p>
+            <p class="hint">ok ${esc(chords.tracks_ok)}/${esc(chords.tracks_considered)}</p>
           </div>
+        </div>
+
+        <div class="card">
+          <h3>Exemples de suites par titre</h3>
+          <table>
+            <thead><tr><th>Titre</th><th>Tonalité</th><th>Suite d'accords</th></tr></thead>
+            <tbody>
+              ${trackChordSamples.map((t) => `
+                <tr>
+                  <td>${esc((t.file || "").replace(/\\.mp3$/i, ""))}</td>
+                  <td>${esc(t.key || "—")}</td>
+                  <td><strong>${esc(t.chords || "—")}</strong></td>
+                </tr>`).join("")}
+            </tbody>
+          </table>
         </div>` : ""}
 
         <div class="grid-2">
@@ -363,6 +395,12 @@
       }
       if (clusters.length) {
         bar("clusterChart", clusters.map((c) => c.name), clusters.map((c) => c.count), true);
+      }
+      if (chordLoops.length) {
+        bar("chordLoopChart", chordLoops.map((x) => x.name), chordLoops.map((x) => x.count), true);
+      }
+      if (topChords.length) {
+        bar("chordFreqChart", topChords.map((x) => x.name), topChords.map((x) => x.count), true);
       }
       if (progressions.length) {
         bar("chordChart", progressions.map((x) => x.name), progressions.map((x) => x.count), true);

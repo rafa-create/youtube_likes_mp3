@@ -465,14 +465,115 @@
     "Tempo médian ~118 BPM : zone pop / groove confortable.",
     "Tonalités fréquentes : A minor (57), G minor (47), C major (43), C# minor (40), B minor (38).",
     "Styles détectés dans les titres : autre / non classé, electronic / EDM, piano / neo-classical, pop, french chanson / pop FR.",
-    "Progressions fréquentes (pilote accords) : vi-IV-I-V (28), IV-I-V-vi (20), V-vi-IV-I (17), I-V-vi-IV (16), IV-I-vi-I (11) · n=66."
+    "Boucles d'accords fréquentes (pilote) : D#-A#-Cm-G# (10), Cm-G#-D#-A# (10), D-A-E-F#m (10), D-Am-C-Em (9) · n=66.",
+    "Même chose en degrés : vi-IV-I-V (28), IV-I-V-vi (20), V-vi-IV-I (17), I-V-vi-IV (16)."
   ],
   "chord_progressions": {
-    "method": "librosa chroma triad templates + Roman numerals (pilot)",
+    "method": "librosa chroma triad templates → accords absolus + degrés romains (pilote)",
     "tracks_considered": 100,
     "tracks_ok": 66,
     "tracks_failed": 0,
     "coverage_note": "Pilote sur 66/100 pistes filtrées (hors tutos/mix longs/highlights) — estimation bruitée.",
+    "top_chords": [
+      {
+        "name": "D#",
+        "count": 297
+      },
+      {
+        "name": "G",
+        "count": 286
+      },
+      {
+        "name": "D",
+        "count": 264
+      },
+      {
+        "name": "C",
+        "count": 246
+      },
+      {
+        "name": "Am",
+        "count": 235
+      },
+      {
+        "name": "F",
+        "count": 227
+      },
+      {
+        "name": "A#",
+        "count": 213
+      },
+      {
+        "name": "Cm",
+        "count": 205
+      },
+      {
+        "name": "Gm",
+        "count": 201
+      },
+      {
+        "name": "G#",
+        "count": 184
+      },
+      {
+        "name": "Em",
+        "count": 174
+      },
+      {
+        "name": "A",
+        "count": 173
+      }
+    ],
+    "top_chord_loops": [
+      {
+        "name": "D#-A#-Cm-G#",
+        "count": 10
+      },
+      {
+        "name": "Cm-G#-D#-A#",
+        "count": 10
+      },
+      {
+        "name": "D-A-E-F#m",
+        "count": 10
+      },
+      {
+        "name": "D-Am-C-Em",
+        "count": 9
+      },
+      {
+        "name": "A#-Cm-G#-D#",
+        "count": 8
+      },
+      {
+        "name": "B-C#m-B-C#m",
+        "count": 7
+      },
+      {
+        "name": "G#-D#-A#-Cm",
+        "count": 7
+      },
+      {
+        "name": "C-Em-D-Am",
+        "count": 7
+      },
+      {
+        "name": "Em-D-Am-C",
+        "count": 7
+      },
+      {
+        "name": "F#m-E-D-F#m",
+        "count": 7
+      },
+      {
+        "name": "D-F#m-E-D",
+        "count": 7
+      },
+      {
+        "name": "Cm-D#-A#-G#",
+        "count": 7
+      }
+    ],
     "top_progressions": [
       {
         "name": "vi-IV-I-V",
@@ -507,15 +608,15 @@
         "count": 9
       },
       {
-        "name": "IV-I-V-I",
-        "count": 8
-      },
-      {
         "name": "vi-I-vi-I",
         "count": 8
       },
       {
         "name": "V-I-vi-I",
+        "count": 8
+      },
+      {
+        "name": "IV-I-V-I",
         "count": 8
       },
       {
@@ -526,38 +627,43 @@
     "examples": [
       {
         "progression": "vi-IV-I-V",
+        "chords": "A#m-Am-C-Am",
         "examples": [
+          "#833 Pomme - Umbrella (Reprise acoustique de Rihanna).mp3",
           "Alan Walker - The Spectre.mp3",
-          "Alan x Walkers feat. SAPPHIRE - Unity.mp3",
-          "#833 Pomme - Umbrella (Reprise acoustique de Rihanna).mp3"
+          "Alan x Walkers feat. SAPPHIRE - Unity.mp3"
         ]
       },
       {
         "progression": "IV-I-V-vi",
+        "chords": "C#m-A-E-B",
         "examples": [
           "Alan Walker - The Spectre.mp3",
-          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3",
-          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3",
+          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3"
         ]
       },
       {
         "progression": "V-vi-IV-I",
+        "chords": "C#m-A-E-B",
         "examples": [
           "Alan Walker - The Spectre.mp3",
-          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3",
-          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3",
+          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3"
         ]
       },
       {
         "progression": "I-V-vi-IV",
+        "chords": "C#m-A-E-B",
         "examples": [
           "Alan Walker - The Spectre.mp3",
-          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3",
-          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3",
+          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3"
         ]
       },
       {
         "progression": "IV-I-vi-I",
+        "chords": "B-F#-D#m-F#",
         "examples": [
           "Asaf Avidan, The Mojos - One Day ⧸ Reckoning Song (Videoclip Day Version).mp3",
           "Comptine d'un autre été： l'Après-midi (from ＂Amélie＂).mp3",
@@ -570,6 +676,29 @@
         "file": "Kid Francescoli - ＂Moon (and it went like)＂ (Official Video).mp3",
         "key": "B minor",
         "confidence": 0.0723,
+        "chords": "G-Bm-D-G",
+        "top_chords": [
+          {
+            "name": "G",
+            "count": 33
+          },
+          {
+            "name": "Bm",
+            "count": 18
+          },
+          {
+            "name": "D",
+            "count": 15
+          },
+          {
+            "name": "C#m",
+            "count": 1
+          },
+          {
+            "name": "F#m",
+            "count": 1
+          }
+        ],
         "top": [
           {
             "name": "bVI-i-bIII-bVI",
@@ -589,6 +718,29 @@
         "file": "Billie Eilish - True Blue, rhianne.mp3",
         "key": "A minor",
         "confidence": 0.0651,
+        "chords": "D-Am-C-Em",
+        "top_chords": [
+          {
+            "name": "C",
+            "count": 17
+          },
+          {
+            "name": "D",
+            "count": 17
+          },
+          {
+            "name": "Am",
+            "count": 17
+          },
+          {
+            "name": "Em",
+            "count": 14
+          },
+          {
+            "name": "Cm",
+            "count": 1
+          }
+        ],
         "top": [
           {
             "name": "IV-i-bIII-v",
@@ -608,6 +760,29 @@
         "file": "Kodaline - Everything Works Out in the End ｜｜ Piano Cover (Sheet Music).mp3",
         "key": "C major",
         "confidence": 0.0578,
+        "chords": "Dm-G-C-F",
+        "top_chords": [
+          {
+            "name": "G",
+            "count": 18
+          },
+          {
+            "name": "C",
+            "count": 14
+          },
+          {
+            "name": "F",
+            "count": 14
+          },
+          {
+            "name": "Dm",
+            "count": 13
+          },
+          {
+            "name": "C#",
+            "count": 3
+          }
+        ],
         "top": [
           {
             "name": "ii-V-I-IV",
@@ -627,6 +802,29 @@
         "file": "Jain - “Maria” - C à vous - 06⧸12⧸2023.mp3",
         "key": "F minor",
         "confidence": 0.0536,
+        "chords": "Fm-C#-Fm-A#m",
+        "top_chords": [
+          {
+            "name": "C#",
+            "count": 22
+          },
+          {
+            "name": "Fm",
+            "count": 20
+          },
+          {
+            "name": "D#",
+            "count": 13
+          },
+          {
+            "name": "A#m",
+            "count": 9
+          },
+          {
+            "name": "C#m",
+            "count": 1
+          }
+        ],
         "top": [
           {
             "name": "iv-bVII-iv-bVII",
@@ -646,6 +844,29 @@
         "file": "Sia - Elastic Heart (Hambleton Remix).mp3",
         "key": "A major",
         "confidence": 0.0534,
+        "chords": "D-A-E-F#m",
+        "top_chords": [
+          {
+            "name": "D",
+            "count": 23
+          },
+          {
+            "name": "E",
+            "count": 16
+          },
+          {
+            "name": "F#m",
+            "count": 14
+          },
+          {
+            "name": "A",
+            "count": 12
+          },
+          {
+            "name": "Am",
+            "count": 2
+          }
+        ],
         "top": [
           {
             "name": "IV-I-V-vi",
@@ -665,6 +886,29 @@
         "file": "Comptine d'un autre été： l'Après-midi (from ＂Amélie＂).mp3",
         "key": "D major",
         "confidence": 0.053,
+        "chords": "Em-G-Bm-D",
+        "top_chords": [
+          {
+            "name": "D",
+            "count": 22
+          },
+          {
+            "name": "Em",
+            "count": 15
+          },
+          {
+            "name": "G",
+            "count": 15
+          },
+          {
+            "name": "Bm",
+            "count": 11
+          },
+          {
+            "name": "Fm",
+            "count": 2
+          }
+        ],
         "top": [
           {
             "name": "ii-IV-vi-I",
@@ -684,6 +928,29 @@
         "file": "Down - Jason Walker [Traduction Française].mp3",
         "key": "F# major",
         "confidence": 0.0512,
+        "chords": "D#m-B-D#m-F#",
+        "top_chords": [
+          {
+            "name": "D#m",
+            "count": 22
+          },
+          {
+            "name": "F#",
+            "count": 18
+          },
+          {
+            "name": "A#m",
+            "count": 13
+          },
+          {
+            "name": "B",
+            "count": 8
+          },
+          {
+            "name": "C#",
+            "count": 3
+          }
+        ],
         "top": [
           {
             "name": "vi-IV-vi-I",
@@ -703,6 +970,29 @@
         "file": "Band of Horses - The Funeral [OFFICIAL VIDEO].mp3",
         "key": "C minor",
         "confidence": 0.0478,
+        "chords": "D#-A#-Cm-G#",
+        "top_chords": [
+          {
+            "name": "Cm",
+            "count": 29
+          },
+          {
+            "name": "G#",
+            "count": 13
+          },
+          {
+            "name": "A#",
+            "count": 12
+          },
+          {
+            "name": "D#",
+            "count": 9
+          },
+          {
+            "name": "Gm",
+            "count": 3
+          }
+        ],
         "top": [
           {
             "name": "bIII-bVII-i-bVI",
@@ -722,6 +1012,29 @@
         "file": "City of the Sun - ＂Another Time＂.mp3",
         "key": "B minor",
         "confidence": 0.0475,
+        "chords": "Em-D-Em-D",
+        "top_chords": [
+          {
+            "name": "Em",
+            "count": 32
+          },
+          {
+            "name": "D",
+            "count": 28
+          },
+          {
+            "name": "C",
+            "count": 2
+          },
+          {
+            "name": "F",
+            "count": 1
+          },
+          {
+            "name": "F#",
+            "count": 1
+          }
+        ],
         "top": [
           {
             "name": "iv-bIII-iv-bIII",
@@ -741,6 +1054,29 @@
         "file": "London Grammar - Lord It's A Feeling Orchestral (Amazon Original).mp3",
         "key": "E minor",
         "confidence": 0.0438,
+        "chords": "C-Em-C-Em",
+        "top_chords": [
+          {
+            "name": "Em",
+            "count": 38
+          },
+          {
+            "name": "C",
+            "count": 21
+          },
+          {
+            "name": "Am",
+            "count": 3
+          },
+          {
+            "name": "G",
+            "count": 3
+          },
+          {
+            "name": "D",
+            "count": 2
+          }
+        ],
         "top": [
           {
             "name": "bVI-i-bVI-i",
@@ -760,6 +1096,29 @@
         "file": "Lauren Daigle - You Say (Official Music Video).mp3",
         "key": "F major",
         "confidence": 0.0435,
+        "chords": "F-Am-Dm-A#",
+        "top_chords": [
+          {
+            "name": "Am",
+            "count": 17
+          },
+          {
+            "name": "Dm",
+            "count": 16
+          },
+          {
+            "name": "A#",
+            "count": 14
+          },
+          {
+            "name": "F",
+            "count": 10
+          },
+          {
+            "name": "C",
+            "count": 8
+          }
+        ],
         "top": [
           {
             "name": "I-iii-vi-IV",
@@ -779,6 +1138,29 @@
         "file": "U2 Perform Rare, Intimate Version on ＂Every Breaking Wave＂ [EXCLUSIVE].mp3",
         "key": "D# major",
         "confidence": 0.0429,
+        "chords": "G#-Cm-D#-A#",
+        "top_chords": [
+          {
+            "name": "G#",
+            "count": 18
+          },
+          {
+            "name": "D#",
+            "count": 17
+          },
+          {
+            "name": "A#",
+            "count": 17
+          },
+          {
+            "name": "Cm",
+            "count": 14
+          },
+          {
+            "name": "Dm",
+            "count": 1
+          }
+        ],
         "top": [
           {
             "name": "IV-vi-I-V",
@@ -798,6 +1180,29 @@
         "file": "Taylor Swift - The Fate of Ophelia ｜ PIANO COVER by Paul Hankinson.mp3",
         "key": "C major",
         "confidence": 0.0424,
+        "chords": "E-Gm-Dm-F",
+        "top_chords": [
+          {
+            "name": "C",
+            "count": 15
+          },
+          {
+            "name": "F",
+            "count": 14
+          },
+          {
+            "name": "Gm",
+            "count": 8
+          },
+          {
+            "name": "Dm",
+            "count": 7
+          },
+          {
+            "name": "G",
+            "count": 7
+          }
+        ],
         "top": [
           {
             "name": "III-v-ii-IV",
@@ -817,6 +1222,29 @@
         "file": "Carla Morrison - Disfruto (letra).mp3",
         "key": "F# major",
         "confidence": 0.0419,
+        "chords": "G#m-B-F#m-C#m",
+        "top_chords": [
+          {
+            "name": "F#m",
+            "count": 17
+          },
+          {
+            "name": "B",
+            "count": 17
+          },
+          {
+            "name": "C#m",
+            "count": 13
+          },
+          {
+            "name": "G#m",
+            "count": 13
+          },
+          {
+            "name": "G#",
+            "count": 4
+          }
+        ],
         "top": [
           {
             "name": "ii-IV-i-v",
@@ -836,6 +1264,29 @@
         "file": "Rence - Baby Blue.mp3",
         "key": "G major",
         "confidence": 0.0413,
+        "chords": "C#-G-Gm-G",
+        "top_chords": [
+          {
+            "name": "G",
+            "count": 39
+          },
+          {
+            "name": "C",
+            "count": 23
+          },
+          {
+            "name": "Gm",
+            "count": 2
+          },
+          {
+            "name": "C#",
+            "count": 1
+          },
+          {
+            "name": "A",
+            "count": 1
+          }
+        ],
         "top": [
           {
             "name": "bV-I-i-I",
@@ -847,6 +1298,216 @@
           },
           {
             "name": "i-I-i-I",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "file": "Tony Ann - The Interstellar Experience.mp3",
+        "key": "C major",
+        "confidence": 0.038,
+        "chords": "Am-G-Em-F",
+        "top_chords": [
+          {
+            "name": "Am",
+            "count": 19
+          },
+          {
+            "name": "F",
+            "count": 18
+          },
+          {
+            "name": "G",
+            "count": 13
+          },
+          {
+            "name": "Em",
+            "count": 11
+          },
+          {
+            "name": "E",
+            "count": 4
+          }
+        ],
+        "top": [
+          {
+            "name": "vi-V-iii-IV",
+            "count": 3
+          },
+          {
+            "name": "V-iii-IV-vi",
+            "count": 3
+          },
+          {
+            "name": "IV-vi-iii-V",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Blood Diamond OST - London [Extended].mp3",
+        "key": "D minor",
+        "confidence": 0.0355,
+        "chords": "Dm-A#-C-Am",
+        "top_chords": [
+          {
+            "name": "Dm",
+            "count": 20
+          },
+          {
+            "name": "A#",
+            "count": 12
+          },
+          {
+            "name": "C",
+            "count": 11
+          },
+          {
+            "name": "D",
+            "count": 10
+          },
+          {
+            "name": "Am",
+            "count": 6
+          }
+        ],
+        "top": [
+          {
+            "name": "i-bVI-bVII-v",
+            "count": 3
+          },
+          {
+            "name": "bVI-bVII-v-i",
+            "count": 3
+          },
+          {
+            "name": "bVII-v-i-bVI",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "file": "Angus & Julia Stone - Yellow Brick Road [Audio].mp3",
+        "key": "B major",
+        "confidence": 0.0351,
+        "chords": "B-C#m-B-C#m",
+        "top_chords": [
+          {
+            "name": "B",
+            "count": 34
+          },
+          {
+            "name": "C#m",
+            "count": 21
+          },
+          {
+            "name": "A",
+            "count": 7
+          },
+          {
+            "name": "Em",
+            "count": 2
+          },
+          {
+            "name": "F#",
+            "count": 2
+          }
+        ],
+        "top": [
+          {
+            "name": "I-ii-I-ii",
+            "count": 7
+          },
+          {
+            "name": "ii-I-ii-I",
+            "count": 6
+          },
+          {
+            "name": "bVII-I-ii-I",
+            "count": 5
+          }
+        ]
+      },
+      {
+        "file": "#833 Pomme - Umbrella (Reprise acoustique de Rihanna).mp3",
+        "key": "C major",
+        "confidence": 0.0349,
+        "chords": "A#m-Am-C-Am",
+        "top_chords": [
+          {
+            "name": "C",
+            "count": 23
+          },
+          {
+            "name": "Am",
+            "count": 14
+          },
+          {
+            "name": "G",
+            "count": 11
+          },
+          {
+            "name": "F",
+            "count": 7
+          },
+          {
+            "name": "D",
+            "count": 5
+          }
+        ],
+        "top": [
+          {
+            "name": "bVII-vi-I-vi",
+            "count": 1
+          },
+          {
+            "name": "vi-I-vi-I",
+            "count": 1
+          },
+          {
+            "name": "I-vi-I-V",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "file": "In My Veins.mp3",
+        "key": "C major",
+        "confidence": 0.0332,
+        "chords": "A#-E-Am-F",
+        "top_chords": [
+          {
+            "name": "C",
+            "count": 15
+          },
+          {
+            "name": "Am",
+            "count": 14
+          },
+          {
+            "name": "F",
+            "count": 11
+          },
+          {
+            "name": "G",
+            "count": 10
+          },
+          {
+            "name": "Em",
+            "count": 4
+          }
+        ],
+        "top": [
+          {
+            "name": "bVII-III-vi-IV",
+            "count": 1
+          },
+          {
+            "name": "III-vi-IV-ii",
+            "count": 1
+          },
+          {
+            "name": "vi-IV-ii-iii",
             "count": 1
           }
         ]
