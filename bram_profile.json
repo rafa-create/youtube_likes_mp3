@@ -1,0 +1,619 @@
+{
+  "source": "https://open.spotify.com/playlist/7prdtzDctYFscp8PgFsp6i",
+  "name": "Chill🌿",
+  "owner": "Bram van Beurden",
+  "track_count": 270,
+  "spotify_total": 270,
+  "followers": 2,
+  "description": "",
+  "duration_median_sec": 214.1,
+  "top_artists": [
+    {
+      "name": "Jack Johnson",
+      "count": 12
+    },
+    {
+      "name": "Bobby Alu",
+      "count": 5
+    },
+    {
+      "name": "Bahamas",
+      "count": 4
+    },
+    {
+      "name": "Donavon Frankenreiter",
+      "count": 3
+    },
+    {
+      "name": "John Mayer",
+      "count": 3
+    },
+    {
+      "name": "Bonga",
+      "count": 3
+    },
+    {
+      "name": "Loyle Carner",
+      "count": 3
+    },
+    {
+      "name": "Sido",
+      "count": 3
+    },
+    {
+      "name": "Dominic Fike",
+      "count": 3
+    },
+    {
+      "name": "Froukje",
+      "count": 3
+    },
+    {
+      "name": "Bakar",
+      "count": 3
+    },
+    {
+      "name": "Fresku",
+      "count": 3
+    },
+    {
+      "name": "Blick Bassy",
+      "count": 3
+    },
+    {
+      "name": "Keb' Mo'",
+      "count": 2
+    },
+    {
+      "name": "The Beautiful Girls",
+      "count": 2
+    }
+  ],
+  "languages": [
+    {
+      "name": "en",
+      "count": 242
+    },
+    {
+      "name": "autres (fr/nl/de/es)",
+      "count": 28
+    }
+  ],
+  "style_signals": [
+    {
+      "name": "acoustic / folk / island",
+      "count": 34,
+      "note": "Jack Johnson, Bobby Alu, Bahamas, Frankenreiter, Mayer"
+    },
+    {
+      "name": "chill / soft pop / alt",
+      "count": 120,
+      "note": "Dominic Fike, Bakar, Froukje, Loyle Carner pocket"
+    },
+    {
+      "name": "hip-hop soft / spoken",
+      "count": 15,
+      "note": "Loyle Carner, Sido, Fresku"
+    },
+    {
+      "name": "world / afro / latin",
+      "count": 12,
+      "note": "Bonga, Blick Bassy, Edu Requejo"
+    },
+    {
+      "name": "blues / roots / soul",
+      "count": 12,
+      "note": "Keb Mo, Stapleton, Kiwanuka, Teskey"
+    }
+  ],
+  "instruments_likely": [
+    {
+      "name": "guitare acoustique",
+      "share_pct": 55,
+      "note": "Jack Johnson / Frankenreiter / Mayer"
+    },
+    {
+      "name": "voix soft / lead",
+      "share_pct": 40,
+      "note": "presque toute la playlist est chantée"
+    },
+    {
+      "name": "harmonica / blues harp",
+      "share_pct": 12,
+      "note": "blues / roots pocket"
+    },
+    {
+      "name": "ukulele / percussions light",
+      "share_pct": 10,
+      "note": "island / chill vibe"
+    },
+    {
+      "name": "piano / soft keys",
+      "share_pct": 8,
+      "note": "ballades / soul"
+    }
+  ],
+  "tempo_profile": {
+    "median_estimate": 90,
+    "p25_estimate": 78,
+    "p75_estimate": 102,
+    "buckets": [
+      {
+        "name": "<80 ballade",
+        "count_label": "élevé"
+      },
+      {
+        "name": "80–100 mid lent",
+        "count_label": "dominant"
+      },
+      {
+        "name": "100–120 pop",
+        "count_label": "faible"
+      },
+      {
+        "name": "120+",
+        "count_label": "rare"
+      }
+    ],
+    "note": "Estimations curatorielles (pas d'analyse audio complète) — chill / acoustic ~80–100 BPM."
+  },
+  "creation_recipes": [
+    {
+      "chords": "G–C–D–Em",
+      "degrees": "I–IV–V–vi",
+      "bpm_median": 92,
+      "tempo_bucket": "80–100 mid lent",
+      "language": "en",
+      "key": "G major / E minor",
+      "instrument": "guitare acoustique fingerstyle",
+      "why": "Cœur Jack Johnson / Frankenreiter / island-folk de la playlist",
+      "recipe": "Écrire autour de G–C–D–Em (~I–IV–V–vi) · ~90–95 BPM · EN · guitare fingerstyle + voix soft"
+    },
+    {
+      "chords": "C–G–Am–F",
+      "degrees": "I–V–vi–IV",
+      "bpm_median": 88,
+      "tempo_bucket": "80–100 mid lent",
+      "language": "en",
+      "key": "C major",
+      "instrument": "guitare nylon / steel + voix",
+      "why": "Soft pop / Mayer acoustic / campfire",
+      "recipe": "Écrire autour de C–G–Am–F (~I–V–vi–IV) · ~85–95 BPM · EN · voix douce"
+    },
+    {
+      "chords": "Am–G–C–F",
+      "degrees": "vi–V–I–IV",
+      "bpm_median": 78,
+      "tempo_bucket": "<80 ballade",
+      "language": "en",
+      "key": "A minor",
+      "instrument": "guitare + harmonica / soul voice",
+      "why": "Blues-soul (Kiwanuka, Stapleton, Teskey, Keb' Mo')",
+      "recipe": "Écrire autour de Am–G–C–F · ~70–85 BPM · EN · blues / soul soft"
+    },
+    {
+      "chords": "Dm–Bb–F–C",
+      "degrees": "i–bVI–bIII–bVII",
+      "bpm_median": 96,
+      "tempo_bucket": "80–100 mid lent",
+      "language": "es",
+      "key": "D minor",
+      "instrument": "guitare + percussions light",
+      "why": "Poche latin / world de la playlist",
+      "recipe": "Écrire autour de Dm–Bb–F–C · ~90–100 BPM · ES · groove léger"
+    }
+  ],
+  "insights": [
+    "Playlist Chill de Bram van Beurden — 270 titres Spotify.",
+    "Artistes phares : Jack Johnson (12), Bobby Alu (5), Bahamas (4), Frankenreiter / Mayer / Bonga / Loyle Carner / Froukje.",
+    "Langue dominante : anglais (~90%).",
+    "Centre : acoustic island-folk + chill alt · guitare · ~85–95 BPM.",
+    "Cible création #1 : G–C–D–Em · fingerstyle · voix soft EN.",
+    "2e poche : soft hip-hop / alt européen (Loyle Carner, Froukje, Fresku)."
+  ],
+  "sample_tracks": [
+    {
+      "name": "Banana Pancakes",
+      "artist": "Jack Johnson",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Sunsets For Somebody Else",
+      "artist": "Jack Johnson",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Big Wave",
+      "artist": "Donavon Frankenreiter",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Lo Que Andaba Buscando",
+      "artist": "Edu Requejo",
+      "language": "es",
+      "styles": [
+        "latin / world"
+      ]
+    },
+    {
+      "name": "Wow",
+      "artist": "Beck",
+      "language": "en",
+      "styles": [
+        "indie / soft rock"
+      ]
+    },
+    {
+      "name": "Diving Duck Blues",
+      "artist": "Taj Mahal, Keb' Mo'",
+      "language": "en",
+      "styles": [
+        "blues / roots"
+      ]
+    },
+    {
+      "name": "Life Is Beautiful",
+      "artist": "Keb' Mo'",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Push The Blues Away",
+      "artist": "Josh Teskey, Ash Grunwald",
+      "language": "en",
+      "styles": [
+        "blues / roots"
+      ]
+    },
+    {
+      "name": "High On You",
+      "artist": "Jeangu Macrooy",
+      "language": "en",
+      "styles": [
+        "soul / r&b soft"
+      ]
+    },
+    {
+      "name": "Love Song #16",
+      "artist": "Jack Johnson",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "No Depression",
+      "artist": "Bahamas",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "I Won't Bitch",
+      "artist": "Brianna Harness",
+      "language": "en",
+      "styles": [
+        "blues / roots"
+      ]
+    },
+    {
+      "name": "La Danza Del Espacio Tiempo",
+      "artist": "Koino Yokan",
+      "language": "es",
+      "styles": [
+        "latin / world"
+      ]
+    },
+    {
+      "name": "Something Like Olivia - Acoustic",
+      "artist": "John Mayer",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Seasick Dream",
+      "artist": "Jack Johnson",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "My Style",
+      "artist": "Bobby Alu",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "La Mar",
+      "artist": "The Beautiful Girls",
+      "language": "es",
+      "styles": [
+        "acoustic / folk / island",
+        "latin / world"
+      ]
+    },
+    {
+      "name": "Don't Worry Be Happy",
+      "artist": "Bobby McFerrin",
+      "language": "en",
+      "styles": [
+        "soul / r&b soft"
+      ]
+    },
+    {
+      "name": "Home Again",
+      "artist": "Michael Kiwanuka",
+      "language": "en",
+      "styles": [
+        "soul / r&b soft"
+      ]
+    },
+    {
+      "name": "Beautiful Day",
+      "artist": "Donavon Frankenreiter",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Subplots",
+      "artist": "Jack Johnson",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Girl, I Wanna Lay You Down",
+      "artist": "ALO, Jack Johnson",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Little Bit of Love",
+      "artist": "John Cruz, Jack Johnson",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "It’s Time",
+      "artist": "Bobby Alu",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Tennessee Whiskey",
+      "artist": "Chris Stapleton",
+      "language": "en",
+      "styles": [
+        "blues / roots"
+      ]
+    },
+    {
+      "name": "Slow Dancing in a Burning Room",
+      "artist": "John Mayer",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "The Captain Is Drunk",
+      "artist": "Jack Johnson",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Oh Now",
+      "artist": "Brian Casey",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Heartbeats",
+      "artist": "José González",
+      "language": "fr",
+      "styles": [
+        "soul / r&b soft"
+      ]
+    },
+    {
+      "name": "Free",
+      "artist": "Donavon Frankenreiter",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Chienne de vie",
+      "artist": "Zoufris Maracas",
+      "language": "fr",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Ocean Eyes - Blackbear Remix",
+      "artist": "Billie Eilish, blackbear",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Mona Ki Ngi Xica",
+      "artist": "Bonga",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Home",
+      "artist": "Jack Johnson",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "Above the Bones",
+      "artist": "Mishka",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Young and Able",
+      "artist": "Current Swell",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Jesus, Etc.",
+      "artist": "Wilco",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Le soleil de bacchus",
+      "artist": "Teorem",
+      "language": "fr",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Rain",
+      "artist": "Jules",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Eigenlijk Wel",
+      "artist": "Paul Sinha",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Will - pt. I",
+      "artist": "Son Mieux",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Here It Comes",
+      "artist": "Benny Sings",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Goodbye",
+      "artist": "Who Is Fancy",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Fly Me To The Moon (8D Audio)",
+      "artist": "8D Tunes",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Walk On the Wild Side",
+      "artist": "Lou Reed",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Floating",
+      "artist": "Tay Oskee",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "In Your Arms",
+      "artist": "Chef'Special",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    },
+    {
+      "name": "Follow The Sun",
+      "artist": "Xavier Rudd",
+      "language": "en",
+      "styles": [
+        "acoustic / folk / island"
+      ]
+    },
+    {
+      "name": "La Mar (The Ocean)",
+      "artist": "The Beautiful Girls",
+      "language": "es",
+      "styles": [
+        "acoustic / folk / island",
+        "latin / world"
+      ]
+    },
+    {
+      "name": "If You Love Me",
+      "artist": "Christone \"Kingfish\" Ingram",
+      "language": "en",
+      "styles": [
+        "chill / soft pop"
+      ]
+    }
+  ],
+  "method": "Spotify Web API (token embed open.spotify.com) + heuristiques artistes/titres ; recettes accords/tempo curatorielles pour ce catalogue chill/acoustic — pas de librosa sur MP3."
+}

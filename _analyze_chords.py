@@ -1,4 +1,4 @@
-"""Pilot chord-progression analysis on ~100 filtered MP3s (librosa chroma templates)."""
+"""Chord / tempo / language analysis for creation targeting (full filtered playlist)."""
 from __future__ import annotations
 
 import argparse
@@ -6,7 +6,7 @@ import json
 import re
 import sys
 import warnings
-from collections import Counter
+from collections import Counter, defaultdict
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
@@ -21,14 +21,37 @@ PROFILE = ROOT / "music_profile.json"
 EXCLUDE = re.compile(
     r"(tuto|tutorial|after\s*movie|teaser|highlight|nba|gala|campagne|"
     r"full\s*album|1\s*hour|4\s*hours|9\s*hours|playlist|mix\s*\(|"
-    r"greatest\s*hits|bandas\s*sonoras|official\s*trailer)",
+    r"greatest\s*hits|bandas\s*sonoras|official\s*trailer|"
+    r"audition|game\s*highlights)",
     re.I,
 )
 
-# 24 major/minor triad templates in chroma space
 NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 ROMAN_MAJ = ["I", "bII", "II", "bIII", "III", "IV", "bV", "V", "bVI", "VI", "bVII", "VII"]
 ROMAN_MIN = ["i", "bii", "ii", "biii", "III", "iv", "bv", "v", "bVI", "VI", "bVII", "vii"]
+
+FR_HINTS = re.compile(
+    r"\b(le|la|les|des|une|aux|pour|dans|avec|sans|mon|ton|son|notre|"
+    r"pomme|louane|angele|bigflo|ninho|stromae|mika|coeur|amour|vie|"
+    r"paroles|clip\s*officiel|francais|français)\b|"
+    r"[àâäéèêëïîôùûç]",
+    re.I,
+)
+ES_HINTS = re.compile(
+    r"\b(el|la|los|las|una|para|con|amor|corazon|español|espanol|"
+    r"reggaeton|bachata|despeinada|official\s*video\s*español)\b|"
+    r"[ñ¿¡]",
+    re.I,
+)
+EN_HINTS = re.compile(
+    r"\b(the|and|you|love|heart|night|official|lyrics|feat|featuring|"
+    r"remix|acoustic|cover|music\s*video)\b",
+    re.I,
+)
+INSTR_HINTS = re.compile(
+    r"\b(instrumental|piano|orchestr|soundtrack|no\s*lyrics|karaoke)\b",
+    re.I,
+)
 
 
 def _triad_template(root: int, quality: str) -> np.ndarray:
@@ -46,13 +69,41 @@ CHORD_TEMPLATES = np.stack(
 )
 
 
-def select_tracks(limit: int = 100) -> list[Path]:
+def detect_language(title: str) -> str:
+    if INSTR_HINTS.search(title):
+        return "instrumental"
+    fr = len(FR_HINTS.findall(title))
+    es = len(ES_HINTS.findall(title))
+    en = len(EN_HINTS.findall(title))
+    # accented FR chars boost
+    if fr >= es and fr >= en and fr > 0:
+        return "fr"
+    if es > fr and es >= en:
+        return "es"
+    if en > 0:
+        return "en"
+    return "inconnu"
+
+
+def bpm_bucket(bpm: float) -> str:
+    if bpm < 80:
+        return "<80 ballade"
+    if bpm < 100:
+        return "80–100 mid lent"
+    if bpm < 120:
+        return "100–120 pop"
+    if bpm < 140:
+        return "120–140 groove/dance"
+    return "140+ rapide"
+
+
+def select_tracks(limit: int = 0) -> list[Path]:
     files = sorted(MP3_DIR.glob("*.mp3"))
     kept = [f for f in files if not EXCLUDE.search(f.stem)]
-    if len(kept) <= limit:
-        return kept
-    step = max(1, len(kept) // limit)
-    return kept[::step][:limit]
+    if limit and limit > 0 and len(kept) > limit:
+        step = max(1, len(kept) // limit)
+        return kept[::step][:limit]
+    return kept
 
 
 def estimate_key_from_chroma(chroma_avg: np.ndarray) -> tuple[int, str]:
@@ -77,13 +128,17 @@ def to_roman(chord: str, key_root: int, key_mode: str) -> str:
     if key_mode == "maj":
         base = ROMAN_MAJ[deg]
         return base if qual == "maj" else base.lower() if base.isupper() else base
-    # minor key: keep common pop notation
     if qual == "min":
-        return ROMAN_MIN[deg] if ROMAN_MIN[deg].islower() or ROMAN_MIN[deg] in {"III", "VI", "bVI", "bVII"} else ROMAN_MIN[deg]
+        return ROMAN_MIN[deg]
     return ROMAN_MAJ[deg]
 
 
-def smooth_labels(labels: list[int], min_run: int = 4) -> list[int]:
+def pretty_chord(chord: str) -> str:
+    name, qual = chord.split(":")
+    return name if qual == "maj" else f"{name}m"
+
+
+def smooth_labels(labels: list[int], min_run: int = 3) -> list[int]:
     if not labels:
         return labels
     out = labels[:]
@@ -99,12 +154,6 @@ def smooth_labels(labels: list[int], min_run: int = 4) -> list[int]:
     return out
 
 
-def pretty_chord(chord: str) -> str:
-    """C:maj -> C, A:min -> Am"""
-    name, qual = chord.split(":")
-    return name if qual == "maj" else f"{name}m"
-
-
 def extract_progressions(seq: list[str], n: int = 4) -> list[str]:
     collapsed = []
     for r in seq:
@@ -113,7 +162,7 @@ def extract_progressions(seq: list[str], n: int = 4) -> list[str]:
     return ["-".join(collapsed[i : i + n]) for i in range(len(collapsed) - n + 1)]
 
 
-def analyze_chords(path: str, duration: float = 90.0) -> dict:
+def analyze_chords(path: str, duration: float = 60.0) -> dict:
     import librosa
 
     p = Path(path)
@@ -122,14 +171,18 @@ def analyze_chords(path: str, duration: float = 90.0) -> dict:
         if len(y) < sr * 8:
             return {"file": p.name, "error": "too_short"}
 
+        tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
+        if isinstance(tempo, np.ndarray):
+            tempo = float(tempo[0]) if tempo.size else 0.0
+        else:
+            tempo = float(tempo)
+
         chroma = librosa.feature.chroma_cqt(y=y, sr=sr, hop_length=2048)
         norms = np.linalg.norm(chroma, axis=0, keepdims=True) + 1e-9
-        cnorm = chroma / norms
-        scores = CHORD_TEMPLATES @ cnorm
+        scores = CHORD_TEMPLATES @ (chroma / norms)
         labels = smooth_labels(scores.argmax(axis=0).tolist(), min_run=3)
 
-        chroma_avg = chroma.mean(axis=1)
-        key_root, key_mode = estimate_key_from_chroma(chroma_avg)
+        key_root, key_mode = estimate_key_from_chroma(chroma.mean(axis=1))
         key_name = f"{NOTES[key_root]} {'major' if key_mode == 'maj' else 'minor'}"
 
         chord_seq = [CHORD_NAMES[i] for i in labels]
@@ -140,30 +193,26 @@ def analyze_chords(path: str, duration: float = 90.0) -> dict:
 
         grams_roman = extract_progressions(romans, n=4)
         grams_abs = extract_progressions(absolutes, n=4)
-
-        # most common loop in this track (absolute)
         abs_top = Counter(grams_abs).most_common(3)
         roman_top = Counter(grams_roman).most_common(3)
-        chord_hist = Counter(absolutes)
-
-        # representative loop: first occurrence of the top absolute gram, else first 8 unique-collapsed
-        collapsed_abs = []
-        for a in absolutes:
-            if not collapsed_abs or collapsed_abs[-1] != a:
-                collapsed_abs.append(a)
-        main_loop = abs_top[0][0] if abs_top else "-".join(collapsed_abs[:6])
+        main_loop = abs_top[0][0] if abs_top else "-".join(
+            [a for i, a in enumerate(absolutes) if i == 0 or a != absolutes[i - 1]][:6]
+        )
 
         part = np.partition(scores, -2, axis=0)
         margin = float(np.mean(part[-1] - part[-2]))
+        lang = detect_language(p.stem)
 
         return {
             "file": p.name,
             "key": key_name,
-            "n_chords": len(set(absolutes)),
+            "bpm": round(tempo, 1),
+            "bpm_bucket": bpm_bucket(tempo),
+            "language": lang,
+            "main_loop": main_loop,
             "progression_top": roman_top,
             "absolute_top": abs_top,
-            "chord_counts": chord_hist.most_common(8),
-            "main_loop": main_loop,
+            "chord_counts": Counter(absolutes).most_common(8),
             "confidence": round(margin, 4),
             "grams": grams_roman,
             "grams_abs": grams_abs,
@@ -176,91 +225,141 @@ def _job(args: tuple[str, float]) -> dict:
     return analyze_chords(*args)
 
 
+def build_creation_recipes(ok: list[dict], top_loops: list[tuple[str, int]], n: int = 8) -> list[dict]:
+    recipes = []
+    for loop, count in top_loops[:n]:
+        tracks = [r for r in ok if loop in (r.get("grams_abs") or []) or r.get("main_loop") == loop]
+        if not tracks:
+            tracks = [r for r in ok if any(loop == g for g, _ in (r.get("absolute_top") or []))]
+        if not tracks:
+            continue
+        bpms = [r["bpm"] for r in tracks if r.get("bpm")]
+        langs = Counter(r.get("language", "inconnu") for r in tracks)
+        keys = Counter(r.get("key", "?") for r in tracks)
+        buckets = Counter(r.get("bpm_bucket", "?") for r in tracks)
+        romans = Counter()
+        for r in tracks:
+            for g, c in r.get("progression_top") or []:
+                romans[g] += c
+        recipes.append(
+            {
+                "chords": loop,
+                "degrees": romans.most_common(1)[0][0] if romans else None,
+                "count": count,
+                "tracks": len(tracks),
+                "bpm_mean": round(float(np.mean(bpms)), 1) if bpms else None,
+                "bpm_median": round(float(np.median(bpms)), 1) if bpms else None,
+                "tempo_bucket": buckets.most_common(1)[0][0] if buckets else None,
+                "language": langs.most_common(1)[0][0] if langs else None,
+                "languages": [{"name": k, "count": v} for k, v in langs.most_common()],
+                "key": keys.most_common(1)[0][0] if keys else None,
+                "examples": [t["file"] for t in tracks[:3]],
+                "recipe": (
+                    f"Écrire autour de {loop}"
+                    + (f" (~{romans.most_common(1)[0][0]})" if romans else "")
+                    + (f" · tempo ~{round(float(np.median(bpms)))} BPM" if bpms else "")
+                    + (f" · langue {langs.most_common(1)[0][0]}" if langs else "")
+                    + (f" · tonalité type {keys.most_common(1)[0][0]}" if keys else "")
+                ),
+            }
+        )
+    return recipes
+
+
 def main() -> None:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--limit", type=int, default=100)
-    parser.add_argument("--duration", type=float, default=90.0)
-    parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--limit", type=int, default=0, help="0 = toute la playlist filtrée")
+    parser.add_argument("--duration", type=float, default=60.0)
+    parser.add_argument("--workers", type=int, default=6)
     args = parser.parse_args()
 
-    tracks = select_tracks(args.limit)
-    print(f"Chord pilot: {len(tracks)} tracks, duration={args.duration}s, workers={args.workers}")
+    selected = select_tracks(args.limit)
+    n_selected = len(selected)
+    print(
+        f"Chord+tempo+lang: {n_selected} tracks "
+        f"(duration={args.duration}s, workers={args.workers})"
+    )
 
     results = []
-    jobs = [(str(t), args.duration) for t in tracks]
+    jobs = [(str(t), args.duration) for t in selected]
     done = 0
     with ProcessPoolExecutor(max_workers=max(1, args.workers)) as pool:
         futs = [pool.submit(_job, j) for j in jobs]
         for fut in as_completed(futs):
             done += 1
-            if done % 10 == 0 or done == len(futs):
+            if done % 25 == 0 or done == len(futs):
                 print(f"  progress {done}/{len(futs)}")
             results.append(fut.result())
 
-    ok = [r for r in results if "error" not in r and r.get("grams")]
-    ok_conf = [r for r in ok if r.get("confidence", 0) >= 0.02] or ok
+    ok = [r for r in results if "error" not in r and r.get("grams_abs")]
+    ok_conf = [r for r in ok if r.get("confidence", 0) >= 0.015] or ok
 
     prog_all = Counter()
     abs_all = Counter()
     chord_all = Counter()
+    lang_all = Counter()
+    tempo_all = Counter()
     for r in ok_conf:
         prog_all.update(r["grams"])
         abs_all.update(r.get("grams_abs") or [])
         chord_all.update(dict(r.get("chord_counts") or []))
+        lang_all[r.get("language", "inconnu")] += 1
+        tempo_all[r.get("bpm_bucket", "?")] += 1
 
-    top = [{"name": g, "count": c} for g, c in prog_all.most_common(12)]
-    top_abs = [{"name": g, "count": c} for g, c in abs_all.most_common(12)]
-    top_chords = [{"name": g, "count": c} for g, c in chord_all.most_common(12)]
+    top_abs = abs_all.most_common(15)
+    top_roman = prog_all.most_common(12)
+    recipes = build_creation_recipes(ok_conf, top_abs, n=10)
 
-    examples = []
-    for g, _ in prog_all.most_common(5):
-        matches = [r for r in ok_conf if g in r["grams"]]
-        files = [r["file"] for r in matches][:3]
-        # most common absolute realization of this roman progression among matches
-        abs_real = Counter()
-        for r in matches:
-            for ag, _ac in r.get("absolute_top") or []:
-                # keep abs loops that appear in same track
-                abs_real[ag] += 1
-        realization = abs_real.most_common(1)[0][0] if abs_real else None
-        # better: for tracks containing roman g, pick their main_loop if related
-        loops = Counter(r.get("main_loop") for r in matches if r.get("main_loop"))
-        if loops:
-            realization = loops.most_common(1)[0][0]
-        examples.append(
-            {
-                "progression": g,
-                "chords": realization,
-                "examples": files,
-            }
-        )
+    # Cross tabs: loop × language, loop × tempo for top loops
+    cross_lang = []
+    cross_tempo = []
+    for loop, _ in top_abs[:6]:
+        matching = [r for r in ok_conf if loop in (r.get("grams_abs") or [])]
+        lc = Counter(r["language"] for r in matching)
+        tc = Counter(r["bpm_bucket"] for r in matching)
+        cross_lang.append({"chords": loop, "languages": [{"name": k, "count": v} for k, v in lc.most_common()]})
+        cross_tempo.append({"chords": loop, "tempos": [{"name": k, "count": v} for k, v in tc.most_common()]})
 
     payload = {
-        "method": "librosa chroma triad templates → accords absolus + degrés romains (pilote)",
-        "tracks_considered": len(tracks),
+        "method": "librosa chroma + BPM + langue titres (full filtered playlist)",
+        "purpose": "creation_targeting",
+        "tracks_considered": n_selected,
         "tracks_ok": len(ok_conf),
         "tracks_failed": len(results) - len(ok),
         "coverage_note": (
-            f"Pilote sur {len(ok_conf)}/{len(tracks)} pistes filtrées "
-            "(hors tutos/mix longs/highlights) — estimation bruitée."
+            f"Analyse création sur {len(ok_conf)}/{n_selected} pistes musicales filtrées "
+            "(hors tutos/highlights/mix longs)."
         ),
-        "top_chords": top_chords,
-        "top_chord_loops": top_abs,
-        "top_progressions": top,
-        "examples": examples,
+        "languages": [{"name": k, "count": v} for k, v in lang_all.most_common()],
+        "tempo_buckets": [{"name": k, "count": v} for k, v in tempo_all.most_common()],
+        "top_chords": [{"name": n, "count": c} for n, c in chord_all.most_common(12)],
+        "top_chord_loops": [{"name": g, "count": c} for g, c in top_abs],
+        "top_progressions": [{"name": g, "count": c} for g, c in top_roman],
+        "creation_recipes": recipes,
+        "cross_language": cross_lang,
+        "cross_tempo": cross_tempo,
+        "examples": [
+            {
+                "progression": r.get("degrees"),
+                "chords": r["chords"],
+                "examples": r["examples"],
+            }
+            for r in recipes[:5]
+        ],
         "sample_track_results": [
             {
                 "file": r["file"],
                 "key": r["key"],
-                "confidence": r["confidence"],
+                "bpm": r["bpm"],
+                "language": r["language"],
                 "chords": r.get("main_loop"),
-                "top_chords": [{"name": n, "count": c} for n, c in (r.get("chord_counts") or [])[:5]],
+                "confidence": r["confidence"],
                 "top": [{"name": g, "count": c} for g, c in r["progression_top"]],
             }
-            for r in sorted(ok_conf, key=lambda x: -x["confidence"])[:20]
+            for r in sorted(ok_conf, key=lambda x: -x["confidence"])[:25]
         ],
     }
 
@@ -268,35 +367,42 @@ def main() -> None:
     if PROFILE.is_file():
         profile = json.loads(PROFILE.read_text(encoding="utf-8"))
     profile["chord_progressions"] = payload
-    insights = profile.get("insights") or []
+
     insights = [
         i
-        for i in insights
+        for i in (profile.get("insights") or [])
         if "progression" not in i.casefold()
-        and "I–V–vi–IV" not in i
+        and "boucle" not in i.casefold()
+        and "degré" not in i.casefold()
+        and "création" not in i.casefold()
+        and "I–V" not in i
         and "accords" not in i.casefold()
     ]
-    if top_abs:
-        insights.append(
-            "Boucles d'accords fréquentes (pilote) : "
-            + ", ".join(f"{t['name']} ({t['count']})" for t in top_abs[:4])
-            + f" · n={payload['tracks_ok']}."
+    if recipes:
+        top = recipes[0]
+        insights.insert(
+            0,
+            f"Cible création #1 : {top['recipe']} (vu {top['count']}× / {top['tracks']} titres).",
         )
-    if top:
+        insights.insert(
+            1,
+            "Top suites : "
+            + ", ".join(f"{r['chords']} (~{r['bpm_median']} BPM, {r['language']})" for r in recipes[:4])
+            + ".",
+        )
+    if lang_all:
         insights.append(
-            "Même chose en degrés : "
-            + ", ".join(f"{t['name']} ({t['count']})" for t in top[:4])
+            "Langues détectées (titres) : "
+            + ", ".join(f"{k} ({v})" for k, v in lang_all.most_common())
             + "."
         )
     profile["insights"] = insights
+
     PROFILE.write_text(json.dumps(profile, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"OK tracks={len(ok_conf)} failed={payload['tracks_failed']}")
-    print("Top absolute loops:")
-    for t in top_abs[:8]:
-        print(f"  {t['name']}: {t['count']}")
-    print("Top chords:")
-    for t in top_chords[:8]:
-        print(f"  {t['name']}: {t['count']}")
+    print(f"OK={len(ok_conf)} failed={payload['tracks_failed']}")
+    print("Creation recipes:")
+    for r in recipes[:6]:
+        print(f"  - {r['recipe']}")
     print(f"Wrote {PROFILE}")
 
 

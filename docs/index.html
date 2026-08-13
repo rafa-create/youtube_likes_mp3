@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Profil musical — likes YouTube</title>
-  <meta name="description" content="Analyse du goût musical à partir des vidéos YouTube aimées : BPM, tonalités, artistes, instruments." />
+  <title>Création — Rafael × Bram</title>
+  <meta name="description" content="Cibles de création musicale : Rafael (YouTube likes), Bram (Spotify Chill), et brief à deux." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;700&display=swap" rel="stylesheet" />
@@ -18,6 +18,7 @@
       --accent: #5b9fd4;
       --accent-soft: rgba(91, 159, 212, 0.14);
       --line: #2a3542;
+      --ok: #6db89a;
     }
     * { box-sizing: border-box; }
     body {
@@ -31,92 +32,107 @@
       line-height: 1.5;
       min-height: 100vh;
     }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 40px 20px 80px; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 28px 16px 72px; }
     h1 {
       font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
       font-weight: 700;
       margin: 0 0 8px;
       letter-spacing: -0.02em;
     }
-    .sub { color: var(--muted); margin: 0 0 28px; max-width: 56ch; }
+    .sub { color: var(--muted); margin: 0 0 18px; max-width: 56ch; }
+    .tabs {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+    }
+    .tab {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .tab.active {
+      color: var(--text);
+      border-color: rgba(91, 159, 212, 0.55);
+      background: var(--accent-soft);
+    }
+    .panel { display: none; }
+    .panel.active { display: block; }
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 16px;
     }
     @media (max-width: 700px) {
       .stats { grid-template-columns: repeat(2, 1fr); }
-      .grid-2, .grid-3 { grid-template-columns: 1fr !important; }
+      .grid-2 { grid-template-columns: 1fr !important; }
     }
     .stat {
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 16px 18px;
+      padding: 14px 14px;
     }
     .stat strong {
       display: block;
       font-family: "Fraunces", Georgia, serif;
-      font-size: 1.55rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: var(--accent);
-      line-height: 1.15;
+      line-height: 1.2;
+      word-break: break-word;
     }
-    .stat span { color: var(--muted); font-size: 0.85rem; }
+    .stat span { color: var(--muted); font-size: 0.8rem; }
     .callout {
       background: var(--accent-soft);
       border: 1px solid rgba(91, 159, 212, 0.35);
       border-radius: 12px;
-      padding: 16px 18px;
-      margin-bottom: 24px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
     }
-    .callout h2 { margin: 0 0 6px; font-size: 0.95rem; color: var(--accent); }
-    .callout p { margin: 0; }
-    .callout ul { margin: 8px 0 0; padding-left: 1.1rem; color: var(--text); }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .callout.ok {
+      background: rgba(109, 184, 154, 0.12);
+      border-color: rgba(109, 184, 154, 0.35);
+    }
+    .callout h2 { margin: 0 0 6px; font-size: 0.92rem; color: var(--accent); }
+    .callout.ok h2 { color: var(--ok); }
+    .callout ul { margin: 8px 0 0; padding-left: 1.1rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     .card {
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 16px 18px;
-      margin-bottom: 16px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
     }
-    .card h3 { margin: 0 0 14px; font-size: 0.95rem; font-weight: 600; }
-    .chart-box { position: relative; height: 240px; }
-    .chart-box.tall { height: 280px; }
-    .hint { color: var(--muted); font-size: 0.8rem; margin-top: 10px; }
-    section > h2 {
+    .card h3 { margin: 0 0 12px; font-size: 0.92rem; font-weight: 600; }
+    .chart-box { position: relative; height: 230px; }
+    .hint { color: var(--muted); font-size: 0.78rem; margin-top: 8px; }
+    h2.sec {
       font-family: "Fraunces", Georgia, serif;
-      font-size: 1.35rem;
-      margin: 28px 0 14px;
+      font-size: 1.25rem;
+      margin: 22px 0 12px;
     }
-    .pattern h4 { margin: 0 0 4px; font-size: 0.95rem; }
-    .pattern p { margin: 0 0 12px; color: var(--muted); font-size: 0.88rem; }
-    .pattern p:last-child { margin-bottom: 0; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); }
-    th { color: var(--muted); font-weight: 500; font-size: 0.8rem; }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 520px; }
+    th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 500; font-size: 0.78rem; }
     footer {
-      margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line);
-      color: var(--muted); font-size: 0.85rem;
+      margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 0.82rem;
     }
     footer a { color: var(--accent); }
-    .warn {
-      background: rgba(212, 163, 91, 0.12);
-      border: 1px solid rgba(212, 163, 91, 0.35);
-      border-radius: 12px; padding: 14px 16px; font-size: 0.9rem; margin: 16px 0 24px;
-    }
     .err { color: #f0a0a0; padding: 24px; }
   </style>
 </head>
 <body>
   <div class="wrap" id="app">
-    <p class="sub">Chargement du profil…</p>
+    <p class="sub">Chargement…</p>
   </div>
-
   <script>
     const accent = "#5b9fd4";
     const muted = "#8b9aab";
@@ -125,8 +141,16 @@
     Chart.defaults.borderColor = grid;
     Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
 
+    const charts = [];
+    function clearCharts() {
+      while (charts.length) {
+        try { charts.pop().destroy(); } catch (_) {}
+      }
+    }
     function bar(id, labels, data, horizontal = false) {
-      new Chart(document.getElementById(id), {
+      const el = document.getElementById(id);
+      if (!el) return;
+      charts.push(new Chart(el, {
         type: "bar",
         data: {
           labels,
@@ -136,25 +160,16 @@
           indexAxis: horizontal ? "y" : "x",
           plugins: { legend: { display: false } },
           scales: {
-            x: {
-              beginAtZero: true,
-              ticks: { precision: 0 },
-              grid: { display: horizontal },
-            },
-            y: {
-              beginAtZero: true,
-              ticks: { precision: 0 },
-              grid: { display: !horizontal },
-            },
+            x: { beginAtZero: true, ticks: { precision: 0 }, grid: { display: horizontal } },
+            y: { beginAtZero: true, ticks: { precision: 0 }, grid: { display: !horizontal } },
           },
         },
-      });
+      }));
     }
-
     function esc(s) {
-      return String(s ?? "").replace(/[&<>"']/g, (c) => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
-      })[c]);
+      return String(s ?? "").replace(/[&<>"']/g, (c) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+      );
     }
 
     async function loadProfile() {
@@ -176,240 +191,168 @@
     }
 
     function render(p) {
-      const modes = p.modes || [];
-      const keys = (p.keys || []).slice(0, 8);
-      const artists = (p.top_artists || []).slice(0, 10);
-      const genres = (p.genre_signals || []).filter((g) => g.name !== "autre / non classé").slice(0, 7);
-      const instruments = (p.instruments || []).slice(0, 7);
-      const bpmBuckets = p.bpm_buckets || [];
-      const bpmLabels = [];
-      const bpmData = [];
-      for (const b of bpmBuckets) {
-        const m = (b.name || "").match(/^([^ (]+(?:–[^ (]+)?)/);
-        bpmLabels.push(m ? m[1] : b.name);
-        bpmData.push(b.count);
-      }
-      const pref = p.preferred_instrument || {};
-      const mood = p.mood || {};
-      const quadrants = mood.quadrants || [];
-      const clusters = p.clusters || [];
       const chords = p.chord_progressions || {};
-      const progressions = (chords.top_progressions || []).slice(0, 8);
-      const chordLoops = (chords.top_chord_loops || []).slice(0, 8);
-      const topChords = (chords.top_chords || []).slice(0, 10);
-      const chordExamples = (chords.examples || []).slice(0, 5);
-      const trackChordSamples = (chords.sample_track_results || []).slice(0, 10);
-      const insights = p.insights || [];
-      const samples = (p.sample_tracks || []).slice(0, 8);
-      const minor = modes.find((m) => m.name === "minor")?.count || 0;
-      const major = modes.find((m) => m.name === "major")?.count || 0;
-      const minorPct = minor + major ? Math.round((100 * minor) / (minor + major)) : 0;
-      const topMood = quadrants[0]?.name || "—";
-      const topProg = chordLoops[0]?.name || progressions[0]?.name || "—";
+      const recipes = (chords.creation_recipes || []).slice(0, 6);
+      const loops = (chords.top_chord_loops || []).slice(0, 8);
+      const langs = (chords.languages || []).slice(0, 5);
+      const tempos = (chords.tempo_buckets || []).slice(0, 5);
+      const bram = p.bram || {};
+      const bRecipes = (bram.creation_recipes || []).slice(0, 4);
+      const bArtists = (bram.top_artists || []).slice(0, 8);
+      const bStyles = (bram.style_signals || []).slice(0, 5);
+      const bLangs = (bram.languages || []).slice(0, 4);
+      const topR = recipes[0];
 
       document.getElementById("app").innerHTML = `
-        <h1>Profil musical — likes YouTube</h1>
-        <p class="sub">
-          ${esc(p.playlist_count)} likes / ${esc(p.mp3_count)} MP3 ·
-          audio ${esc(p.audio_sample_size)} pistes (${esc(p.audio_coverage_pct)}%) ·
-          page dynamique (<code>music_profile.json</code>)
-        </p>
+        <h1>Création — Rafael × Bram</h1>
+        <p class="sub">Cibles artistiques séparées + brief à deux (accords, tempo, langue, instruments, rôles).</p>
 
-        <div class="stats">
-          <div class="stat"><strong>${esc(p.bpm_stats?.median ?? "—")}</strong><span>BPM médian</span></div>
-          <div class="stat"><strong>${esc(pref.name || "—")}</strong><span>Instrument préféré</span></div>
-          <div class="stat"><strong>${esc(topMood)}</strong><span>Mood dominant</span></div>
-          <div class="stat"><strong>${esc(topProg)}</strong><span>Boucle d'accords top</span></div>
+        <div class="tabs" id="tabs">
+          <button class="tab active" data-tab="rafael">Rafael (YouTube)</button>
+          <button class="tab" data-tab="bram">Bram (Spotify Chill)</button>
+          <button class="tab" data-tab="duo">À deux</button>
         </div>
 
-        <div class="callout">
-          <h2>Verdict rapide</h2>
-          <ul>
-            ${insights.slice(0, 6).map((i) => `<li>${esc(i)}</li>`).join("")}
-          </ul>
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <h3>Mood (quadrants)</h3>
-            <div class="chart-box"><canvas id="moodChart"></canvas></div>
-            <p class="hint">Valence moy. ${esc(mood.valence_mean)} · ${esc(mood.method || "")}</p>
+        <div class="panel active" id="panel-rafael">
+          <div class="stats">
+            <div class="stat"><strong>${esc(topR?.chords || loops[0]?.name || "—")}</strong><span>Suite #1</span></div>
+            <div class="stat"><strong>${esc(topR?.bpm_median ?? p.bpm_stats?.median ?? "—")}</strong><span>BPM</span></div>
+            <div class="stat"><strong>${esc(langs[0]?.name || "en")}</strong><span>Langue</span></div>
+            <div class="stat"><strong>${esc(p.preferred_instrument?.name || "voix")}</strong><span>Timbre</span></div>
+          </div>
+          <div class="callout">
+            <h2>Brief Rafael</h2>
+            <ul>${(p.insights || []).slice(0, 4).map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
           </div>
           <div class="card">
-            <h3>Clusters de goût</h3>
-            <div class="chart-box"><canvas id="clusterChart"></canvas></div>
-            <p class="hint">k-means sur BPM / énergie / valence</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Détail des clusters</h3>
-          <table>
-            <thead>
-              <tr><th>Cluster</th><th>Part</th><th>BPM</th><th>Énergie</th><th>Valence</th><th>% mineur</th><th>Exemples</th></tr>
-            </thead>
-            <tbody>
-              ${clusters.map((c) => `
-                <tr>
-                  <td>${esc(c.name)}</td>
-                  <td>${esc(c.share_pct)}% (${esc(c.count)})</td>
-                  <td>${esc(c.bpm_mean)}</td>
-                  <td>${esc(c.energy_mean)}</td>
-                  <td>${esc(c.valence_mean)}</td>
-                  <td>${esc(c.minor_pct)}%</td>
-                  <td>${esc((c.examples || []).slice(0, 2).map((f) => f.replace(/\\.mp3$/i, "")).join(" · "))}</td>
+            <h3>Recettes suite × tempo × langue</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Suite</th><th>Degrés</th><th>BPM</th><th>Langue</th><th>Vu</th></tr></thead>
+              <tbody>
+                ${recipes.map((r) => `<tr>
+                  <td><strong>${esc(r.chords)}</strong></td>
+                  <td>${esc(r.degrees || "—")}</td>
+                  <td>${esc(r.bpm_median ?? "—")}</td>
+                  <td>${esc(r.language || "—")}</td>
+                  <td>${esc(r.count)}×</td>
                 </tr>`).join("")}
-            </tbody>
-          </table>
-        </div>
-
-        ${(chordLoops.length || progressions.length) ? `
-        <div class="grid-2">
-          <div class="card">
-            <h3>Suites d'accords (Am–F–C–G…)</h3>
-            <div class="chart-box tall"><canvas id="chordLoopChart"></canvas></div>
+              </tbody>
+            </table></div>
             <p class="hint">${esc(chords.coverage_note || "")}</p>
           </div>
-          <div class="card">
-            <h3>Accords les plus joués</h3>
-            <div class="chart-box tall"><canvas id="chordFreqChart"></canvas></div>
-            <p class="hint">Fréquence brute des accords détectés</p>
+          <div class="grid-2">
+            <div class="card"><h3>Suites</h3><div class="chart-box"><canvas id="rLoops"></canvas></div></div>
+            <div class="card"><h3>Langues</h3><div class="chart-box"><canvas id="rLangs"></canvas></div></div>
           </div>
+          <div class="card"><h3>Tempos</h3><div class="chart-box"><canvas id="rTempo"></canvas></div></div>
         </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <h3>Même chose en degrés (I–V–vi–IV)</h3>
-            <div class="chart-box tall"><canvas id="chordChart"></canvas></div>
-            <p class="hint">${esc(chords.method || "")}</p>
+        <div class="panel" id="panel-bram">
+          <div class="stats">
+            <div class="stat"><strong>${esc(bRecipes[0]?.chords || "G–C–D–Em")}</strong><span>Suite #1</span></div>
+            <div class="stat"><strong>~${esc(bram.tempo_profile?.median_estimate || 90)}</strong><span>BPM estimé</span></div>
+            <div class="stat"><strong>EN ~90%</strong><span>Langue</span></div>
+            <div class="stat"><strong>Guitare</strong><span>Timbre</span></div>
+          </div>
+          <div class="callout">
+            <h2>Brief Bram — ${esc(bram.name || "Chill")} (${esc(bram.track_count || 270)} titres)</h2>
+            <ul>${(bram.insights || []).slice(0, 5).map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
+            <p class="hint" style="margin-top:8px"><a href="${esc(bram.source || "https://open.spotify.com/playlist/7prdtzDctYFscp8PgFsp6i")}" style="color:var(--accent)">Playlist Spotify</a></p>
           </div>
           <div class="card">
-            <h3>Degré → accords concrets</h3>
-            <table>
-              <thead><tr><th>Degrés</th><th>Accords</th><th>Exemples</th></tr></thead>
+            <h3>Recettes création</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Suite</th><th>BPM</th><th>Langue</th><th>Instrument</th><th>Recette</th></tr></thead>
               <tbody>
-                ${chordExamples.map((e) => `
-                  <tr>
-                    <td><strong>${esc(e.progression)}</strong></td>
-                    <td>${esc(e.chords || "—")}</td>
-                    <td>${esc((e.examples || []).slice(0, 2).map((f) => f.replace(/\\.mp3$/i, "")).join(" · "))}</td>
-                  </tr>`).join("")}
+                ${bRecipes.map((r) => `<tr>
+                  <td><strong>${esc(r.chords)}</strong></td>
+                  <td>${esc(r.bpm_median ?? "—")}</td>
+                  <td>${esc(r.language || "—")}</td>
+                  <td>${esc(r.instrument || "guitare")}</td>
+                  <td>${esc(r.recipe || "")}</td>
+                </tr>`).join("")}
               </tbody>
-            </table>
-            <p class="hint">ok ${esc(chords.tracks_ok)}/${esc(chords.tracks_considered)}</p>
+            </table></div>
+            <p class="hint">${esc(bram.method || "")}</p>
+          </div>
+          <div class="grid-2">
+            <div class="card"><h3>Artistes</h3><div class="chart-box"><canvas id="bArtists"></canvas></div></div>
+            <div class="card"><h3>Styles</h3><div class="chart-box"><canvas id="bStyles"></canvas></div></div>
           </div>
         </div>
 
-        <div class="card">
-          <h3>Exemples de suites par titre</h3>
-          <table>
-            <thead><tr><th>Titre</th><th>Tonalité</th><th>Suite d'accords</th></tr></thead>
-            <tbody>
-              ${trackChordSamples.map((t) => `
-                <tr>
-                  <td>${esc((t.file || "").replace(/\\.mp3$/i, ""))}</td>
-                  <td>${esc(t.key || "—")}</td>
-                  <td><strong>${esc(t.chords || "—")}</strong></td>
-                </tr>`).join("")}
-            </tbody>
-          </table>
-        </div>` : ""}
-
-        <div class="grid-2">
-          <div class="card">
-            <h3>Mode</h3>
-            <div class="chart-box"><canvas id="modeChart"></canvas></div>
-            <p class="hint">${minor} mineur / ${major} majeur · ${minorPct}% mineur</p>
+        <div class="panel" id="panel-duo">
+          <div class="callout ok">
+            <h2>Pont duo</h2>
+            <ul>
+              <li>Tempo rencontre : <strong>100–108 BPM</strong> (entre ~90 Bram et ~118 Rafael)</li>
+              <li>Langue : <strong>EN</strong> (FR optionnel en pont — Rafael)</li>
+              <li>Grilles communes : <strong>C–G–Am–F</strong> ou <strong>Am–F–C–G</strong></li>
+              <li>Timbre : guitare Bram + pad/synth Rafael</li>
+            </ul>
           </div>
           <div class="card">
-            <h3>Instrument préféré probable</h3>
-            <div class="chart-box"><canvas id="instChart"></canvas></div>
-            <p class="hint">Heuristique titres · ${esc(p.instruments_untagged || 0)} non taggés</p>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <h3>Répartition BPM</h3>
-            <div class="chart-box"><canvas id="bpmChart"></canvas></div>
-            <p class="hint">Médiane ${esc(p.bpm_stats?.median)} · P25–P75 : ${esc(p.bpm_stats?.p25)}–${esc(p.bpm_stats?.p75)}</p>
-          </div>
-          <div class="card">
-            <h3>Tonalités fréquentes</h3>
-            <div class="chart-box"><canvas id="keyChart"></canvas></div>
-            <p class="hint">Estimation chroma</p>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <h3>Artistes récurrents</h3>
-            <div class="chart-box tall"><canvas id="artistChart"></canvas></div>
+            <h3>Qui fait quoi</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Domaine</th><th>Bram</th><th>Rafael</th></tr></thead>
+              <tbody>
+                <tr><td>Guitare / skeleton</td><td>Mène</td><td>Soutien</td></tr>
+                <tr><td>Synth / pads / lift</td><td>—</td><td>Mène</td></tr>
+                <tr><td>Voix soft intimiste</td><td>Mène</td><td>Stacks / prod</td></tr>
+                <tr><td>Paroles EN</td><td>Oui</td><td>Oui</td></tr>
+                <tr><td>Paroles FR</td><td>Support</td><td>Mène (pont)</td></tr>
+                <tr><td>Beat</td><td>Shaker / brush</td><td>Kick / clap léger</td></tr>
+              </tbody>
+            </table></div>
           </div>
           <div class="card">
-            <h3>Signaux de style</h3>
-            <div class="chart-box tall"><canvas id="genreChart"></canvas></div>
+            <h3>3 concepts prêts</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Concept</th><th>Grille</th><th>BPM</th><th>Rôles</th></tr></thead>
+              <tbody>
+                <tr><td>Late light</td><td>C–G–Am–F</td><td>104</td><td>Bram guitare · Rafael pad + clap</td></tr>
+                <tr><td>Warm minor</td><td>Am–F–C–G</td><td>100</td><td>EN + pont FR Rafael</td></tr>
+                <tr><td>Island lift</td><td>G–Em–C–D</td><td>108</td><td>Bram island · Rafael arpèges</td></tr>
+              </tbody>
+            </table></div>
           </div>
-        </div>
-
-        <div class="warn">
-          Mood / clusters = heuristiques audio. Instruments = mots-clés titres.
-          Accords = pilote chroma (bruité) — pas un lead sheet Chordify.
-        </div>
-
-        <div class="card">
-          <h3>Titres représentatifs du profil</h3>
-          <table>
-            <thead><tr><th>Piste</th><th>Tonalité</th><th>BPM</th><th>Énergie</th><th>Valence</th></tr></thead>
-            <tbody>
-              ${samples.map((t) => `
-                <tr>
-                  <td>${esc((t.file || "").replace(/\\.mp3$/i, ""))}</td>
-                  <td>${esc(t.key)} ${esc(t.mode)}</td>
-                  <td>${esc(t.bpm)}</td>
-                  <td>${esc(t.energy ?? "—")}</td>
-                  <td>${esc(t.valence ?? "—")}</td>
-                </tr>`).join("")}
-            </tbody>
-          </table>
+          <div class="callout">
+            <h2>Test de réussite</h2>
+            <p>La chanson tient sans synth (test Bram) <em>et</em> sans guitare (test Rafael).</p>
+          </div>
         </div>
 
         <footer>
           Source :
           <a href="https://github.com/rafa-create/youtube_likes_mp3">rafa-create/youtube_likes_mp3</a>
-          · Données live : music_profile.json
+          · Données : music_profile.json
         </footer>
       `;
 
-      new Chart(document.getElementById("modeChart"), {
-        type: "doughnut",
-        data: {
-          labels: ["Mineur", "Majeur"],
-          datasets: [{ data: [minor, major], backgroundColor: [accent, "#3d5166"], borderWidth: 0 }],
-        },
-        options: { plugins: { legend: { position: "bottom" } }, cutout: "58%" },
+      document.querySelectorAll(".tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
+          document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+          clearCharts();
+          paintCharts();
+        });
       });
 
-      if (quadrants.length) {
-        bar("moodChart", quadrants.map((q) => q.name), quadrants.map((q) => q.count), true);
+      function paintCharts() {
+        const active = document.querySelector(".panel.active")?.id;
+        if (active === "panel-rafael") {
+          if (loops.length) bar("rLoops", loops.map((x) => x.name), loops.map((x) => x.count), true);
+          if (langs.length) bar("rLangs", langs.map((x) => x.name), langs.map((x) => x.count), true);
+          if (tempos.length) bar("rTempo", tempos.map((x) => x.name), tempos.map((x) => x.count), false);
+        }
+        if (active === "panel-bram") {
+          if (bArtists.length) bar("bArtists", bArtists.map((x) => x.name), bArtists.map((x) => x.count), true);
+          if (bStyles.length) bar("bStyles", bStyles.map((x) => x.name), bStyles.map((x) => x.count), true);
+        }
       }
-      if (clusters.length) {
-        bar("clusterChart", clusters.map((c) => c.name), clusters.map((c) => c.count), true);
-      }
-      if (chordLoops.length) {
-        bar("chordLoopChart", chordLoops.map((x) => x.name), chordLoops.map((x) => x.count), true);
-      }
-      if (topChords.length) {
-        bar("chordFreqChart", topChords.map((x) => x.name), topChords.map((x) => x.count), true);
-      }
-      if (progressions.length) {
-        bar("chordChart", progressions.map((x) => x.name), progressions.map((x) => x.count), true);
-      }
-      bar("instChart", instruments.map((i) => i.name), instruments.map((i) => i.count), true);
-      bar("bpmChart", bpmLabels, bpmData, false);
-      bar("keyChart", keys.map((k) => k.name), keys.map((k) => k.count), true);
-      bar("artistChart", artists.map((a) => a.name), artists.map((a) => a.count), true);
-      bar("genreChart", genres.map((g) => g.name), genres.map((g) => g.count), true);
+      paintCharts();
     }
 
     loadProfile()

@@ -457,6 +457,8 @@
     }
   ],
   "insights": [
+    "Cible création #1 : Écrire autour de Cm-G#-D#-A# (~vi-IV-I-V) · tempo ~118 BPM · langue en · tonalité type D# major (vu 21× / 11 titres).",
+    "Top suites : Cm-G#-D#-A# (~117.5 BPM, en), G#-D#-A#-Cm (~117.5 BPM, en), A#-Cm-G#-D# (~117.5 BPM, en), G-D-A-Bm (~112.3 BPM, en).",
     "Couverture audio : 726/726 MP3 (100.0%).",
     "Mood dominant : équilibré / mid (183 pistes) · énergie moy. 0.535 · valence moy. 0.47.",
     "Clusters de goût : Équilibré midtempo (32.2%), Uplift / dance (24.4%), Électro mélancolique (23.8%), Intime / sombre (19.6%).",
@@ -465,209 +467,797 @@
     "Tempo médian ~118 BPM : zone pop / groove confortable.",
     "Tonalités fréquentes : A minor (57), G minor (47), C major (43), C# minor (40), B minor (38).",
     "Styles détectés dans les titres : autre / non classé, electronic / EDM, piano / neo-classical, pop, french chanson / pop FR.",
-    "Boucles d'accords fréquentes (pilote) : D#-A#-Cm-G# (10), Cm-G#-D#-A# (10), D-A-E-F#m (10), D-Am-C-Em (9) · n=66.",
-    "Même chose en degrés : vi-IV-I-V (28), IV-I-V-vi (20), V-vi-IV-I (17), I-V-vi-IV (16)."
+    "Langues détectées (titres) : en (330), inconnu (160), fr (81), instrumental (41), es (5)."
   ],
   "chord_progressions": {
-    "method": "librosa chroma triad templates → accords absolus + degrés romains (pilote)",
-    "tracks_considered": 100,
-    "tracks_ok": 66,
+    "method": "librosa chroma + BPM + langue titres (full filtered playlist)",
+    "purpose": "creation_targeting",
+    "tracks_considered": 703,
+    "tracks_ok": 617,
     "tracks_failed": 0,
-    "coverage_note": "Pilote sur 66/100 pistes filtrées (hors tutos/mix longs/highlights) — estimation bruitée.",
+    "coverage_note": "Analyse création sur 617/703 pistes musicales filtrées (hors tutos/highlights/mix longs).",
+    "languages": [
+      {
+        "name": "en",
+        "count": 330
+      },
+      {
+        "name": "inconnu",
+        "count": 160
+      },
+      {
+        "name": "fr",
+        "count": 81
+      },
+      {
+        "name": "instrumental",
+        "count": 41
+      },
+      {
+        "name": "es",
+        "count": 5
+      }
+    ],
+    "tempo_buckets": [
+      {
+        "name": "120–140 groove/dance",
+        "count": 175
+      },
+      {
+        "name": "80–100 mid lent",
+        "count": 145
+      },
+      {
+        "name": "100–120 pop",
+        "count": 126
+      },
+      {
+        "name": "140+ rapide",
+        "count": 117
+      },
+      {
+        "name": "<80 ballade",
+        "count": 54
+      }
+    ],
     "top_chords": [
       {
-        "name": "D#",
-        "count": 297
+        "name": "D",
+        "count": 1861
       },
       {
         "name": "G",
-        "count": 286
-      },
-      {
-        "name": "D",
-        "count": 264
+        "count": 1733
       },
       {
         "name": "C",
-        "count": 246
-      },
-      {
-        "name": "Am",
-        "count": 235
-      },
-      {
-        "name": "F",
-        "count": 227
-      },
-      {
-        "name": "A#",
-        "count": 213
-      },
-      {
-        "name": "Cm",
-        "count": 205
-      },
-      {
-        "name": "Gm",
-        "count": 201
-      },
-      {
-        "name": "G#",
-        "count": 184
-      },
-      {
-        "name": "Em",
-        "count": 174
+        "count": 1725
       },
       {
         "name": "A",
-        "count": 173
+        "count": 1598
+      },
+      {
+        "name": "Am",
+        "count": 1449
+      },
+      {
+        "name": "F",
+        "count": 1413
+      },
+      {
+        "name": "Gm",
+        "count": 1402
+      },
+      {
+        "name": "D#",
+        "count": 1377
+      },
+      {
+        "name": "E",
+        "count": 1357
+      },
+      {
+        "name": "A#",
+        "count": 1301
+      },
+      {
+        "name": "F#m",
+        "count": 1212
+      },
+      {
+        "name": "Dm",
+        "count": 1196
       }
     ],
     "top_chord_loops": [
       {
-        "name": "D#-A#-Cm-G#",
-        "count": 10
-      },
-      {
         "name": "Cm-G#-D#-A#",
-        "count": 10
-      },
-      {
-        "name": "D-A-E-F#m",
-        "count": 10
-      },
-      {
-        "name": "D-Am-C-Em",
-        "count": 9
-      },
-      {
-        "name": "A#-Cm-G#-D#",
-        "count": 8
-      },
-      {
-        "name": "B-C#m-B-C#m",
-        "count": 7
+        "count": 21
       },
       {
         "name": "G#-D#-A#-Cm",
-        "count": 7
+        "count": 19
       },
       {
-        "name": "C-Em-D-Am",
-        "count": 7
+        "name": "A#-Cm-G#-D#",
+        "count": 19
       },
       {
-        "name": "Em-D-Am-C",
-        "count": 7
+        "name": "G-D-A-Bm",
+        "count": 18
       },
       {
-        "name": "F#m-E-D-F#m",
-        "count": 7
+        "name": "D#-A#-Cm-G#",
+        "count": 18
       },
       {
-        "name": "D-F#m-E-D",
-        "count": 7
+        "name": "D-A-Bm-G",
+        "count": 17
       },
       {
-        "name": "Cm-D#-A#-G#",
-        "count": 7
+        "name": "G#m-E-B-F#",
+        "count": 16
+      },
+      {
+        "name": "Bm-G-D-A",
+        "count": 15
+      },
+      {
+        "name": "C#m-A-E-B",
+        "count": 15
+      },
+      {
+        "name": "B-F#-G#m-E",
+        "count": 15
+      },
+      {
+        "name": "Bm-A-Bm-A",
+        "count": 15
+      },
+      {
+        "name": "D#m-B-F#-C#",
+        "count": 14
+      },
+      {
+        "name": "A-E-B-C#m",
+        "count": 14
+      },
+      {
+        "name": "A-Bm-A-Bm",
+        "count": 14
+      },
+      {
+        "name": "E-B-C#m-A",
+        "count": 13
       }
     ],
     "top_progressions": [
       {
         "name": "vi-IV-I-V",
-        "count": 28
+        "count": 102
       },
       {
         "name": "IV-I-V-vi",
-        "count": 20
-      },
-      {
-        "name": "V-vi-IV-I",
-        "count": 17
+        "count": 90
       },
       {
         "name": "I-V-vi-IV",
-        "count": 16
+        "count": 76
       },
       {
-        "name": "IV-I-vi-I",
-        "count": 11
+        "name": "V-vi-IV-I",
+        "count": 69
       },
       {
-        "name": "I-vi-I-vi",
-        "count": 9
+        "name": "I-i-I-i",
+        "count": 53
+      },
+      {
+        "name": "i-bVI-bVII-i",
+        "count": 47
+      },
+      {
+        "name": "i-I-i-I",
+        "count": 42
+      },
+      {
+        "name": "i-bVI-bIII-bVII",
+        "count": 39
+      },
+      {
+        "name": "bVI-bVII-i-bVI",
+        "count": 39
       },
       {
         "name": "IV-vi-I-V",
-        "count": 9
+        "count": 39
       },
       {
-        "name": "i-bVII-bVI-i",
-        "count": 9
+        "name": "bVI-bIII-bVII-i",
+        "count": 35
       },
       {
-        "name": "vi-I-vi-I",
-        "count": 8
+        "name": "i-bVI-i-bVI",
+        "count": 32
+      }
+    ],
+    "creation_recipes": [
+      {
+        "chords": "Cm-G#-D#-A#",
+        "degrees": "vi-IV-I-V",
+        "count": 21,
+        "tracks": 11,
+        "bpm_mean": 116.5,
+        "bpm_median": 117.5,
+        "tempo_bucket": "100–120 pop",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 7
+          },
+          {
+            "name": "fr",
+            "count": 2
+          },
+          {
+            "name": "inconnu",
+            "count": 1
+          },
+          {
+            "name": "instrumental",
+            "count": 1
+          }
+        ],
+        "key": "D# major",
+        "examples": [
+          "6ix9ine - Bori feat. Lenier (Official Music Video).mp3",
+          "Alec Benjamin - Devil Doesn't Bargain [Official Lyric Video].mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+        ],
+        "recipe": "Écrire autour de Cm-G#-D#-A# (~vi-IV-I-V) · tempo ~118 BPM · langue en · tonalité type D# major"
       },
       {
-        "name": "V-I-vi-I",
-        "count": 8
+        "chords": "G#-D#-A#-Cm",
+        "degrees": "vi-IV-I-V",
+        "count": 19,
+        "tracks": 12,
+        "bpm_mean": 111.5,
+        "bpm_median": 117.5,
+        "tempo_bucket": "100–120 pop",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 6
+          },
+          {
+            "name": "fr",
+            "count": 2
+          },
+          {
+            "name": "inconnu",
+            "count": 2
+          },
+          {
+            "name": "instrumental",
+            "count": 2
+          }
+        ],
+        "key": "D# major",
+        "examples": [
+          "6ix9ine - Bori feat. Lenier (Official Music Video).mp3",
+          "Alec Benjamin - Devil Doesn't Bargain [Official Lyric Video].mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+        ],
+        "recipe": "Écrire autour de G#-D#-A#-Cm (~vi-IV-I-V) · tempo ~118 BPM · langue en · tonalité type D# major"
       },
       {
-        "name": "IV-I-V-I",
-        "count": 8
+        "chords": "A#-Cm-G#-D#",
+        "degrees": "vi-IV-I-V",
+        "count": 19,
+        "tracks": 10,
+        "bpm_mean": 114.3,
+        "bpm_median": 117.5,
+        "tempo_bucket": "100–120 pop",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 7
+          },
+          {
+            "name": "fr",
+            "count": 2
+          },
+          {
+            "name": "inconnu",
+            "count": 1
+          }
+        ],
+        "key": "D# major",
+        "examples": [
+          "6ix9ine - Bori feat. Lenier (Official Music Video).mp3",
+          "Alec Benjamin - Devil Doesn't Bargain [Official Lyric Video].mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+        ],
+        "recipe": "Écrire autour de A#-Cm-G#-D# (~vi-IV-I-V) · tempo ~118 BPM · langue en · tonalité type D# major"
       },
       {
-        "name": "bIII-bVII-i-bVI",
-        "count": 8
+        "chords": "G-D-A-Bm",
+        "degrees": "IV-I-V-vi",
+        "count": 18,
+        "tracks": 7,
+        "bpm_mean": 109.0,
+        "bpm_median": 112.3,
+        "tempo_bucket": "100–120 pop",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 4
+          },
+          {
+            "name": "inconnu",
+            "count": 3
+          }
+        ],
+        "key": "D major",
+        "examples": [
+          "Alan Walker (upscaled to 4K), Sabrina Carpenter singing ＂On My Way＂, GMA with subtitles.mp3",
+          "Anuel AA - Enrique Iglesias ｜ FÚTBOL Y RUMBA.mp3",
+          "Anuel AA, Enrique Iglesias - Fútbol y Rumba (Guitar Cover).mp3"
+        ],
+        "recipe": "Écrire autour de G-D-A-Bm (~IV-I-V-vi) · tempo ~112 BPM · langue en · tonalité type D major"
+      },
+      {
+        "chords": "D#-A#-Cm-G#",
+        "degrees": "vi-IV-I-V",
+        "count": 18,
+        "tracks": 9,
+        "bpm_mean": 114.2,
+        "bpm_median": 117.5,
+        "tempo_bucket": "100–120 pop",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 5
+          },
+          {
+            "name": "fr",
+            "count": 2
+          },
+          {
+            "name": "inconnu",
+            "count": 1
+          },
+          {
+            "name": "instrumental",
+            "count": 1
+          }
+        ],
+        "key": "D# major",
+        "examples": [
+          "Alec Benjamin - Devil Doesn't Bargain [Official Lyric Video].mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3",
+          "Band of Horses - The Funeral [OFFICIAL VIDEO].mp3"
+        ],
+        "recipe": "Écrire autour de D#-A#-Cm-G# (~vi-IV-I-V) · tempo ~118 BPM · langue en · tonalité type D# major"
+      },
+      {
+        "chords": "D-A-Bm-G",
+        "degrees": "IV-I-V-vi",
+        "count": 17,
+        "tracks": 9,
+        "bpm_mean": 105.2,
+        "bpm_median": 112.3,
+        "tempo_bucket": "100–120 pop",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 5
+          },
+          {
+            "name": "inconnu",
+            "count": 4
+          }
+        ],
+        "key": "D major",
+        "examples": [
+          "Alan Walker (upscaled to 4K), Sabrina Carpenter singing ＂On My Way＂, GMA with subtitles.mp3",
+          "Anuel AA - Enrique Iglesias ｜ FÚTBOL Y RUMBA.mp3",
+          "Anuel AA, Enrique Iglesias - Fútbol y Rumba (Guitar Cover).mp3"
+        ],
+        "recipe": "Écrire autour de D-A-Bm-G (~IV-I-V-vi) · tempo ~112 BPM · langue en · tonalité type D major"
+      },
+      {
+        "chords": "G#m-E-B-F#",
+        "degrees": "vi-IV-I-V",
+        "count": 16,
+        "tracks": 9,
+        "bpm_mean": 128.8,
+        "bpm_median": 117.5,
+        "tempo_bucket": "140+ rapide",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 5
+          },
+          {
+            "name": "inconnu",
+            "count": 2
+          },
+          {
+            "name": "instrumental",
+            "count": 2
+          }
+        ],
+        "key": "B major",
+        "examples": [
+          "Alan Walker - Unity (Extended Version) by Albert Vishi.mp3",
+          "Alan x Walkers feat. SAPPHIRE - Unity.mp3",
+          "Don't Let Me Down ( The Chainsmokers cover ) ⧸⧸ Waxx feat Pomme & Igit & L.E.J.mp3"
+        ],
+        "recipe": "Écrire autour de G#m-E-B-F# (~vi-IV-I-V) · tempo ~118 BPM · langue en · tonalité type B major"
+      },
+      {
+        "chords": "Bm-G-D-A",
+        "degrees": "IV-I-V-vi",
+        "count": 15,
+        "tracks": 7,
+        "bpm_mean": 109.0,
+        "bpm_median": 112.3,
+        "tempo_bucket": "100–120 pop",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 4
+          },
+          {
+            "name": "inconnu",
+            "count": 3
+          }
+        ],
+        "key": "D major",
+        "examples": [
+          "Alan Walker (upscaled to 4K), Sabrina Carpenter singing ＂On My Way＂, GMA with subtitles.mp3",
+          "Anuel AA - Enrique Iglesias ｜ FÚTBOL Y RUMBA.mp3",
+          "Anuel AA, Enrique Iglesias - Fútbol y Rumba (Guitar Cover).mp3"
+        ],
+        "recipe": "Écrire autour de Bm-G-D-A (~IV-I-V-vi) · tempo ~112 BPM · langue en · tonalité type D major"
+      },
+      {
+        "chords": "C#m-A-E-B",
+        "degrees": "vi-IV-I-V",
+        "count": 15,
+        "tracks": 6,
+        "bpm_mean": 114.8,
+        "bpm_median": 120.8,
+        "tempo_bucket": "120–140 groove/dance",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 5
+          },
+          {
+            "name": "inconnu",
+            "count": 1
+          }
+        ],
+        "key": "E major",
+        "examples": [
+          "Alan Walker - The Spectre.mp3",
+          "Alan Walker, Sabrina Carpenter & Farruko  - On My Way.mp3",
+          "B.o.B - Don't Let Me Fall (Official Video).mp3"
+        ],
+        "recipe": "Écrire autour de C#m-A-E-B (~vi-IV-I-V) · tempo ~121 BPM · langue en · tonalité type E major"
+      },
+      {
+        "chords": "B-F#-G#m-E",
+        "degrees": "vi-IV-I-V",
+        "count": 15,
+        "tracks": 9,
+        "bpm_mean": 121.4,
+        "bpm_median": 117.5,
+        "tempo_bucket": "80–100 mid lent",
+        "language": "en",
+        "languages": [
+          {
+            "name": "en",
+            "count": 4
+          },
+          {
+            "name": "inconnu",
+            "count": 3
+          },
+          {
+            "name": "instrumental",
+            "count": 2
+          }
+        ],
+        "key": "B major",
+        "examples": [
+          "Alan Walker - Unity (Extended Version) by Albert Vishi.mp3",
+          "HAEVN feat. Neco Novellas - Great Mother (Official Music Video).mp3",
+          "HANS ZIMMER Melodies for Deep Focus and Relaxation - Soft Felt Piano Collection.mp3"
+        ],
+        "recipe": "Écrire autour de B-F#-G#m-E (~vi-IV-I-V) · tempo ~118 BPM · langue en · tonalité type B major"
+      }
+    ],
+    "cross_language": [
+      {
+        "chords": "Cm-G#-D#-A#",
+        "languages": [
+          {
+            "name": "en",
+            "count": 7
+          },
+          {
+            "name": "fr",
+            "count": 2
+          },
+          {
+            "name": "inconnu",
+            "count": 1
+          },
+          {
+            "name": "instrumental",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "chords": "G#-D#-A#-Cm",
+        "languages": [
+          {
+            "name": "en",
+            "count": 6
+          },
+          {
+            "name": "fr",
+            "count": 2
+          },
+          {
+            "name": "inconnu",
+            "count": 2
+          },
+          {
+            "name": "instrumental",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "chords": "A#-Cm-G#-D#",
+        "languages": [
+          {
+            "name": "en",
+            "count": 7
+          },
+          {
+            "name": "fr",
+            "count": 2
+          },
+          {
+            "name": "inconnu",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "chords": "G-D-A-Bm",
+        "languages": [
+          {
+            "name": "en",
+            "count": 4
+          },
+          {
+            "name": "inconnu",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "chords": "D#-A#-Cm-G#",
+        "languages": [
+          {
+            "name": "en",
+            "count": 5
+          },
+          {
+            "name": "fr",
+            "count": 2
+          },
+          {
+            "name": "inconnu",
+            "count": 1
+          },
+          {
+            "name": "instrumental",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "chords": "D-A-Bm-G",
+        "languages": [
+          {
+            "name": "en",
+            "count": 5
+          },
+          {
+            "name": "inconnu",
+            "count": 4
+          }
+        ]
+      }
+    ],
+    "cross_tempo": [
+      {
+        "chords": "Cm-G#-D#-A#",
+        "tempos": [
+          {
+            "name": "100–120 pop",
+            "count": 5
+          },
+          {
+            "name": "80–100 mid lent",
+            "count": 3
+          },
+          {
+            "name": "120–140 groove/dance",
+            "count": 2
+          },
+          {
+            "name": "140+ rapide",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "chords": "G#-D#-A#-Cm",
+        "tempos": [
+          {
+            "name": "100–120 pop",
+            "count": 5
+          },
+          {
+            "name": "80–100 mid lent",
+            "count": 4
+          },
+          {
+            "name": "120–140 groove/dance",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "chords": "A#-Cm-G#-D#",
+        "tempos": [
+          {
+            "name": "100–120 pop",
+            "count": 5
+          },
+          {
+            "name": "120–140 groove/dance",
+            "count": 3
+          },
+          {
+            "name": "80–100 mid lent",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "chords": "G-D-A-Bm",
+        "tempos": [
+          {
+            "name": "100–120 pop",
+            "count": 3
+          },
+          {
+            "name": "120–140 groove/dance",
+            "count": 2
+          },
+          {
+            "name": "80–100 mid lent",
+            "count": 1
+          },
+          {
+            "name": "<80 ballade",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "chords": "D#-A#-Cm-G#",
+        "tempos": [
+          {
+            "name": "100–120 pop",
+            "count": 5
+          },
+          {
+            "name": "120–140 groove/dance",
+            "count": 2
+          },
+          {
+            "name": "80–100 mid lent",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "chords": "D-A-Bm-G",
+        "tempos": [
+          {
+            "name": "100–120 pop",
+            "count": 4
+          },
+          {
+            "name": "80–100 mid lent",
+            "count": 2
+          },
+          {
+            "name": "120–140 groove/dance",
+            "count": 2
+          },
+          {
+            "name": "<80 ballade",
+            "count": 1
+          }
+        ]
       }
     ],
     "examples": [
       {
         "progression": "vi-IV-I-V",
-        "chords": "A#m-Am-C-Am",
+        "chords": "Cm-G#-D#-A#",
         "examples": [
-          "#833 Pomme - Umbrella (Reprise acoustique de Rihanna).mp3",
-          "Alan Walker - The Spectre.mp3",
-          "Alan x Walkers feat. SAPPHIRE - Unity.mp3"
+          "6ix9ine - Bori feat. Lenier (Official Music Video).mp3",
+          "Alec Benjamin - Devil Doesn't Bargain [Official Lyric Video].mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+        ]
+      },
+      {
+        "progression": "vi-IV-I-V",
+        "chords": "G#-D#-A#-Cm",
+        "examples": [
+          "6ix9ine - Bori feat. Lenier (Official Music Video).mp3",
+          "Alec Benjamin - Devil Doesn't Bargain [Official Lyric Video].mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+        ]
+      },
+      {
+        "progression": "vi-IV-I-V",
+        "chords": "A#-Cm-G#-D#",
+        "examples": [
+          "6ix9ine - Bori feat. Lenier (Official Music Video).mp3",
+          "Alec Benjamin - Devil Doesn't Bargain [Official Lyric Video].mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
         ]
       },
       {
         "progression": "IV-I-V-vi",
-        "chords": "C#m-A-E-B",
+        "chords": "G-D-A-Bm",
         "examples": [
-          "Alan Walker - The Spectre.mp3",
-          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3",
-          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3"
+          "Alan Walker (upscaled to 4K), Sabrina Carpenter singing ＂On My Way＂, GMA with subtitles.mp3",
+          "Anuel AA - Enrique Iglesias ｜ FÚTBOL Y RUMBA.mp3",
+          "Anuel AA, Enrique Iglesias - Fútbol y Rumba (Guitar Cover).mp3"
         ]
       },
       {
-        "progression": "V-vi-IV-I",
-        "chords": "C#m-A-E-B",
+        "progression": "vi-IV-I-V",
+        "chords": "D#-A#-Cm-G#",
         "examples": [
-          "Alan Walker - The Spectre.mp3",
+          "Alec Benjamin - Devil Doesn't Bargain [Official Lyric Video].mp3",
           "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3",
-          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3"
-        ]
-      },
-      {
-        "progression": "I-V-vi-IV",
-        "chords": "C#m-A-E-B",
-        "examples": [
-          "Alan Walker - The Spectre.mp3",
-          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3",
-          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3"
-        ]
-      },
-      {
-        "progression": "IV-I-vi-I",
-        "chords": "B-F#-D#m-F#",
-        "examples": [
-          "Asaf Avidan, The Mojos - One Day ⧸ Reckoning Song (Videoclip Day Version).mp3",
-          "Comptine d'un autre été： l'Après-midi (from ＂Amélie＂).mp3",
-          "Hallelujah.mp3"
+          "Band of Horses - The Funeral [OFFICIAL VIDEO].mp3"
         ]
       }
     ],
@@ -675,125 +1265,219 @@
       {
         "file": "Kid Francescoli - ＂Moon (and it went like)＂ (Official Video).mp3",
         "key": "B minor",
-        "confidence": 0.0723,
+        "bpm": 117.5,
+        "language": "en",
         "chords": "G-Bm-D-G",
-        "top_chords": [
-          {
-            "name": "G",
-            "count": 33
-          },
-          {
-            "name": "Bm",
-            "count": 18
-          },
-          {
-            "name": "D",
-            "count": 15
-          },
-          {
-            "name": "C#m",
-            "count": 1
-          },
-          {
-            "name": "F#m",
-            "count": 1
-          }
-        ],
+        "confidence": 0.081,
         "top": [
           {
             "name": "bVI-i-bIII-bVI",
-            "count": 4
+            "count": 3
           },
           {
             "name": "i-bIII-bVI-i",
-            "count": 4
+            "count": 3
           },
           {
             "name": "bIII-bVI-i-bIII",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Love.mp3",
+        "key": "C major",
+        "bpm": 83.4,
+        "language": "en",
+        "chords": "C-A#-Dm-C",
+        "confidence": 0.0788,
+        "top": [
+          {
+            "name": "I-bVII-ii-I",
             "count": 3
+          },
+          {
+            "name": "bVII-ii-IV-I",
+            "count": 2
+          },
+          {
+            "name": "bVII-ii-I-bVII",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Andante Risoluto - SUCCESSION (HBO) SEASON 4 ｜ Piano Cover + Sheets.mp3",
+        "key": "F minor",
+        "bpm": 215.3,
+        "language": "instrumental",
+        "chords": "C-Fm-C#-A#m",
+        "confidence": 0.0672,
+        "top": [
+          {
+            "name": "V-i-bVI-iv",
+            "count": 2
+          },
+          {
+            "name": "bVI-i-bVI-iv",
+            "count": 1
+          },
+          {
+            "name": "i-bVI-iv-bVI",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "file": "Gravagerz - Chihiro (Official Music Video).mp3",
+        "key": "D minor",
+        "bpm": 69.8,
+        "language": "en",
+        "chords": "Dm-A#-F-Gm",
+        "confidence": 0.0664,
+        "top": [
+          {
+            "name": "i-bVI-bIII-iv",
+            "count": 5
+          },
+          {
+            "name": "bVI-bIII-iv-i",
+            "count": 4
+          },
+          {
+            "name": "bIII-iv-i-bVI",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "file": "Loner Deer - Joline [acoustic live].mp3",
+        "key": "A# major",
+        "bpm": 92.3,
+        "language": "en",
+        "chords": "Cm-D#-A#-Fm",
+        "confidence": 0.0648,
+        "top": [
+          {
+            "name": "ii-IV-I-v",
+            "count": 2
+          },
+          {
+            "name": "IV-I-v-ii",
+            "count": 2
+          },
+          {
+            "name": "I-v-ii-IV",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Parra for Cuva - Swept Away (feat. Anna Naklab & Mr. Gramo).mp3",
+        "key": "E minor",
+        "bpm": 83.4,
+        "language": "en",
+        "chords": "Em-G-F-Am",
+        "confidence": 0.0632,
+        "top": [
+          {
+            "name": "i-bIII-bII-iv",
+            "count": 6
+          },
+          {
+            "name": "iv-i-bIII-bII",
+            "count": 5
+          },
+          {
+            "name": "bII-iv-i-bIII",
+            "count": 5
           }
         ]
       },
       {
         "file": "Billie Eilish - True Blue, rhianne.mp3",
         "key": "A minor",
-        "confidence": 0.0651,
+        "bpm": 103.4,
+        "language": "inconnu",
         "chords": "D-Am-C-Em",
-        "top_chords": [
-          {
-            "name": "C",
-            "count": 17
-          },
-          {
-            "name": "D",
-            "count": 17
-          },
-          {
-            "name": "Am",
-            "count": 17
-          },
-          {
-            "name": "Em",
-            "count": 14
-          },
-          {
-            "name": "Cm",
-            "count": 1
-          }
-        ],
+        "confidence": 0.0629,
         "top": [
           {
             "name": "IV-i-bIII-v",
-            "count": 8
+            "count": 6
           },
           {
             "name": "bIII-v-IV-i",
-            "count": 6
+            "count": 4
           },
           {
             "name": "v-IV-i-bIII",
-            "count": 6
+            "count": 4
           }
         ]
       },
       {
-        "file": "Kodaline - Everything Works Out in the End ｜｜ Piano Cover (Sheet Music).mp3",
-        "key": "C major",
-        "confidence": 0.0578,
-        "chords": "Dm-G-C-F",
-        "top_chords": [
-          {
-            "name": "G",
-            "count": 18
-          },
-          {
-            "name": "C",
-            "count": 14
-          },
-          {
-            "name": "F",
-            "count": 14
-          },
-          {
-            "name": "Dm",
-            "count": 13
-          },
-          {
-            "name": "C#",
-            "count": 3
-          }
-        ],
+        "file": "Einaudi： Nuvole Bianche.mp3",
+        "key": "G# major",
+        "bpm": 123.0,
+        "language": "inconnu",
+        "chords": "Fm-C#-G#-D#",
+        "confidence": 0.0597,
         "top": [
           {
-            "name": "ii-V-I-IV",
+            "name": "vi-IV-I-V",
+            "count": 4
+          },
+          {
+            "name": "IV-I-V-vi",
             "count": 2
           },
           {
-            "name": "V-I-IV-ii",
+            "name": "I-V-vi-IV",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Twenty One Pilots - Stressed out for cello and piano (COVER).mp3",
+        "key": "A minor",
+        "bpm": 83.4,
+        "language": "instrumental",
+        "chords": "F-Dm-Am-F",
+        "confidence": 0.0595,
+        "top": [
+          {
+            "name": "bVI-iv-i-bVI",
             "count": 2
           },
           {
-            "name": "IV-ii-V-I",
+            "name": "iv-i-bVI-iv",
+            "count": 2
+          },
+          {
+            "name": "i-bVI-iv-i",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Giorni Dispari - Ludovico Einaudi ⧹⧹ Jacob's Piano.mp3",
+        "key": "F minor",
+        "bpm": 112.3,
+        "language": "instrumental",
+        "chords": "Fm-C#-D#-Fm",
+        "confidence": 0.0576,
+        "top": [
+          {
+            "name": "i-bVI-bVII-i",
+            "count": 2
+          },
+          {
+            "name": "bVI-bVII-i-bIII",
+            "count": 2
+          },
+          {
+            "name": "bVII-i-bIII-i",
             "count": 2
           }
         ]
@@ -801,30 +1485,10 @@
       {
         "file": "Jain - “Maria” - C à vous - 06⧸12⧸2023.mp3",
         "key": "F minor",
-        "confidence": 0.0536,
+        "bpm": 117.5,
+        "language": "fr",
         "chords": "Fm-C#-Fm-A#m",
-        "top_chords": [
-          {
-            "name": "C#",
-            "count": 22
-          },
-          {
-            "name": "Fm",
-            "count": 20
-          },
-          {
-            "name": "D#",
-            "count": 13
-          },
-          {
-            "name": "A#m",
-            "count": 9
-          },
-          {
-            "name": "C#m",
-            "count": 1
-          }
-        ],
+        "confidence": 0.0576,
         "top": [
           {
             "name": "iv-bVII-iv-bVII",
@@ -841,675 +1505,689 @@
         ]
       },
       {
-        "file": "Sia - Elastic Heart (Hambleton Remix).mp3",
-        "key": "A major",
-        "confidence": 0.0534,
-        "chords": "D-A-E-F#m",
-        "top_chords": [
-          {
-            "name": "D",
-            "count": 23
-          },
-          {
-            "name": "E",
-            "count": 16
-          },
-          {
-            "name": "F#m",
-            "count": 14
-          },
-          {
-            "name": "A",
-            "count": 12
-          },
-          {
-            "name": "Am",
-            "count": 2
-          }
-        ],
+        "file": "Fyripu - Nocturnus ナイト [Atmospheric Space Phonk].mp3",
+        "key": "D minor",
+        "bpm": 69.8,
+        "language": "inconnu",
+        "chords": "Gm-A#-F-Dm",
+        "confidence": 0.0574,
         "top": [
           {
-            "name": "IV-I-V-vi",
+            "name": "iv-bVI-bIII-i",
+            "count": 8
+          },
+          {
+            "name": "bVI-bIII-i-iv",
             "count": 7
           },
           {
-            "name": "V-vi-IV-I",
+            "name": "bIII-i-iv-bVI",
+            "count": 7
+          }
+        ]
+      },
+      {
+        "file": "Rihanna - Stay ft. Mikky Ekko.mp3",
+        "key": "A minor",
+        "bpm": 112.3,
+        "language": "inconnu",
+        "chords": "Am-C-Am-C",
+        "confidence": 0.0571,
+        "top": [
+          {
+            "name": "i-bIII-i-bIII",
+            "count": 5
+          },
+          {
+            "name": "bIII-i-bIII-i",
+            "count": 4
+          },
+          {
+            "name": "bIII-i-bIII-iv",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "file": "Sia - Elastic Heart (Hambleton Remix).mp3",
+        "key": "A major",
+        "bpm": 123.0,
+        "language": "en",
+        "chords": "D-A-E-F#m",
+        "confidence": 0.0568,
+        "top": [
+          {
+            "name": "IV-I-V-vi",
             "count": 6
           },
           {
+            "name": "I-V-vi-V",
+            "count": 3
+          },
+          {
+            "name": "V-vi-V-IV",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "file": "christina perri - jar of hearts (10th anniversary acoustic performance).mp3",
+        "key": "D# major",
+        "bpm": 71.8,
+        "language": "en",
+        "chords": "Bm-Cm-D-D#",
+        "confidence": 0.0566,
+        "top": [
+          {
+            "name": "bVI-vi-VII-I",
+            "count": 1
+          },
+          {
+            "name": "vi-VII-I-II",
+            "count": 1
+          },
+          {
+            "name": "VII-I-II-I",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "file": "Kodaline - Everything Works Out in the End ｜｜ Piano Cover (Sheet Music).mp3",
+        "key": "C major",
+        "bpm": 161.5,
+        "language": "instrumental",
+        "chords": "Dm-G-C-F",
+        "confidence": 0.0561,
+        "top": [
+          {
+            "name": "ii-V-I-IV",
+            "count": 2
+          },
+          {
+            "name": "V-I-IV-ii",
+            "count": 2
+          },
+          {
+            "name": "V-I-vi-IV",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Nightcore - I'm so lonely (Lyrics).mp3",
+        "key": "C minor",
+        "bpm": 86.1,
+        "language": "en",
+        "chords": "G#-Fm-G#-Gm",
+        "confidence": 0.056,
+        "top": [
+          {
+            "name": "bVI-iv-bVI-v",
+            "count": 2
+          },
+          {
+            "name": "iv-bVI-v-i",
+            "count": 2
+          },
+          {
+            "name": "bVI-v-i-bVI",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "From Now On (from ＂The Greatest Showman＂) Musicality Cover.mp3",
+        "key": "E major",
+        "bpm": 161.5,
+        "language": "en",
+        "chords": "C#m-A-E-B",
+        "confidence": 0.0556,
+        "top": [
+          {
+            "name": "vi-IV-I-V",
+            "count": 3
+          },
+          {
+            "name": "IV-I-V-vi",
+            "count": 3
+          },
+          {
             "name": "I-V-vi-IV",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "file": "HAEVN - Trade It For The Night (Lyric Video) with Neco Novellas.mp3",
+        "key": "F# minor",
+        "bpm": 123.0,
+        "language": "en",
+        "chords": "E-D-E-F#m",
+        "confidence": 0.0552,
+        "top": [
+          {
+            "name": "bVII-bVI-bVII-i",
             "count": 5
+          },
+          {
+            "name": "i-bVII-bVI-bVII",
+            "count": 3
+          },
+          {
+            "name": "bVI-bVII-i-bVII",
+            "count": 3
           }
         ]
       },
       {
         "file": "Comptine d'un autre été： l'Après-midi (from ＂Amélie＂).mp3",
-        "key": "D major",
-        "confidence": 0.053,
-        "chords": "Em-G-Bm-D",
-        "top_chords": [
-          {
-            "name": "D",
-            "count": 22
-          },
-          {
-            "name": "Em",
-            "count": 15
-          },
-          {
-            "name": "G",
-            "count": 15
-          },
-          {
-            "name": "Bm",
-            "count": 11
-          },
-          {
-            "name": "Fm",
-            "count": 2
-          }
-        ],
-        "top": [
-          {
-            "name": "ii-IV-vi-I",
-            "count": 5
-          },
-          {
-            "name": "vi-I-ii-IV",
-            "count": 4
-          },
-          {
-            "name": "IV-vi-I-ii",
-            "count": 3
-          }
-        ]
-      },
-      {
-        "file": "Down - Jason Walker [Traduction Française].mp3",
-        "key": "F# major",
-        "confidence": 0.0512,
-        "chords": "D#m-B-D#m-F#",
-        "top_chords": [
-          {
-            "name": "D#m",
-            "count": 22
-          },
-          {
-            "name": "F#",
-            "count": 18
-          },
-          {
-            "name": "A#m",
-            "count": 13
-          },
-          {
-            "name": "B",
-            "count": 8
-          },
-          {
-            "name": "C#",
-            "count": 3
-          }
-        ],
-        "top": [
-          {
-            "name": "vi-IV-vi-I",
-            "count": 3
-          },
-          {
-            "name": "iii-vi-IV-vi",
-            "count": 2
-          },
-          {
-            "name": "IV-vi-I-iii",
-            "count": 2
-          }
-        ]
-      },
-      {
-        "file": "Band of Horses - The Funeral [OFFICIAL VIDEO].mp3",
-        "key": "C minor",
-        "confidence": 0.0478,
-        "chords": "D#-A#-Cm-G#",
-        "top_chords": [
-          {
-            "name": "Cm",
-            "count": 29
-          },
-          {
-            "name": "G#",
-            "count": 13
-          },
-          {
-            "name": "A#",
-            "count": 12
-          },
-          {
-            "name": "D#",
-            "count": 9
-          },
-          {
-            "name": "Gm",
-            "count": 3
-          }
-        ],
-        "top": [
-          {
-            "name": "bIII-bVII-i-bVI",
-            "count": 5
-          },
-          {
-            "name": "bVII-i-bVI-bIII",
-            "count": 5
-          },
-          {
-            "name": "i-bVI-bIII-bVII",
-            "count": 4
-          }
-        ]
-      },
-      {
-        "file": "City of the Sun - ＂Another Time＂.mp3",
         "key": "B minor",
-        "confidence": 0.0475,
-        "chords": "Em-D-Em-D",
-        "top_chords": [
-          {
-            "name": "Em",
-            "count": 32
-          },
-          {
-            "name": "D",
-            "count": 28
-          },
-          {
-            "name": "C",
-            "count": 2
-          },
-          {
-            "name": "F",
-            "count": 1
-          },
-          {
-            "name": "F#",
-            "count": 1
-          }
-        ],
+        "bpm": 99.4,
+        "language": "fr",
+        "chords": "Em-G-Bm-D",
+        "confidence": 0.0541,
         "top": [
           {
-            "name": "iv-bIII-iv-bIII",
-            "count": 2
+            "name": "iv-bVI-i-bIII",
+            "count": 5
           },
           {
-            "name": "bIII-iv-bIII-iv",
-            "count": 2
+            "name": "bVI-i-bIII-iv",
+            "count": 3
           },
           {
-            "name": "bII-bV-V-ii",
-            "count": 1
+            "name": "i-bIII-iv-bVI",
+            "count": 3
           }
         ]
       },
       {
-        "file": "London Grammar - Lord It's A Feeling Orchestral (Amazon Original).mp3",
-        "key": "E minor",
-        "confidence": 0.0438,
-        "chords": "C-Em-C-Em",
-        "top_chords": [
-          {
-            "name": "Em",
-            "count": 38
-          },
-          {
-            "name": "C",
-            "count": 21
-          },
-          {
-            "name": "Am",
-            "count": 3
-          },
-          {
-            "name": "G",
-            "count": 3
-          },
-          {
-            "name": "D",
-            "count": 2
-          }
-        ],
+        "file": "Adèle Castillon - À la folie (clip officiel).mp3",
+        "key": "G minor",
+        "bpm": 99.4,
+        "language": "fr",
+        "chords": "Cm-Gm-F-D#",
+        "confidence": 0.0539,
         "top": [
           {
-            "name": "bVI-i-bVI-i",
+            "name": "iv-i-bVII-bVI",
             "count": 4
           },
           {
-            "name": "i-bVI-i-bVI",
+            "name": "i-bVII-bVI-iv",
             "count": 2
           },
           {
-            "name": "bVII-i-iv-bVI",
-            "count": 1
-          }
-        ]
-      },
-      {
-        "file": "Lauren Daigle - You Say (Official Music Video).mp3",
-        "key": "F major",
-        "confidence": 0.0435,
-        "chords": "F-Am-Dm-A#",
-        "top_chords": [
-          {
-            "name": "Am",
-            "count": 17
-          },
-          {
-            "name": "Dm",
-            "count": 16
-          },
-          {
-            "name": "A#",
-            "count": 14
-          },
-          {
-            "name": "F",
-            "count": 10
-          },
-          {
-            "name": "C",
-            "count": 8
-          }
-        ],
-        "top": [
-          {
-            "name": "I-iii-vi-IV",
+            "name": "bVII-bVI-iv-i",
             "count": 2
-          },
-          {
-            "name": "vi-IV-I-iii",
-            "count": 2
-          },
-          {
-            "name": "V-VI-iii-I",
-            "count": 1
           }
         ]
       },
       {
-        "file": "U2 Perform Rare, Intimate Version on ＂Every Breaking Wave＂ [EXCLUSIVE].mp3",
-        "key": "D# major",
-        "confidence": 0.0429,
-        "chords": "G#-Cm-D#-A#",
-        "top_chords": [
-          {
-            "name": "G#",
-            "count": 18
-          },
-          {
-            "name": "D#",
-            "count": 17
-          },
-          {
-            "name": "A#",
-            "count": 17
-          },
-          {
-            "name": "Cm",
-            "count": 14
-          },
-          {
-            "name": "Dm",
-            "count": 1
-          }
-        ],
-        "top": [
-          {
-            "name": "IV-vi-I-V",
-            "count": 7
-          },
-          {
-            "name": "vi-I-V-IV",
-            "count": 5
-          },
-          {
-            "name": "I-V-IV-vi",
-            "count": 5
-          }
-        ]
-      },
-      {
-        "file": "Taylor Swift - The Fate of Ophelia ｜ PIANO COVER by Paul Hankinson.mp3",
-        "key": "C major",
-        "confidence": 0.0424,
-        "chords": "E-Gm-Dm-F",
-        "top_chords": [
-          {
-            "name": "C",
-            "count": 15
-          },
-          {
-            "name": "F",
-            "count": 14
-          },
-          {
-            "name": "Gm",
-            "count": 8
-          },
-          {
-            "name": "Dm",
-            "count": 7
-          },
-          {
-            "name": "G",
-            "count": 7
-          }
-        ],
-        "top": [
-          {
-            "name": "III-v-ii-IV",
-            "count": 1
-          },
-          {
-            "name": "v-ii-IV-I",
-            "count": 1
-          },
-          {
-            "name": "ii-IV-I-iv",
-            "count": 1
-          }
-        ]
-      },
-      {
-        "file": "Carla Morrison - Disfruto (letra).mp3",
-        "key": "F# major",
-        "confidence": 0.0419,
-        "chords": "G#m-B-F#m-C#m",
-        "top_chords": [
-          {
-            "name": "F#m",
-            "count": 17
-          },
-          {
-            "name": "B",
-            "count": 17
-          },
-          {
-            "name": "C#m",
-            "count": 13
-          },
-          {
-            "name": "G#m",
-            "count": 13
-          },
-          {
-            "name": "G#",
-            "count": 4
-          }
-        ],
-        "top": [
-          {
-            "name": "ii-IV-i-v",
-            "count": 5
-          },
-          {
-            "name": "v-II-ii-IV",
-            "count": 3
-          },
-          {
-            "name": "II-ii-IV-i",
-            "count": 3
-          }
-        ]
-      },
-      {
-        "file": "Rence - Baby Blue.mp3",
+        "file": "Different Worlds - James Malikey (Piano Solo).mp3",
         "key": "G major",
-        "confidence": 0.0413,
-        "chords": "C#-G-Gm-G",
-        "top_chords": [
+        "bpm": 184.6,
+        "language": "instrumental",
+        "chords": "Em-G-D-Am",
+        "confidence": 0.0537,
+        "top": [
           {
-            "name": "G",
-            "count": 39
+            "name": "vi-I-V-ii",
+            "count": 3
           },
           {
-            "name": "C",
-            "count": 23
-          },
-          {
-            "name": "Gm",
+            "name": "I-V-ii-vi",
             "count": 2
           },
           {
-            "name": "C#",
-            "count": 1
-          },
-          {
-            "name": "A",
-            "count": 1
-          }
-        ],
-        "top": [
-          {
-            "name": "bV-I-i-I",
-            "count": 1
-          },
-          {
-            "name": "I-i-I-i",
-            "count": 1
-          },
-          {
-            "name": "i-I-i-I",
+            "name": "bV-bII-vi-I",
             "count": 1
           }
         ]
       },
       {
-        "file": "Tony Ann - The Interstellar Experience.mp3",
-        "key": "C major",
-        "confidence": 0.038,
-        "chords": "Am-G-Em-F",
-        "top_chords": [
-          {
-            "name": "Am",
-            "count": 19
-          },
-          {
-            "name": "F",
-            "count": 18
-          },
-          {
-            "name": "G",
-            "count": 13
-          },
-          {
-            "name": "Em",
-            "count": 11
-          },
-          {
-            "name": "E",
-            "count": 4
-          }
-        ],
+        "file": "Shawn Mendes - It'll Be Okay (Lyric Video).mp3",
+        "key": "D major",
+        "bpm": 136.0,
+        "language": "inconnu",
+        "chords": "G-D-C-Am",
+        "confidence": 0.0526,
         "top": [
+          {
+            "name": "IV-I-bVII-v",
+            "count": 2
+          },
+          {
+            "name": "I-bVII-v-IV",
+            "count": 2
+          },
+          {
+            "name": "bVII-v-IV-I",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "AVAION - Call my name (Official Lyric Video).mp3",
+        "key": "A major",
+        "bpm": 83.4,
+        "language": "en",
+        "chords": "D-F#m-E-C#m",
+        "confidence": 0.052,
+        "top": [
+          {
+            "name": "IV-vi-V-iii",
+            "count": 6
+          },
           {
             "name": "vi-V-iii-IV",
-            "count": 3
+            "count": 6
           },
           {
             "name": "V-iii-IV-vi",
-            "count": 3
-          },
-          {
-            "name": "IV-vi-iii-V",
-            "count": 2
+            "count": 5
           }
         ]
       },
       {
-        "file": "Blood Diamond OST - London [Extended].mp3",
+        "file": "Iconic Piano Covers and Mashups - 40 min Relaxing Piano (by James Malikey).mp3",
+        "key": "F# minor",
+        "bpm": 80.7,
+        "language": "instrumental",
+        "chords": "F#m-D-E-F#m",
+        "confidence": 0.052,
+        "top": [
+          {
+            "name": "i-bVI-bVII-i",
+            "count": 3
+          },
+          {
+            "name": "bVI-bVII-i-bVI",
+            "count": 3
+          },
+          {
+            "name": "bVII-i-bVI-bVII",
+            "count": 2
+          }
+        ]
+      }
+    ]
+  },
+  "bram": {
+    "source": "https://open.spotify.com/playlist/7prdtzDctYFscp8PgFsp6i",
+    "name": "Chill🌿",
+    "owner": "Bram van Beurden",
+    "track_count": 270,
+    "spotify_total": 270,
+    "followers": 2,
+    "description": "",
+    "duration_median_sec": 214.1,
+    "top_artists": [
+      {
+        "name": "Jack Johnson",
+        "count": 12
+      },
+      {
+        "name": "Bobby Alu",
+        "count": 5
+      },
+      {
+        "name": "Bahamas",
+        "count": 4
+      },
+      {
+        "name": "Donavon Frankenreiter",
+        "count": 3
+      },
+      {
+        "name": "John Mayer",
+        "count": 3
+      },
+      {
+        "name": "Bonga",
+        "count": 3
+      },
+      {
+        "name": "Loyle Carner",
+        "count": 3
+      },
+      {
+        "name": "Sido",
+        "count": 3
+      },
+      {
+        "name": "Dominic Fike",
+        "count": 3
+      },
+      {
+        "name": "Froukje",
+        "count": 3
+      },
+      {
+        "name": "Bakar",
+        "count": 3
+      },
+      {
+        "name": "Fresku",
+        "count": 3
+      },
+      {
+        "name": "Blick Bassy",
+        "count": 3
+      },
+      {
+        "name": "Keb' Mo'",
+        "count": 2
+      },
+      {
+        "name": "The Beautiful Girls",
+        "count": 2
+      }
+    ],
+    "languages": [
+      {
+        "name": "en",
+        "count": 242
+      },
+      {
+        "name": "autres (fr/nl/de/es)",
+        "count": 28
+      }
+    ],
+    "style_signals": [
+      {
+        "name": "acoustic / folk / island",
+        "count": 34,
+        "note": "Jack Johnson, Bobby Alu, Bahamas, Frankenreiter, Mayer"
+      },
+      {
+        "name": "chill / soft pop / alt",
+        "count": 120,
+        "note": "Dominic Fike, Bakar, Froukje, Loyle Carner pocket"
+      },
+      {
+        "name": "hip-hop soft / spoken",
+        "count": 15,
+        "note": "Loyle Carner, Sido, Fresku"
+      },
+      {
+        "name": "world / afro / latin",
+        "count": 12,
+        "note": "Bonga, Blick Bassy, Edu Requejo"
+      },
+      {
+        "name": "blues / roots / soul",
+        "count": 12,
+        "note": "Keb Mo, Stapleton, Kiwanuka, Teskey"
+      }
+    ],
+    "instruments_likely": [
+      {
+        "name": "guitare acoustique",
+        "share_pct": 55,
+        "note": "Jack Johnson / Frankenreiter / Mayer"
+      },
+      {
+        "name": "voix soft / lead",
+        "share_pct": 40,
+        "note": "presque toute la playlist est chantée"
+      },
+      {
+        "name": "harmonica / blues harp",
+        "share_pct": 12,
+        "note": "blues / roots pocket"
+      },
+      {
+        "name": "ukulele / percussions light",
+        "share_pct": 10,
+        "note": "island / chill vibe"
+      },
+      {
+        "name": "piano / soft keys",
+        "share_pct": 8,
+        "note": "ballades / soul"
+      }
+    ],
+    "tempo_profile": {
+      "median_estimate": 90,
+      "p25_estimate": 78,
+      "p75_estimate": 102,
+      "buckets": [
+        {
+          "name": "<80 ballade",
+          "count_label": "élevé"
+        },
+        {
+          "name": "80–100 mid lent",
+          "count_label": "dominant"
+        },
+        {
+          "name": "100–120 pop",
+          "count_label": "faible"
+        },
+        {
+          "name": "120+",
+          "count_label": "rare"
+        }
+      ],
+      "note": "Estimations curatorielles (pas d'analyse audio complète) — chill / acoustic ~80–100 BPM."
+    },
+    "creation_recipes": [
+      {
+        "chords": "G–C–D–Em",
+        "degrees": "I–IV–V–vi",
+        "bpm_median": 92,
+        "tempo_bucket": "80–100 mid lent",
+        "language": "en",
+        "key": "G major / E minor",
+        "instrument": "guitare acoustique fingerstyle",
+        "why": "Cœur Jack Johnson / Frankenreiter / island-folk de la playlist",
+        "recipe": "Écrire autour de G–C–D–Em (~I–IV–V–vi) · ~90–95 BPM · EN · guitare fingerstyle + voix soft"
+      },
+      {
+        "chords": "C–G–Am–F",
+        "degrees": "I–V–vi–IV",
+        "bpm_median": 88,
+        "tempo_bucket": "80–100 mid lent",
+        "language": "en",
+        "key": "C major",
+        "instrument": "guitare nylon / steel + voix",
+        "why": "Soft pop / Mayer acoustic / campfire",
+        "recipe": "Écrire autour de C–G–Am–F (~I–V–vi–IV) · ~85–95 BPM · EN · voix douce"
+      },
+      {
+        "chords": "Am–G–C–F",
+        "degrees": "vi–V–I–IV",
+        "bpm_median": 78,
+        "tempo_bucket": "<80 ballade",
+        "language": "en",
+        "key": "A minor",
+        "instrument": "guitare + harmonica / soul voice",
+        "why": "Blues-soul (Kiwanuka, Stapleton, Teskey, Keb' Mo')",
+        "recipe": "Écrire autour de Am–G–C–F · ~70–85 BPM · EN · blues / soul soft"
+      },
+      {
+        "chords": "Dm–Bb–F–C",
+        "degrees": "i–bVI–bIII–bVII",
+        "bpm_median": 96,
+        "tempo_bucket": "80–100 mid lent",
+        "language": "es",
         "key": "D minor",
-        "confidence": 0.0355,
-        "chords": "Dm-A#-C-Am",
-        "top_chords": [
-          {
-            "name": "Dm",
-            "count": 20
-          },
-          {
-            "name": "A#",
-            "count": 12
-          },
-          {
-            "name": "C",
-            "count": 11
-          },
-          {
-            "name": "D",
-            "count": 10
-          },
-          {
-            "name": "Am",
-            "count": 6
-          }
-        ],
-        "top": [
-          {
-            "name": "i-bVI-bVII-v",
-            "count": 3
-          },
-          {
-            "name": "bVI-bVII-v-i",
-            "count": 3
-          },
-          {
-            "name": "bVII-v-i-bVI",
-            "count": 3
-          }
+        "instrument": "guitare + percussions light",
+        "why": "Poche latin / world de la playlist",
+        "recipe": "Écrire autour de Dm–Bb–F–C · ~90–100 BPM · ES · groove léger"
+      }
+    ],
+    "insights": [
+      "Playlist Chill de Bram van Beurden — 270 titres Spotify.",
+      "Artistes phares : Jack Johnson (12), Bobby Alu (5), Bahamas (4), Frankenreiter / Mayer / Bonga / Loyle Carner / Froukje.",
+      "Langue dominante : anglais (~90%).",
+      "Centre : acoustic island-folk + chill alt · guitare · ~85–95 BPM.",
+      "Cible création #1 : G–C–D–Em · fingerstyle · voix soft EN.",
+      "2e poche : soft hip-hop / alt européen (Loyle Carner, Froukje, Fresku)."
+    ],
+    "method": "Spotify Web API (token embed open.spotify.com) + heuristiques artistes/titres ; recettes accords/tempo curatorielles pour ce catalogue chill/acoustic — pas de librosa sur MP3.",
+    "sample_tracks": [
+      {
+        "name": "Banana Pancakes",
+        "artist": "Jack Johnson",
+        "language": "en",
+        "styles": [
+          "acoustic / folk / island"
         ]
       },
       {
-        "file": "Angus & Julia Stone - Yellow Brick Road [Audio].mp3",
-        "key": "B major",
-        "confidence": 0.0351,
-        "chords": "B-C#m-B-C#m",
-        "top_chords": [
-          {
-            "name": "B",
-            "count": 34
-          },
-          {
-            "name": "C#m",
-            "count": 21
-          },
-          {
-            "name": "A",
-            "count": 7
-          },
-          {
-            "name": "Em",
-            "count": 2
-          },
-          {
-            "name": "F#",
-            "count": 2
-          }
-        ],
-        "top": [
-          {
-            "name": "I-ii-I-ii",
-            "count": 7
-          },
-          {
-            "name": "ii-I-ii-I",
-            "count": 6
-          },
-          {
-            "name": "bVII-I-ii-I",
-            "count": 5
-          }
+        "name": "Sunsets For Somebody Else",
+        "artist": "Jack Johnson",
+        "language": "en",
+        "styles": [
+          "acoustic / folk / island"
         ]
       },
       {
-        "file": "#833 Pomme - Umbrella (Reprise acoustique de Rihanna).mp3",
-        "key": "C major",
-        "confidence": 0.0349,
-        "chords": "A#m-Am-C-Am",
-        "top_chords": [
-          {
-            "name": "C",
-            "count": 23
-          },
-          {
-            "name": "Am",
-            "count": 14
-          },
-          {
-            "name": "G",
-            "count": 11
-          },
-          {
-            "name": "F",
-            "count": 7
-          },
-          {
-            "name": "D",
-            "count": 5
-          }
-        ],
-        "top": [
-          {
-            "name": "bVII-vi-I-vi",
-            "count": 1
-          },
-          {
-            "name": "vi-I-vi-I",
-            "count": 1
-          },
-          {
-            "name": "I-vi-I-V",
-            "count": 1
-          }
+        "name": "Big Wave",
+        "artist": "Donavon Frankenreiter",
+        "language": "en",
+        "styles": [
+          "acoustic / folk / island"
         ]
       },
       {
-        "file": "In My Veins.mp3",
-        "key": "C major",
-        "confidence": 0.0332,
-        "chords": "A#-E-Am-F",
-        "top_chords": [
-          {
-            "name": "C",
-            "count": 15
-          },
-          {
-            "name": "Am",
-            "count": 14
-          },
-          {
-            "name": "F",
-            "count": 11
-          },
-          {
-            "name": "G",
-            "count": 10
-          },
-          {
-            "name": "Em",
-            "count": 4
-          }
-        ],
-        "top": [
-          {
-            "name": "bVII-III-vi-IV",
-            "count": 1
-          },
-          {
-            "name": "III-vi-IV-ii",
-            "count": 1
-          },
-          {
-            "name": "vi-IV-ii-iii",
-            "count": 1
-          }
+        "name": "Lo Que Andaba Buscando",
+        "artist": "Edu Requejo",
+        "language": "es",
+        "styles": [
+          "latin / world"
+        ]
+      },
+      {
+        "name": "Wow",
+        "artist": "Beck",
+        "language": "en",
+        "styles": [
+          "indie / soft rock"
+        ]
+      },
+      {
+        "name": "Diving Duck Blues",
+        "artist": "Taj Mahal, Keb' Mo'",
+        "language": "en",
+        "styles": [
+          "blues / roots"
+        ]
+      },
+      {
+        "name": "Life Is Beautiful",
+        "artist": "Keb' Mo'",
+        "language": "en",
+        "styles": [
+          "chill / soft pop"
+        ]
+      },
+      {
+        "name": "Push The Blues Away",
+        "artist": "Josh Teskey, Ash Grunwald",
+        "language": "en",
+        "styles": [
+          "blues / roots"
+        ]
+      },
+      {
+        "name": "High On You",
+        "artist": "Jeangu Macrooy",
+        "language": "en",
+        "styles": [
+          "soul / r&b soft"
+        ]
+      },
+      {
+        "name": "Love Song #16",
+        "artist": "Jack Johnson",
+        "language": "en",
+        "styles": [
+          "acoustic / folk / island"
+        ]
+      },
+      {
+        "name": "No Depression",
+        "artist": "Bahamas",
+        "language": "en",
+        "styles": [
+          "acoustic / folk / island"
+        ]
+      },
+      {
+        "name": "I Won't Bitch",
+        "artist": "Brianna Harness",
+        "language": "en",
+        "styles": [
+          "blues / roots"
+        ]
+      },
+      {
+        "name": "La Danza Del Espacio Tiempo",
+        "artist": "Koino Yokan",
+        "language": "es",
+        "styles": [
+          "latin / world"
+        ]
+      },
+      {
+        "name": "Something Like Olivia - Acoustic",
+        "artist": "John Mayer",
+        "language": "en",
+        "styles": [
+          "acoustic / folk / island"
+        ]
+      },
+      {
+        "name": "Seasick Dream",
+        "artist": "Jack Johnson",
+        "language": "en",
+        "styles": [
+          "acoustic / folk / island"
+        ]
+      },
+      {
+        "name": "My Style",
+        "artist": "Bobby Alu",
+        "language": "en",
+        "styles": [
+          "acoustic / folk / island"
+        ]
+      },
+      {
+        "name": "La Mar",
+        "artist": "The Beautiful Girls",
+        "language": "es",
+        "styles": [
+          "acoustic / folk / island",
+          "latin / world"
+        ]
+      },
+      {
+        "name": "Don't Worry Be Happy",
+        "artist": "Bobby McFerrin",
+        "language": "en",
+        "styles": [
+          "soul / r&b soft"
+        ]
+      },
+      {
+        "name": "Home Again",
+        "artist": "Michael Kiwanuka",
+        "language": "en",
+        "styles": [
+          "soul / r&b soft"
+        ]
+      },
+      {
+        "name": "Beautiful Day",
+        "artist": "Donavon Frankenreiter",
+        "language": "en",
+        "styles": [
+          "acoustic / folk / island"
         ]
       }
     ]
