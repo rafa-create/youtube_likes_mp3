@@ -383,7 +383,7 @@
   <div class="wrap" id="app">
     <p class="sub">Chargement…</p>
   </div>
-  <script src="./i18n.js?v=6"></script>
+  <script src="./i18n.js?v=7"></script>
   <script>
     const accent = "#5b9fd4";
     const muted = "#8b9aab";
@@ -561,6 +561,61 @@
         <p class="hint">${t("Contribution observée = composante × poids. Le hard-club et l’acoustic « beach bro » réduisent le score ; le midtempo émotionnel et la chanson l’augmentent.")}</p>
         ${tbl([t("Composante"), t("Pts /100"), t("Contribution observée")], g.components.map((c) => [t(c.name), String(c.pts), t(c.why)]))}
         <p class="hint">${t("Limites. Validité de construit culturelle, non biologique. Les deux corpus ne sont pas observés avec le même instrument (audio vs métadonnées). Chez Bram, l’acoustic « dude with a guitar » fonctionne comme variable suppressrice : l’intimité vocale est élevée, le score reste médian. L’IG ne prédit pas une préférence titre par titre.")}</p>
+      `;
+    }
+    function romansHowToHtml(who) {
+      const lanes = {
+        rafael: [
+          ["#1", "Cm–G#–D#–A#", "vi–IV–I–V", "D#"],
+          ["#2", "Fm–C#–G#–D#", "vi–IV–I–V", "G#"],
+          ["#3", "C#m–A–E–B", "vi–IV–I–V", "E"],
+          ["#4", "G–D–A–Bm", "IV–I–V–vi", "D"],
+        ],
+        bram: [
+          ["#1", "G–C–D–Em", "I–IV–V–vi", "G"],
+          ["#2", "C–G–Am–F", "I–V–vi–IV", "C"],
+          ["#3", "Am–G–C–F", "vi–V–I–IV", "C"],
+          ["#4", "Em–G–C–D", "vi–I–IV–V", "G"],
+        ],
+        duo: [
+          ["Late light", "C–G–Am–F", "I–V–vi–IV", "C"],
+          ["Warm minor", "Am–F–C–G", "vi–IV–I–V", "C"],
+          ["Island lift", "G–Em–C–D", "I–vi–IV–V", "G"],
+        ],
+      };
+      return `
+        <h2 class="sec">${t("Chiffres romains — mode d’emploi")}</h2>
+        <div class="callout">
+          <h2>${t("Zéro solfège")}</h2>
+          <p>${t("Tu n’as pas à « savoir la musique ». Un chiffre romain est un <strong>numéro de marche</strong> dans la chanson, pas une touche de piano. Tu choisis d’abord un plan (vi–IV–I–V), ensuite une maison (I = C, ou D#, ou G). Les notes arrivent en dernier, en lisant le tableau.")}</p>
+        </div>
+        ${tbl([t("Romain"), t("Rôle"), t("Si I = C (guitare facile)"), t("Si I = D# (brief Rafael)")], [
+          ["I", t("La maison. Ça sonne « on est arrivé »."), "C", "D#"],
+          ["IV", t("On part. L’accord d’ouverture, souvent."), "F", "G#"],
+          ["V", t("La tension. Ça demande de rentrer à la maison."), "G", "A#"],
+          ["vi", t("Le cousin triste de la maison. Accords en minuscule = mineur."), "Am", "Cm"],
+        ])}
+        <p class="hint">${t("Majuscule (I, IV, V) = accord majeur, ça sonne « ouvert ». Minuscule (vi) = mineur, ça sonne plus intérieur. Le <em>m</em> de Cm, c’est la même chose que vi.")}</p>
+        <div class="card">
+          <h3>${t("Pour composer : 3 gestes")}</h3>
+          ${sigHtml([
+            [t("1. Prends une boucle"), t("Un ordre de numéros, pas des notes. Rafael : vi–IV–I–V. Bram : I–V–vi–IV. Ce sont les mêmes 4 marches, autre porte d’entrée.")],
+            [t("2. Choisis la maison (I)"), t("Une seule note : C (le plus simple à la guitare), D, D#, E ou G. Tout le reste suit.")],
+            [t("3. Remplace chaque numéro"), t("Lis la colonne du tableau. vi–IV–I–V avec I = C → Am–F–C–G. Avec I = D# → Cm–G#–D#–A# (c’est le brief Rafael #1).")],
+          ])}
+        </div>
+        <div class="card">
+          <h3>${t("Couplet vs refrain, sans changer d’accords")}</h3>
+          <p>${t("Tu gardes les <strong>mêmes 4 accords</strong>. Tu commences à un autre numéro. Couplet plus sombre : pars de <strong>vi</strong>. Refrain plus ouvert : pars de <strong>I</strong>.")}</p>
+          ${tbl([t("Section"), t("Départ"), t("En C"), t("En D#")], [
+            [t("Couplet"), "vi–IV–I–V", "Am–F–C–G", "Cm–G#–D#–A#"],
+            [t("Refrain"), "I–V–vi–IV", "C–G–Am–F", "D#–A#–Cm–G#"],
+          ])}
+          <p class="hint">${t("Si D# / G# / A# te bloquent : joue tout en C (Am, F, C, G). Dans le DAW tu pourras transposer plus tard. Capo 3 sur une guitare en C ≈ la couleur de D#.")}</p>
+        </div>
+        <h2 class="sec">${t("Tes lanes, traduites")}</h2>
+        ${tbl([t("Lane"), t("Accords à jouer"), t("Plan romain"), t("Maison (I)")], lanes[who])}
+        <p class="hint">${t("Les 4 lanes ne sont pas 4 théories. C’est la même famille de 4 accords, maison différente ou autre numéro de départ.")}</p>
       `;
     }
     const BRIEFS = {};
@@ -742,7 +797,7 @@
             </div>
             <div class="grid-2">
               <div class="card"><h3>${t("Artistes récurrents")}</h3>${rankHtml(rArtists.map((x) => ({ name: x.name, n: x.count })), playlistN)}<p class="hint">${t("Chaque like = 1. Nightcore = style/label (remixes), pas un artiste unique. Le top n’est pas le corpus.")}</p></div>
-              <div class="card"><h3>${t("Même boucle, autre départ")}</h3>${rankHtml(romans.map((x) => ({ name: x.name, n: x.count })))}<p class="hint">${t("vi–IV–I–V, IV–I–V–vi… = rotations du même cycle. Les chiffres romains (I, IV, V, vi) sont juste des numéros de marche dans la tonalité.")}</p></div>
+              <div class="card"><h3>${t("Même boucle, autre départ")}</h3>${rankHtml(romans.map((x) => ({ name: x.name, n: x.count })))}<p class="hint">${t("vi–IV–I–V, IV–I–V–vi… = la même boucle de 4 accords, commencée à un autre numéro. I = maison, IV et V = les deux autres piliers majeurs, vi = le cousin mineur. Mode d’emploi complet : onglet Création artistique.")}</p></div>
             </div>
             ${gaytitudeHtml("rafael")}
             <h2 class="sec">${t("Hors likes — paris")} <span class="badge">${t("estimé")}</span></h2>
@@ -761,6 +816,7 @@
               <h2>${t("Brief studio Rafael — priorité #1")}</h2>
               <p>${t("Écris une chanson qui <strong>absorbe</strong> : intimité → espace → montée. EN, <strong>Cm–G#–D#–A#</strong>, <strong>116–120 BPM</strong>, voix vulnérable + pad. La tristesse doit devenir <strong>belle</strong>, pas s’installer dans le désespoir. Électro mélodique, pas club. La prod doit <strong>ouvrir un espace</strong> — partir ailleurs, pas durcir.")}</p>
             </div>
+            ${romansHowToHtml("rafael")}
             <h2 class="sec">${t("4 lanes de création")}</h2>
             <div class="grid-3">
               <div class="card lane"><h3>${t("#1 Pop mineure brillante")}</h3><strong>Cm – G# – D# – A#</strong><p class="hint">${t("~118 BPM · EN · D# · voix vulnérable + pad. Hook sur D#/A# · couplet plus sombre sur Cm. Lyric : distance / nuit / désir contenu.")}</p>${copyBtn("r1", t("Rafael #1 — Pop mineure brillante\nCm–G#–D#–A#\n~118 BPM · EN · D#\nMêmes 4 accords que G#–D#–A#–Cm : couplet vs refrain = autre départ.\nVoix vulnérable + pad. Hook sur D#/A#, couplet plus sombre sur Cm.\nLyric : distance / nuit / désir contenu."))}</div>
@@ -880,6 +936,7 @@
               <h2>${t("Brief studio Bram — priorité #1")}</h2>
               <p>${t("<strong>Voix + guitare</strong>, chaleur → groove → liberté. Tempo ~85–95. Pas du lo-fi : rester <strong>exactement là</strong>. La prod <strong>donne du corps</strong>. Feel-good avec une petite ombre — mélancolie acceptée, désir charnel, pas de catharsis. NL ou EN. Si trop produit, enlever une couche.")}</p>
             </div>
+            ${romansHowToHtml("bram")}
             <h2 class="sec">${t("4 lanes de création")}</h2>
             <div class="grid-3">
               <div class="card lane"><h3>${t("#1 Surf / journée")}</h3><strong>G – C – D – Em</strong><p class="hint">${t("~90 BPM · NL ou EN. Fingerstyle, soleil, mer, dimanche. Johnson / Alu / Xavier Rudd — simplicité, pas démonstration.")}</p>${copyBtn("b1", t("Bram #1 — Surf / journée\nG–C–D–Em\n~90 BPM · NL ou EN\nFingerstyle, proche micro. Soleil, mer, dimanche matin.\nJack Johnson / Bobby Alu — simplicité, pas démonstration."))}</div>
@@ -953,9 +1010,10 @@
               [t("Harmonie"), t("4 accords, plusieurs départs (D#/E)"), t("campfire I–IV–V"), "C–G–Am–F · Am–F–C–G"],
             ])}
             <div class="card"><h3>${t("Grilles communes")}</h3>
-              <p><strong>C – G – Am – F</strong> · ${t("Bram campfire · Rafael, même 4 accords en C")}</p>
-              <p><strong>Am – F – C – G</strong> · ${t("Même boucle, départ mineur · Bram ballade")}</p>
-              <p><strong>G – Em – C – D</strong> · ${t("Bram island · Rafael arpèges synth")}</p>
+              <p><strong>C – G – Am – F</strong> · ${t("Bram campfire · Rafael, même 4 accords en C")} · I–V–vi–IV</p>
+              <p><strong>Am – F – C – G</strong> · ${t("Même boucle, départ mineur · Bram ballade")} · vi–IV–I–V</p>
+              <p><strong>G – Em – C – D</strong> · ${t("Bram island · Rafael arpèges synth")} · I–vi–IV–V</p>
+              <p class="hint">${t("Mode d’emploi des romains : onglet Concepts.")}</p>
             </div>
             <div class="card">
               <h3>${t("Pont hors listes")}</h3>
@@ -1005,6 +1063,7 @@
           </div>
 
           <div class="subpanel" id="duo-concepts">
+            ${romansHowToHtml("duo")}
             <h2 class="sec">${t("Concepts prêts à composer")}</h2>
             <div class="grid-3">
               <div class="card"><h3>1 — Late light</h3><p><strong>C–G–Am–F · 104 BPM · EN</strong></p><p>${t("Bram fingerstyle C. Rafael pad + clap. Refrain duo.")}</p><p class="hint">Lyric : « leave the porch light on for me… »</p>${copyBtn("d1", t("Duo — Late light\nC–G–Am–F · 104 BPM · EN\nBram fingerstyle C. Rafael pad + clap. Refrain duo.\nLyric : leave the porch light on for me…"))}</div>
