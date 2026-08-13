@@ -1,0 +1,370 @@
+{
+  "playlist_count": 776,
+  "mp3_count": 726,
+  "audio_sample_size": 80,
+  "top_artists": [
+    {
+      "name": "Nightcore",
+      "count": 15
+    },
+    {
+      "name": "Sia",
+      "count": 13
+    },
+    {
+      "name": "Alan Walker",
+      "count": 7
+    },
+    {
+      "name": "HAEVN",
+      "count": 7
+    },
+    {
+      "name": "Ed Sheeran",
+      "count": 7
+    },
+    {
+      "name": "Pomme",
+      "count": 6
+    },
+    {
+      "name": "NNX LXSY",
+      "count": 5
+    },
+    {
+      "name": "Lost Frequencies",
+      "count": 5
+    },
+    {
+      "name": "Milky Chance",
+      "count": 5
+    },
+    {
+      "name": "Vibfy",
+      "count": 4
+    },
+    {
+      "name": "Kodaline",
+      "count": 4
+    },
+    {
+      "name": "Tony Ann",
+      "count": 4
+    },
+    {
+      "name": "Alec Benjamin",
+      "count": 4
+    },
+    {
+      "name": "Tom Odell",
+      "count": 4
+    },
+    {
+      "name": "Rihanna",
+      "count": 4
+    }
+  ],
+  "genre_signals": [
+    {
+      "name": "autre / non classé",
+      "count": 572
+    },
+    {
+      "name": "electronic / EDM",
+      "count": 45
+    },
+    {
+      "name": "piano / neo-classical",
+      "count": 44
+    },
+    {
+      "name": "pop",
+      "count": 43
+    },
+    {
+      "name": "french chanson / pop FR",
+      "count": 33
+    },
+    {
+      "name": "folk / acoustic",
+      "count": 29
+    },
+    {
+      "name": "cinematic / soundtrack",
+      "count": 21
+    },
+    {
+      "name": "ambient / chill",
+      "count": 14
+    },
+    {
+      "name": "rock / alternative",
+      "count": 9
+    },
+    {
+      "name": "hip-hop / rap",
+      "count": 8
+    }
+  ],
+  "modes": [
+    {
+      "name": "minor",
+      "count": 41
+    },
+    {
+      "name": "major",
+      "count": 39
+    }
+  ],
+  "keys": [
+    {
+      "name": "G minor",
+      "count": 7
+    },
+    {
+      "name": "C# minor",
+      "count": 7
+    },
+    {
+      "name": "C major",
+      "count": 6
+    },
+    {
+      "name": "G major",
+      "count": 6
+    },
+    {
+      "name": "A major",
+      "count": 5
+    },
+    {
+      "name": "D# major",
+      "count": 4
+    },
+    {
+      "name": "B minor",
+      "count": 4
+    },
+    {
+      "name": "G# minor",
+      "count": 4
+    }
+  ],
+  "bpm_buckets": [
+    {
+      "name": "110–130 (pop / groove)",
+      "count": 33
+    },
+    {
+      "name": "90–110 (midtempo)",
+      "count": 16
+    },
+    {
+      "name": "70–90 (lent / ballade)",
+      "count": 11
+    },
+    {
+      "name": "150+ (rapide / EDM)",
+      "count": 11
+    },
+    {
+      "name": "130–150 (dance / uptempo)",
+      "count": 7
+    },
+    {
+      "name": "<70 (très lent)",
+      "count": 2
+    }
+  ],
+  "bpm_stats": {
+    "mean": 116.2,
+    "median": 117.5,
+    "p25": 99.4,
+    "p75": 129.2
+  },
+  "sample_tracks": [
+    {
+      "file": "#833 Pomme - Umbrella (Reprise acoustique de Rihanna).mp3",
+      "bpm": 99.4,
+      "key": "C",
+      "mode": "major",
+      "key_confidence": 0.786
+    },
+    {
+      "file": "[Ghost] Riders in the Sky.mp3",
+      "bpm": 107.7,
+      "key": "A#",
+      "mode": "minor",
+      "key_confidence": 0.76
+    },
+    {
+      "file": "After movie des campagnes ENSEM 2021.mp3",
+      "bpm": 129.2,
+      "key": "G",
+      "mode": "minor",
+      "key_confidence": 0.774
+    },
+    {
+      "file": "Alan Walker - Faded.mp3",
+      "bpm": 89.1,
+      "key": "F#",
+      "mode": "major",
+      "key_confidence": 0.719
+    },
+    {
+      "file": "Alec Benjamin - Devil Doesn't Bargain [Official Lyric Video].mp3",
+      "bpm": 123.0,
+      "key": "D#",
+      "mode": "major",
+      "key_confidence": 0.916
+    },
+    {
+      "file": "Aliose - Tired Feet (Alela Diane Cover) - Version live acoustique.mp3",
+      "bpm": 107.7,
+      "key": "A#",
+      "mode": "minor",
+      "key_confidence": 0.734
+    },
+    {
+      "file": "André Rieu ft. Gheorghe Zamfir - The Lonely Shepherd.mp3",
+      "bpm": 123.0,
+      "key": "D",
+      "mode": "minor",
+      "key_confidence": 0.811
+    },
+    {
+      "file": "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3",
+      "bpm": 117.5,
+      "key": "D#",
+      "mode": "major",
+      "key_confidence": 0.839
+    },
+    {
+      "file": "AURORA - Running With The Wolves (Official Audio).mp3",
+      "bpm": 83.4,
+      "key": "A",
+      "mode": "minor",
+      "key_confidence": 0.714
+    },
+    {
+      "file": "Axis of Awesome - 4 Four Chord Song (with song titles).mp3",
+      "bpm": 123.0,
+      "key": "E",
+      "mode": "major",
+      "key_confidence": 0.699
+    },
+    {
+      "file": "Ben Cocks - So Cold (with lyrics).mp3",
+      "bpm": 76.0,
+      "key": "A#",
+      "mode": "major",
+      "key_confidence": 0.908
+    },
+    {
+      "file": "Billie Eilish - True Blue, rhianne.mp3",
+      "bpm": 112.3,
+      "key": "A",
+      "mode": "minor",
+      "key_confidence": 0.803
+    },
+    {
+      "file": "Bob Dylan - Knockin on Heaven's Door ｜ Tamara Weber-Fillion ｜ The Voice France 2016 ｜ Blind Audition.mp3",
+      "bpm": 123.0,
+      "key": "F",
+      "mode": "major",
+      "key_confidence": 0.698
+    },
+    {
+      "file": "Calum Scott - If Our Love Is Wrong (Audio).mp3",
+      "bpm": 152.0,
+      "key": "A#",
+      "mode": "major",
+      "key_confidence": 0.793
+    },
+    {
+      "file": "Charlie Puth & Selena Gomez - We Don't Talk Anymore [Official Live Performance].mp3",
+      "bpm": 99.4,
+      "key": "F#",
+      "mode": "minor",
+      "key_confidence": 0.764
+    },
+    {
+      "file": "City of the Sun - ＂Another Time＂.mp3",
+      "bpm": 95.7,
+      "key": "B",
+      "mode": "minor",
+      "key_confidence": 0.728
+    },
+    {
+      "file": "Coffin Dance but it's actually sad and emotional.mp3",
+      "bpm": 172.3,
+      "key": "C#",
+      "mode": "minor",
+      "key_confidence": 0.726
+    },
+    {
+      "file": "Cœur De Pirate - Crier Tout Bas (live session).mp3",
+      "bpm": 107.7,
+      "key": "G",
+      "mode": "minor",
+      "key_confidence": 0.791
+    },
+    {
+      "file": "Depeche Mode - Ghosts Again (Official Video).mp3",
+      "bpm": 117.5,
+      "key": "A",
+      "mode": "major",
+      "key_confidence": 0.641
+    },
+    {
+      "file": "Down.mp3",
+      "bpm": 71.8,
+      "key": "D#",
+      "mode": "major",
+      "key_confidence": 0.816
+    },
+    {
+      "file": "Dua Lipa - Falling Forever (Official Visualiser).mp3",
+      "bpm": 129.2,
+      "key": "F#",
+      "mode": "minor",
+      "key_confidence": 0.762
+    },
+    {
+      "file": "Ed Sheeran - Shape of you for cello and piano (COVER).mp3",
+      "bpm": 95.7,
+      "key": "C#",
+      "mode": "minor",
+      "key_confidence": 0.728
+    },
+    {
+      "file": "Electroman Adventures V2.mp3",
+      "bpm": 161.5,
+      "key": "G#",
+      "mode": "minor",
+      "key_confidence": 0.535
+    },
+    {
+      "file": "fade away (losing you).mp3",
+      "bpm": 76.0,
+      "key": "F#",
+      "mode": "major",
+      "key_confidence": 0.716
+    },
+    {
+      "file": "Freddy Gladieux - Vive Les Promeneurs (CLIP OFFICIEL).mp3",
+      "bpm": 92.3,
+      "key": "D",
+      "mode": "major",
+      "key_confidence": 0.874
+    }
+  ],
+  "insights": [
+    "Équilibre majeur/mineur : tu mixes lumière et tension.",
+    "Tempo médian ~118 BPM : zone pop / groove confortable.",
+    "Tonalités fréquentes (échantillon) : G minor (7), C# minor (7), C major (6), G major (6), A major (5).",
+    "Centres tonals récurrents : G, C#, C, A (utile pour improviser dans ces familles d'accords).",
+    "Styles détectés dans les titres : autre / non classé, electronic / EDM, piano / neo-classical, pop, french chanson / pop FR.",
+    "Pour les progressions d'accords exactes (I–V–vi–IV, ii–V–I…), un outil dédié type Chordify / Mixed In Key / Cyanite est plus précis que l'estimation chroma seule."
+  ]
+}
