@@ -1,11 +1,13 @@
-"""Analyze liked music: meta patterns + audio key/BPM sample."""
+"""Analyze liked music: meta patterns + audio key/BPM on all (or sampled) MP3s."""
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sys
 import warnings
-from collections import Counter, defaultdict
+from collections import Counter
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
 import numpy as np
@@ -99,9 +101,10 @@ def estimate_key(y: np.ndarray, sr: int) -> tuple[str, str, float]:
     return best
 
 
-def analyze_audio(path: Path, duration: float = 90.0) -> dict | None:
+def analyze_audio(path: str | Path, duration: float = 60.0) -> dict | None:
     import librosa
 
+    path = Path(path)
     try:
         y, sr = librosa.load(str(path), sr=22050, mono=True, duration=duration)
         if len(y) < sr * 5:
@@ -123,6 +126,11 @@ def analyze_audio(path: Path, duration: float = 90.0) -> dict | None:
         return {"file": path.name, "error": str(exc)}
 
 
+def _analyze_job(args: tuple[str, float]) -> dict | None:
+    path, duration = args
+    return analyze_audio(path, duration=duration)
+
+
 def bpm_bucket(bpm: float) -> str:
     if bpm < 70:
         return "<70 (très lent)"
@@ -141,6 +149,27 @@ def main() -> None:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
+    parser = argparse.ArgumentParser(description="Profil musical likes YouTube")
+    parser.add_argument(
+        "--sample",
+        type=int,
+        default=0,
+        help="Nombre max de MP3 audio à analyser (0 = tous)",
+    )
+    parser.add_argument(
+        "--duration",
+        type=float,
+        default=60.0,
+        help="Secondes d'audio analysées par piste",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=4,
+        help="Workers parallèles pour l'analyse audio",
+    )
+    args = parser.parse_args()
+
     # --- Meta from playlist ---
     titles: list[str] = []
     if PLAYLIST.is_file():
@@ -157,7 +186,6 @@ def main() -> None:
     for title in titles:
         artist, _ = split_artist_title(title)
         if artist:
-            # normalize featured artists: take first name before "," or " x " or "&" sometimes keep full
             base = re.split(r"\s+(?:feat\.?|ft\.?|×|x)\s+", artist, flags=re.I)[0].strip()
             if len(base) > 1:
                 artists[base] += 1
@@ -170,23 +198,38 @@ def main() -> None:
         else:
             instruments_untagged += 1
 
-    # --- Audio sample ---
+    # --- Audio: all MP3s by default ---
     files = sorted(MP3_DIR.glob("*.mp3"))
-    # Prefer diverse sample: every Nth file + first 20
-    sample_size = min(80, len(files))
-    if len(files) <= sample_size:
-        sample = files
+    if args.sample and args.sample > 0 and len(files) > args.sample:
+        step = max(1, len(files) // args.sample)
+        sample = files[::step][: args.sample]
     else:
-        step = max(1, len(files) // sample_size)
-        sample = files[::step][:sample_size]
+        sample = files
 
-    print(f"Audio sample: {len(sample)} / {len(files)} files")
-    audio_rows = []
-    for i, f in enumerate(sample, 1):
-        print(f"[{i}/{len(sample)}] {f.name[:60]}")
-        row = analyze_audio(f)
-        if row and "error" not in row:
+    print(
+        f"Audio analysis: {len(sample)} / {len(files)} files "
+        f"(duration={args.duration}s, workers={args.workers})"
+    )
+    audio_rows: list[dict] = []
+    errors = 0
+    jobs = [(str(f), args.duration) for f in sample]
+    done = 0
+    with ProcessPoolExecutor(max_workers=max(1, args.workers)) as pool:
+        futures = [pool.submit(_analyze_job, job) for job in jobs]
+        for fut in as_completed(futures):
+            done += 1
+            if done % 25 == 0 or done == len(futures):
+                print(f"  progress {done}/{len(futures)}")
+            row = fut.result()
+            if not row:
+                errors += 1
+                continue
+            if "error" in row:
+                errors += 1
+                continue
             audio_rows.append(row)
+
+    print(f"OK={len(audio_rows)} errors/skip={errors}")
 
     key_counts = Counter(f"{r['key']} {r['mode']}" for r in audio_rows)
     mode_counts = Counter(r["mode"] for r in audio_rows)
@@ -215,6 +258,7 @@ def main() -> None:
         "playlist_count": len(titles),
         "mp3_count": len(files),
         "audio_sample_size": len(audio_rows),
+        "audio_coverage_pct": round(100 * len(audio_rows) / max(1, len(files)), 1),
         "top_artists": [{"name": n, "count": c} for n, c in top_artists],
         "genre_signals": [{"name": n, "count": c} for n, c in top_genres],
         "instruments": instruments_payload,
@@ -239,6 +283,10 @@ def main() -> None:
     }
 
     insights = []
+    insights.append(
+        f"Couverture audio : {len(audio_rows)}/{len(files)} MP3 "
+        f"({round(100 * len(audio_rows) / max(1, len(files)), 1)}%)."
+    )
     if preferred:
         line = (
             f"Instrument préféré probable : {preferred['name']} "
@@ -272,7 +320,7 @@ def main() -> None:
 
     if top_keys:
         insights.append(
-            "Tonalités fréquentes (échantillon) : "
+            "Tonalités fréquentes : "
             + ", ".join(f"{k} ({c})" for k, c in top_keys[:5])
             + "."
         )
