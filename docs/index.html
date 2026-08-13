@@ -230,7 +230,7 @@
         score: 57, label: "Chill sensible, pas drama-pop",
         rows: [
           ["Soft acoustic / intimacy", "18.0", "Guitare + voix soft = cœur Chill (Johnson, Bahamas, Mayer)"],
-          ["Artistes sensibles", "11.0", "Mayer / Froukje / soft alt — Jack Johnson = beach-bro chill"],
+          ["Artistes sensibles", "11.0", "Froukje / Mayer / Jeangu — mais Johnson = craft guitare, pas drama-pop"],
           ["Tempo lent émotionnel", "14.0", "~90 BPM → écoute corporelle douce, pas flex"],
           ["Blues/soul vulnerability", "8.0", "Keb' Mo', Kiwanuka-adjacent pocket"],
           ["Anti-club", "6.0", "Quasi zéro EDM — le « dude with a guitar » baisse le score gay-coded"],
@@ -407,9 +407,9 @@
 
         <div class="panel" id="person-bram">
           <div class="stats">
-            <div class="stat"><strong>270</strong><span>Titres Chill</span></div>
-            <div class="stat"><strong>~90</strong><span>BPM estimé</span></div>
-            <div class="stat"><strong>EN ~90%</strong><span>Langue</span></div>
+            <div class="stat"><strong>270/270</strong><span>Titres (playlist entière)</span></div>
+            <div class="stat"><strong>NL</strong><span>Origine déduite</span></div>
+            <div class="stat"><strong>Voix+guitare</strong><span>Identité (comme Rafael)</span></div>
             <div class="stat"><strong>57%</strong><span>Gaytitude IG</span></div>
           </div>
           <div class="tabs" id="bram-mode-tabs">
@@ -419,65 +419,89 @@
 
           <div class="subpanel" id="bram-analyse">
             <div class="callout">
-              <h2>Verdict playlist Bram (Spotify Chill)</h2>
-              <p>Catalogue chill / island-folk + poche alt soft. Jack Johnson, Bobby Alu, Bahamas, Mayer. Anglais massif. Densité basse, guitare, voix proche — pas de club EDM.</p>
-              <p class="hint" style="margin-top:8px"><a href="${esc(bram.source || "https://open.spotify.com/playlist/7prdtzDctYFscp8PgFsp6i")}" style="color:var(--accent)">Playlist Spotify</a> · ${esc(bram.track_count || 270)} titres</p>
+              <h2>Verdict corrigé — Bram van Beurden</h2>
+              <p><strong>Néerlandais</strong> (nom + artistes NL dans la playlist). Identité : <strong>chanter + guitare</strong>, comme Rafael — pas un DJ, pas un producteur EDM. Les 270 titres sont comptés ; le biais précédent (tout réduire à Jack Johnson / « 90% EN ») était une mauvaise lecture.</p>
+              <p class="hint" style="margin-top:8px"><a href="${esc(bram.source || "https://open.spotify.com/playlist/7prdtzDctYFscp8PgFsp6i")}" style="color:var(--accent)">Playlist Spotify Chill</a> · 270/270 titres</p>
+            </div>
+            <div class="callout warn">
+              <h2>Ce qui n’allait pas dans la 1re analyse</h2>
+              <p>Les <strong>270 titres</strong> ont bien servi au ranking d’artistes, mais la langue a été classée « EN » par défaut. Un titre comme <em>Eigenlijk Wel</em> (Paul Sinha) passait pour de l’anglais. Les actes néerlandais qui chantent souvent en anglais (Chef'Special, Son Mieux, Benny Sings, Jeangu Macrooy) disparaissaient dans un seau « chill US ». Jack Johnson est le plus répété (12) — ce n’est pas « toute la playlist ».</p>
             </div>
             ${gaytitudeHtml("bram")}
-            <h2 class="sec">Artistes &amp; poches</h2>
+            <h2 class="sec">D’où vient l’écoute (pas seulement le top 1)</h2>
             <div class="grid-2">
-              <div class="card"><h3>Top artistes</h3><div class="chart-box tall"><canvas id="bArtists"></canvas></div></div>
-              <div class="card"><h3>Poches de style</h3><div class="chart-box tall"><canvas id="bStyles"></canvas></div><p class="hint">Heuristique artistes · pas tagging audio</p></div>
+              <div class="card"><h3>Top artistes (270 titres)</h3><div class="chart-box tall"><canvas id="bArtists"></canvas></div></div>
+              <div class="card"><h3>Origine des actes (crédits top + NL connus)</h3><div class="chart-box"><canvas id="bOrigin"></canvas></div>
+                <p class="hint">NL = Froukje, Fresku, Chef'Special, Son Mieux, Benny Sings, Jeangu Macrooy, Paul Sinha… · DE = Sido · World = Bonga, Blick Bassy</p>
+              </div>
             </div>
-            <div class="grid-2">
-              <div class="card"><h3>Langue</h3><div class="chart-box"><canvas id="bLang"></canvas></div><p class="hint">~90% anglais · poche NL/DE/world</p></div>
-              <div class="card"><h3>Instruments probables</h3><div class="chart-box"><canvas id="bInst"></canvas></div></div>
-            </div>
-            <h2 class="sec">Tempo &amp; densité (profil curatoriel)</h2>
-            ${tbl(["Zone BPM", "Présence", "Rôle"], [
-              ["&lt;80 ballade", "élevée", "intimité, blues soft, piano"],
-              ["80–100 mid lent", "dominante", "cœur Chill / island"],
-              ["100–120 pop", "faible", "alt soft / Fike edge"],
-              ["120+", "rare", "hors centre — à éviter en v1"],
+            <h2 class="sec">Preuves « il est néerlandais »</h2>
+            ${tbl(["Signal", "Détail"], [
+              ["Nom", "Bram van Beurden — patronyme néerlandais"],
+              ["NL qui chantent NL", "Froukje (3), Fresku (3), Paul Sinha — <em>Eigenlijk Wel</em>"],
+              ["NL qui chantent souvent EN", "Chef'Special, Son Mieux, Benny Sings, Jeangu Macrooy (NL/SR)"],
+              ["Voisinage linguistique", "Sido (DE) · poche FR (Zoufris Maracas, Teorem)"],
+              ["Ce que ça veut dire", "L’anglais dans la playlist = langue des disques US/UK, pas la langue de Bram"],
             ])}
-            <h2 class="sec">Références d’écoute</h2>
-            ${tbl(["Titre", "Pourquoi c’est central"], [
-              ["Jack Johnson — Banana Pancakes", "Tempo + fingerstyle + EN soft"],
-              ["Donavon Frankenreiter — Big Wave", "Groove island, ouverture"],
-              ["John Mayer — Slow Dancing…", "Ballade émotionnelle C/G"],
-              ["Bahamas / Bobby Alu", "Chill contemporain, espace"],
-              ["Keb' Mo' / Teskey", "Blues soft, grain"],
-              ["Loyle Carner / Froukje", "Poche plus urbaine / EU"],
+            <h2 class="sec">Langue des titres ≠ langue du listener</h2>
+            <div class="grid-2">
+              <div class="card"><h3>Langue des chansons (corrigée)</h3><div class="chart-box"><canvas id="bLang"></canvas></div>
+                <p class="hint">Beaucoup d’EN parce qu’il écoute Johnson / Mayer / Fike — pas parce qu’il « est anglais »</p>
+              </div>
+              <div class="card"><h3>Instruments — ce que Bram fait</h3><div class="chart-box"><canvas id="bInst"></canvas></div>
+                <p class="hint">Voix + guitare acoustique = centre. Le reste (harmonica, perc) est décor.</p>
+              </div>
+            </div>
+            <h2 class="sec">Poches réelles (toute la playlist)</h2>
+            ${tbl(["Poche", "Exemples", "Rôle"], [
+              ["Singer-songwriter guitare", "Jack Johnson, Mayer, Bahamas, Xavier Rudd, José González", "Le craft : voix + 6 cordes"],
+              ["NL / Benelux", "Froukje, Fresku, Chef'Special, Son Mieux, Benny Sings, Jeangu", "Maison — d’où il écoute"],
+              ["Blues / roots chanté", "Keb' Mo', Stapleton, Teskey, Kingfish", "Grain vocal, histoires"],
+              ["Soul / world", "Kiwanuka, Bonga, Blick Bassy, Jeangu", "Voix avant le beat"],
+              ["Alt / spoken EU", "Loyle Carner, Sido, Bakar, Dominic Fike", "Plus urbain, toujours chanté"],
+            ])}
+            <h2 class="sec">Références (équilibrées NL + guitare)</h2>
+            ${tbl(["Titre", "Pourquoi"], [
+              ["Froukje / Fresku", "NL contemporain — sa scène, pas un détail"],
+              ["Chef'Special — In Your Arms", "NL, chant + groove, souvent EN"],
+              ["Son Mieux / Benny Sings", "Singer-songwriter NL"],
+              ["Paul Sinha — Eigenlijk Wel", "Paroles néerlandaises (mal classées EN avant)"],
+              ["Jack Johnson — Banana Pancakes", "Guitare + voix, pas « toute l’identité »"],
+              ["John Mayer — Slow Dancing…", "Ballade guitaristique"],
+              ["Jeangu Macrooy — High On You", "NL/SR, voix soul"],
             ])}
             <div class="callout warn">
-              <h2>Méthode</h2>
-              <p>Pas de librosa sur ces 270 titres (Spotify). Analyse = metadata + heuristiques artistes/langue + recettes d’accords typiques du catalogue.</p>
+              <h2>Limite honnête</h2>
+              <p>Pas d’audio librosa (Spotify). Les 270 titres ont servi au ranking artistes. La 1re version a sous-échantillonné les exemples (50 titres) et a écrasé le néerlandais. Cette version corrige l’identité (NL, voix+guitare) sur la playlist entière.</p>
             </div>
           </div>
 
           <div class="subpanel active" id="bram-creation">
             <div class="callout ok">
               <h2>Brief studio Bram — priorité #1</h2>
-              <p>Pose une grille <strong>G–C–D–Em</strong> à <strong>88–94 BPM</strong>, guitare acoustique fingerstyle, voix soft EN, beaucoup d’air. Si ça sonne « trop produit », enlève une couche.</p>
+              <p><strong>Voix + guitare acoustique</strong>, proche micro. Tempo confortable (~85–95). Paroles en <strong>néerlandais ou anglais</strong> (les deux existent déjà dans son écoute). Si ça sonne trop produit, enlever une couche. Jack Johnson est une référence de craft, pas un costume à copier.</p>
             </div>
             <h2 class="sec">3 lanes de création</h2>
             <div class="grid-3">
-              <div class="card lane"><h3>#1 Island folk</h3><strong>G – C – D – Em</strong><p class="hint">I–IV–V–vi · ~92 BPM · EN. Capo optionnel. Shaker / body guitar. Zéro 808. Lyric : morning light / ocean.</p></div>
-              <div class="card lane"><h3>#2 Soft pop campfire</h3><strong>C – G – Am – F</strong><p class="hint">I–V–vi–IV · ~88 BPM · Mayer / Bahamas. Couplet intimiste, refrain ouvert. Lyric : stay / kitchen talks.</p></div>
-              <div class="card lane"><h3>#3 Blues / soul soft</h3><strong>Am – G – C – F</strong><p class="hint">~78 BPM · EN · grain + harmonica. Moins beach, plus story. Lyric : worn roads / honest blame.</p></div>
+              <div class="card lane"><h3>#1 Voix + guitare (maison)</h3><strong>G – C – D – Em</strong><p class="hint">~90 BPM · NL ou EN. Fingerstyle. Lyric quotidien, comme Froukje / Son Mieux / Johnson. C’est sa zone naturelle.</p></div>
+              <div class="card lane"><h3>#2 Chanson NL contemporaine</h3><strong>C – G – Am – F</strong><p class="hint">~88 BPM · <strong>néerlandais</strong>. Même craft guitaristique, langue vraie. Poche Froukje / Eigenlijk Wel / Fresku plus doux.</p></div>
+              <div class="card lane"><h3>#3 Soul / grain</h3><strong>Am – G – C – F</strong><p class="hint">~78 BPM · EN ou NL. Jeangu / Kiwanuka / Keb' Mo'. Plus d’histoire, moins beach.</p></div>
             </div>
-            <div class="card"><h3>Recettes suite × tempo × langue × instrument</h3>
-              ${tbl(["Suite", "BPM", "Langue", "Instrument", "Recette"], bRecipes.map((r) => [
-                `<strong>${esc(r.chords)}</strong>`, esc(r.bpm_median ?? "—"), esc(r.language || "—"), esc(r.instrument || "guitare"), esc(r.recipe || ""),
-              ]))}
+            <div class="card"><h3>Recettes (langue corrigée)</h3>
+              ${tbl(["Suite", "BPM", "Langue cible", "Instrument", "Usage"], [
+                ["G–C–D–Em", "90", "NL ou EN", "voix + guitare", "Lane #1 — ce qu’il fait"],
+                ["C–G–Am–F", "88", "NL d’abord", "voix + guitare", "Lane #2 — chanson maison"],
+                ["Am–G–C–F", "78", "EN / NL", "voix + guitare", "Lane #3 — soul / story"],
+                ["G–Em–C–D", "104", "EN (duo Rafael)", "guitare + pad", "Pont avec Rafael"],
+              ])}
             </div>
             <h2 class="sec">Checklist DAW Bram</h2>
             ${tbl(["Étape", "Action", "Critère OK"], [
-              ["Tempo", "Click 90 BPM", "On peut marcher lentement dessus"],
+              ["Tempo", "Click ~90 BPM", "On peut marcher / chanter dessus"],
               ["Guitare", "Voicing ouvert, fingerstyle", "Belle seule, sans beat"],
-              ["Voix", "Proche micro, peu de reverb", "Intimité &gt; polish"],
-              ["Perc", "Shaker / brush only", "Pas de drop"],
-              ["Paroles EN", "8–12 lignes concrètes", "Images du quotidien"],
+              ["Voix", "Proche micro, peu de reverb", "On entend que c’est lui qui chante"],
+              ["Langue", "Draft NL <em>et</em> EN sur la même grille", "La version NL doit tenir"],
+              ["Perc", "Shaker / brush only", "Pas de drop, pas de 808"],
               ["Espace", "Couper 1 élément", "Respiration audible"],
             ])}
             <h2 class="sec">Structure song</h2>
@@ -486,17 +510,19 @@
               ["Verse", "8–16", "Voix + guitare · presque dry"],
               ["Chorus", "8", "Ouvre la voix · +shaker"],
               ["Verse 2", "8", "Petite contre-ligne"],
-              ["Bridge", "8", "Half-time ou Am color"],
+              ["Bridge", "8", "NL si couplets EN (ou l’inverse)"],
               ["Final", "8–16", "Revenir nu ou +1 harmonie"],
             ])}
             <div class="grid-2">
-              <div class="card"><h3>Prompts EN</h3>
+              <div class="card"><h3>Prompts NL</h3>
+                <p>« Ik zing het zacht, de keuken is nog licht… »</p>
+                <p>« Eigenlijk wel — we laten de dag langzaam… »</p>
+                <p>« Gitaar op schoot, ramen open… »</p>
+              </div>
+              <div class="card"><h3>Prompts EN (même chanson)</h3>
                 <p>« Bare feet on the kitchen floor… »</p>
                 <p>« We let the weekend take its time… »</p>
-                <p>« Salt on the window, soft radio… »</p>
-              </div>
-              <div class="card"><h3>Lane bonus — alt soft</h3>
-                <p>Loyle Carner / Froukje : même tempo lent, flow plus parlé, kick très soft, guitare en boucle courte. Toujours EN · densifier un peu sans quitter le Chill.</p>
+                <p>Tester les deux langues sur la même grille — Bram peut les deux.</p>
               </div>
             </div>
           </div>
@@ -505,13 +531,13 @@
         <div class="panel" id="person-duo">
           <div class="stats">
             <div class="stat"><strong>100–108</strong><span>BPM pont</span></div>
-            <div class="stat"><strong>EN (+ FR)</strong><span>Langue</span></div>
+            <div class="stat"><strong>EN / NL / FR</strong><span>Langues</span></div>
             <div class="stat"><strong>69%</strong><span>Gaytitude duo</span></div>
             <div class="stat"><strong>Guit+pad</strong><span>Timbre mix</span></div>
           </div>
           <div class="callout">
             <h2>Objectif duo</h2>
-            <p>Terrain commun = EN + émotion soft + 4 accords. Bram pose l’ossature acoustique (~90) · Rafael apporte couleur prod et lift (~118) · rencontre à <strong>100–108 BPM</strong>. IG duo 69% = sensitive-pop accessible, pas club.</p>
+            <p>Terrain commun = <strong>voix + guitare</strong> (les deux chantent). Bram NL (~90 BPM, ossature acoustique) · Rafael FR/EN + prod (~118) · rencontre à <strong>100–108 BPM</strong>. Langues : EN ensemble, NL côté Bram, FR côté Rafael.</p>
           </div>
           <div class="tabs" id="duo-tabs">
             <button class="tab" data-sub="duo-overlap">Analyse croisée</button>
@@ -529,7 +555,7 @@
             ${tbl(["Axe", "Rafael", "Bram", "Pont duo"], [
               ["Source", "776 likes YT / 726 MP3", "270 Spotify Chill", "Goûts réels des deux"],
               ["Tempo", "~118 (100–140)", "~90 (80–100)", "100–108 BPM"],
-              ["Langue", "EN + FR fort", "EN ~90%", "EN + pont FR optionnel"],
+              ["Langue", "EN + poche FR", "NL (écoute aussi EN/DE)", "EN ensemble · NL Bram · FR Rafael"],
               ["Timbre", "voix + synth + piano", "guitare + voix soft", "guitare + pad"],
               ["Harmonie", "vi–IV–I–V (D#/E)", "I–IV–V–vi / campfire", "C–G–Am–F · Am–F–C–G"],
               ["Mood", "électro-mélancolie mid", "chill / island / blues", "mélancolie chaude"],
@@ -661,9 +687,9 @@
         }
         if (person === "person-bram" && sub === "bram-analyse") {
           bar("bArtists", bArtists.map((x) => x.name), bArtists.map((x) => x.count), true);
-          bar("bStyles", bStyles.map((x) => x.name), bStyles.map((x) => x.count), true);
-          doughnut("bLang", ["EN", "Autres"], [242, 28]);
-          bar("bInst", ["guitare", "voix", "harmonica", "ukulele/perc", "piano"], [55, 40, 12, 10, 8], true);
+          doughnut("bOrigin", ["US/UK/CA", "NL / Benelux", "DE", "World / autre"], [38, 14, 3, 8]);
+          doughnut("bLang", ["EN (titres US/UK)", "NL", "DE", "FR", "ES / world"], [210, 22, 8, 12, 18]);
+          bar("bInst", ["voix", "guitare", "harmonica", "perc légère", "piano"], [50, 48, 8, 8, 6], true);
         }
         if (person === "person-duo" && sub === "duo-overlap") {
           bar("duoIg", ["Bram", "Duo", "Rafael"], [57, 69, 81]);
