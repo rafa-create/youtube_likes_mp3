@@ -159,14 +159,15 @@
 
     async function loadProfile() {
       const urls = [
+        "https://raw.githubusercontent.com/rafa-create/youtube_likes_mp3/main/music_profile.json",
         "../music_profile.json",
         "https://cdn.jsdelivr.net/gh/rafa-create/youtube_likes_mp3@main/music_profile.json",
-        "https://raw.githubusercontent.com/rafa-create/youtube_likes_mp3/main/music_profile.json",
       ];
       let lastErr;
       for (const url of urls) {
         try {
-          const res = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now());
+          const sep = url.includes("?") ? "&" : "?";
+          const res = await fetch(url + sep + "t=" + Date.now(), { cache: "no-store" });
           if (!res.ok) throw new Error(res.status + " " + url);
           return await res.json();
         } catch (e) { lastErr = e; }
