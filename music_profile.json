@@ -464,8 +464,393 @@
     "Dominance mineure (~58%) : couleurs mélancoliques / introspectives plus que joyeuses.",
     "Tempo médian ~118 BPM : zone pop / groove confortable.",
     "Tonalités fréquentes : A minor (57), G minor (47), C major (43), C# minor (40), B minor (38).",
-    "Centres tonals récurrents : D, A, G, C (utile pour improviser dans ces familles d'accords).",
     "Styles détectés dans les titres : autre / non classé, electronic / EDM, piano / neo-classical, pop, french chanson / pop FR.",
-    "Pour les progressions d'accords exactes (I–V–vi–IV, ii–V–I…), un outil dédié type Chordify / Mixed In Key / Cyanite est plus précis que l'estimation chroma seule."
-  ]
+    "Progressions fréquentes (pilote accords) : vi-IV-I-V (28), IV-I-V-vi (20), V-vi-IV-I (17), I-V-vi-IV (16), IV-I-vi-I (11) · n=66."
+  ],
+  "chord_progressions": {
+    "method": "librosa chroma triad templates + Roman numerals (pilot)",
+    "tracks_considered": 100,
+    "tracks_ok": 66,
+    "tracks_failed": 0,
+    "coverage_note": "Pilote sur 66/100 pistes filtrées (hors tutos/mix longs/highlights) — estimation bruitée.",
+    "top_progressions": [
+      {
+        "name": "vi-IV-I-V",
+        "count": 28
+      },
+      {
+        "name": "IV-I-V-vi",
+        "count": 20
+      },
+      {
+        "name": "V-vi-IV-I",
+        "count": 17
+      },
+      {
+        "name": "I-V-vi-IV",
+        "count": 16
+      },
+      {
+        "name": "IV-I-vi-I",
+        "count": 11
+      },
+      {
+        "name": "I-vi-I-vi",
+        "count": 9
+      },
+      {
+        "name": "IV-vi-I-V",
+        "count": 9
+      },
+      {
+        "name": "i-bVII-bVI-i",
+        "count": 9
+      },
+      {
+        "name": "IV-I-V-I",
+        "count": 8
+      },
+      {
+        "name": "vi-I-vi-I",
+        "count": 8
+      },
+      {
+        "name": "V-I-vi-I",
+        "count": 8
+      },
+      {
+        "name": "bIII-bVII-i-bVI",
+        "count": 8
+      }
+    ],
+    "examples": [
+      {
+        "progression": "vi-IV-I-V",
+        "examples": [
+          "Alan Walker - The Spectre.mp3",
+          "Alan x Walkers feat. SAPPHIRE - Unity.mp3",
+          "#833 Pomme - Umbrella (Reprise acoustique de Rihanna).mp3"
+        ]
+      },
+      {
+        "progression": "IV-I-V-vi",
+        "examples": [
+          "Alan Walker - The Spectre.mp3",
+          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+        ]
+      },
+      {
+        "progression": "V-vi-IV-I",
+        "examples": [
+          "Alan Walker - The Spectre.mp3",
+          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+        ]
+      },
+      {
+        "progression": "I-V-vi-IV",
+        "examples": [
+          "Alan Walker - The Spectre.mp3",
+          "Avicii - The Nights (Lyrics) ＂my father told me＂.mp3",
+          "Anthony Keyrouz, Lucifer & Marmy - Kiss Me In Berlin (Lyrics).mp3"
+        ]
+      },
+      {
+        "progression": "IV-I-vi-I",
+        "examples": [
+          "Asaf Avidan, The Mojos - One Day ⧸ Reckoning Song (Videoclip Day Version).mp3",
+          "Comptine d'un autre été： l'Après-midi (from ＂Amélie＂).mp3",
+          "Hallelujah.mp3"
+        ]
+      }
+    ],
+    "sample_track_results": [
+      {
+        "file": "Kid Francescoli - ＂Moon (and it went like)＂ (Official Video).mp3",
+        "key": "B minor",
+        "confidence": 0.0723,
+        "top": [
+          {
+            "name": "bVI-i-bIII-bVI",
+            "count": 4
+          },
+          {
+            "name": "i-bIII-bVI-i",
+            "count": 4
+          },
+          {
+            "name": "bIII-bVI-i-bIII",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "file": "Billie Eilish - True Blue, rhianne.mp3",
+        "key": "A minor",
+        "confidence": 0.0651,
+        "top": [
+          {
+            "name": "IV-i-bIII-v",
+            "count": 8
+          },
+          {
+            "name": "bIII-v-IV-i",
+            "count": 6
+          },
+          {
+            "name": "v-IV-i-bIII",
+            "count": 6
+          }
+        ]
+      },
+      {
+        "file": "Kodaline - Everything Works Out in the End ｜｜ Piano Cover (Sheet Music).mp3",
+        "key": "C major",
+        "confidence": 0.0578,
+        "top": [
+          {
+            "name": "ii-V-I-IV",
+            "count": 2
+          },
+          {
+            "name": "V-I-IV-ii",
+            "count": 2
+          },
+          {
+            "name": "IV-ii-V-I",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Jain - “Maria” - C à vous - 06⧸12⧸2023.mp3",
+        "key": "F minor",
+        "confidence": 0.0536,
+        "top": [
+          {
+            "name": "iv-bVII-iv-bVII",
+            "count": 3
+          },
+          {
+            "name": "i-bVI-i-iv",
+            "count": 2
+          },
+          {
+            "name": "bVI-i-iv-bVII",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Sia - Elastic Heart (Hambleton Remix).mp3",
+        "key": "A major",
+        "confidence": 0.0534,
+        "top": [
+          {
+            "name": "IV-I-V-vi",
+            "count": 7
+          },
+          {
+            "name": "V-vi-IV-I",
+            "count": 6
+          },
+          {
+            "name": "I-V-vi-IV",
+            "count": 5
+          }
+        ]
+      },
+      {
+        "file": "Comptine d'un autre été： l'Après-midi (from ＂Amélie＂).mp3",
+        "key": "D major",
+        "confidence": 0.053,
+        "top": [
+          {
+            "name": "ii-IV-vi-I",
+            "count": 5
+          },
+          {
+            "name": "vi-I-ii-IV",
+            "count": 4
+          },
+          {
+            "name": "IV-vi-I-ii",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "file": "Down - Jason Walker [Traduction Française].mp3",
+        "key": "F# major",
+        "confidence": 0.0512,
+        "top": [
+          {
+            "name": "vi-IV-vi-I",
+            "count": 3
+          },
+          {
+            "name": "iii-vi-IV-vi",
+            "count": 2
+          },
+          {
+            "name": "IV-vi-I-iii",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "file": "Band of Horses - The Funeral [OFFICIAL VIDEO].mp3",
+        "key": "C minor",
+        "confidence": 0.0478,
+        "top": [
+          {
+            "name": "bIII-bVII-i-bVI",
+            "count": 5
+          },
+          {
+            "name": "bVII-i-bVI-bIII",
+            "count": 5
+          },
+          {
+            "name": "i-bVI-bIII-bVII",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "file": "City of the Sun - ＂Another Time＂.mp3",
+        "key": "B minor",
+        "confidence": 0.0475,
+        "top": [
+          {
+            "name": "iv-bIII-iv-bIII",
+            "count": 2
+          },
+          {
+            "name": "bIII-iv-bIII-iv",
+            "count": 2
+          },
+          {
+            "name": "bII-bV-V-ii",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "file": "London Grammar - Lord It's A Feeling Orchestral (Amazon Original).mp3",
+        "key": "E minor",
+        "confidence": 0.0438,
+        "top": [
+          {
+            "name": "bVI-i-bVI-i",
+            "count": 4
+          },
+          {
+            "name": "i-bVI-i-bVI",
+            "count": 2
+          },
+          {
+            "name": "bVII-i-iv-bVI",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "file": "Lauren Daigle - You Say (Official Music Video).mp3",
+        "key": "F major",
+        "confidence": 0.0435,
+        "top": [
+          {
+            "name": "I-iii-vi-IV",
+            "count": 2
+          },
+          {
+            "name": "vi-IV-I-iii",
+            "count": 2
+          },
+          {
+            "name": "V-VI-iii-I",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "file": "U2 Perform Rare, Intimate Version on ＂Every Breaking Wave＂ [EXCLUSIVE].mp3",
+        "key": "D# major",
+        "confidence": 0.0429,
+        "top": [
+          {
+            "name": "IV-vi-I-V",
+            "count": 7
+          },
+          {
+            "name": "vi-I-V-IV",
+            "count": 5
+          },
+          {
+            "name": "I-V-IV-vi",
+            "count": 5
+          }
+        ]
+      },
+      {
+        "file": "Taylor Swift - The Fate of Ophelia ｜ PIANO COVER by Paul Hankinson.mp3",
+        "key": "C major",
+        "confidence": 0.0424,
+        "top": [
+          {
+            "name": "III-v-ii-IV",
+            "count": 1
+          },
+          {
+            "name": "v-ii-IV-I",
+            "count": 1
+          },
+          {
+            "name": "ii-IV-I-iv",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "file": "Carla Morrison - Disfruto (letra).mp3",
+        "key": "F# major",
+        "confidence": 0.0419,
+        "top": [
+          {
+            "name": "ii-IV-i-v",
+            "count": 5
+          },
+          {
+            "name": "v-II-ii-IV",
+            "count": 3
+          },
+          {
+            "name": "II-ii-IV-i",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "file": "Rence - Baby Blue.mp3",
+        "key": "G major",
+        "confidence": 0.0413,
+        "top": [
+          {
+            "name": "bV-I-i-I",
+            "count": 1
+          },
+          {
+            "name": "I-i-I-i",
+            "count": 1
+          },
+          {
+            "name": "i-I-i-I",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  }
 }

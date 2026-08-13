@@ -193,12 +193,16 @@
       const mood = p.mood || {};
       const quadrants = mood.quadrants || [];
       const clusters = p.clusters || [];
+      const chords = p.chord_progressions || {};
+      const progressions = (chords.top_progressions || []).slice(0, 8);
+      const chordExamples = (chords.examples || []).slice(0, 4);
       const insights = p.insights || [];
       const samples = (p.sample_tracks || []).slice(0, 8);
       const minor = modes.find((m) => m.name === "minor")?.count || 0;
       const major = modes.find((m) => m.name === "major")?.count || 0;
       const minorPct = minor + major ? Math.round((100 * minor) / (minor + major)) : 0;
       const topMood = quadrants[0]?.name || "—";
+      const topProg = progressions[0]?.name || "—";
 
       document.getElementById("app").innerHTML = `
         <h1>Profil musical — likes YouTube</h1>
@@ -212,7 +216,7 @@
           <div class="stat"><strong>${esc(p.bpm_stats?.median ?? "—")}</strong><span>BPM médian</span></div>
           <div class="stat"><strong>${esc(pref.name || "—")}</strong><span>Instrument préféré</span></div>
           <div class="stat"><strong>${esc(topMood)}</strong><span>Mood dominant</span></div>
-          <div class="stat"><strong>${esc(mood.energy_mean ?? "—")}</strong><span>Énergie moy. (0–1)</span></div>
+          <div class="stat"><strong>${esc(topProg)}</strong><span>Progression top (pilote)</span></div>
         </div>
 
         <div class="callout">
@@ -256,6 +260,29 @@
           </table>
         </div>
 
+        ${progressions.length ? `
+        <div class="grid-2">
+          <div class="card">
+            <h3>Progressions d'accords (pilote)</h3>
+            <div class="chart-box tall"><canvas id="chordChart"></canvas></div>
+            <p class="hint">${esc(chords.coverage_note || "")}</p>
+          </div>
+          <div class="card">
+            <h3>Exemples par progression</h3>
+            <table>
+              <thead><tr><th>Grille</th><th>Titres</th></tr></thead>
+              <tbody>
+                ${chordExamples.map((e) => `
+                  <tr>
+                    <td><strong>${esc(e.progression)}</strong></td>
+                    <td>${esc((e.examples || []).slice(0, 2).map((f) => f.replace(/\\.mp3$/i, "")).join(" · "))}</td>
+                  </tr>`).join("")}
+              </tbody>
+            </table>
+            <p class="hint">${esc(chords.method || "")} · ok ${esc(chords.tracks_ok)}/${esc(chords.tracks_considered)}</p>
+          </div>
+        </div>` : ""}
+
         <div class="grid-2">
           <div class="card">
             <h3>Mode</h3>
@@ -294,8 +321,8 @@
         </div>
 
         <div class="warn">
-          Mood / clusters = heuristiques audio (pas Spotify). Instruments = mots-clés titres.
-          Accords exacts : Chordify / Mixed In Key / Cyanite.
+          Mood / clusters = heuristiques audio. Instruments = mots-clés titres.
+          Accords = pilote chroma (bruité) — pas un lead sheet Chordify.
         </div>
 
         <div class="card">
@@ -336,6 +363,9 @@
       }
       if (clusters.length) {
         bar("clusterChart", clusters.map((c) => c.name), clusters.map((c) => c.count), true);
+      }
+      if (progressions.length) {
+        bar("chordChart", progressions.map((x) => x.name), progressions.map((x) => x.count), true);
       }
       bar("instChart", instruments.map((i) => i.name), instruments.map((i) => i.count), true);
       bar("bpmChart", bpmLabels, bpmData, false);
