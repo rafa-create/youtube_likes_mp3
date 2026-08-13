@@ -129,6 +129,34 @@
     .callout.ok h2 { color: var(--ok); }
     .callout.warn h2 { color: #d4a35b; }
     .callout p { margin: 0; }
+    details.fold > summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      user-select: none;
+    }
+    details.fold > summary::-webkit-details-marker,
+    details.fold > summary::marker { display: none; content: none; }
+    details.fold > summary h2,
+    details.fold > summary h3 { margin: 0; flex: 1; }
+    details.fold > summary::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-right: 2px solid var(--muted);
+      border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+      margin-top: -3px;
+      transition: transform 0.15s ease;
+    }
+    details.fold[open] > summary { margin-bottom: 8px; }
+    details.fold[open] > summary::after {
+      transform: rotate(225deg);
+      margin-top: 3px;
+    }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     .card {
@@ -325,6 +353,21 @@
       display: block;
     }
     .emo-strip img.tall { object-position: center 72%; }
+    .emo-strip figcaption, .scene figcaption {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 6px;
+    }
+    .scene { margin: 0 0 16px; }
+    .scene img {
+      width: 100%;
+      height: 168px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      display: block;
+    }
+    .scene img.tall { object-position: center 72%; }
     .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
     .chip {
       font-size: 0.75rem;
@@ -376,6 +419,7 @@
       .cover.hero { grid-template-columns: 1fr; }
       .cover.hero img.cover-photo { width: 100%; height: 150px; }
       .emo-strip img { height: 100px; }
+      .scene img { height: 120px; }
     }
   </style>
 </head>
@@ -383,7 +427,7 @@
   <div class="wrap" id="app">
     <p class="sub">Chargement…</p>
   </div>
-  <script src="./i18n.js?v=8"></script>
+  <script src="./i18n.js?v=11"></script>
   <script>
     const accent = "#5b9fd4";
     const muted = "#8b9aab";
@@ -501,6 +545,60 @@
     function yt(label, videoId) {
       return `<a class="yt" href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">${label}</a>`;
     }
+    function sceneHtml(src, caption, imgClass) {
+      return `<figure class="scene"><img src="${src}"${imgClass ? ` class="${imgClass}"` : ""} alt="" loading="lazy" /><figcaption>${caption}</figcaption></figure>`;
+    }
+    function crossTasteHtml(who) {
+      if (who === "rafael") {
+        return `
+          <h2 class="sec">${t("Chez Bram — pour Rafael")} <span class="badge">${t("dans sa playlist")}</span></h2>
+          ${sceneHtml("./paysage-bram-cote.jpg", t("Le climat de Bram"), "tall")}
+          <p>${t("Pas les morceaux les plus proches musicalement. Ceux qui pourraient remplir chez Rafael une <strong>fonction émotionnelle qu’il a déjà</strong> : profondeur et mélancolie, avec moins de dramatisation. Tous dans les 270 Chill.")}</p>
+          ${tbl([t("Titre"), t("Fonction")], [
+            [yt("José González — Heartbeats", "TOsRkcV8pCk"), t("Le pont. Intime, mélancolique, amoureux, contemplatif — et acoustique.")],
+            [yt("Michael Kiwanuka — Home Again", "kJ4s3G7hgR4"), t("Nostalgie + chaleur + sentiment de retour.")],
+            [yt("Bahamas — Lost In The Light", "jPJNt1eTVNY"), t("Mélancolie douce, sans lourdeur.")],
+            [yt("Donny Hathaway — Jealous Guy", "LfY4NLxl72g"), t("Vulnérabilité amoureuse très directe.")],
+            [yt("Damien Rice — 9 Crimes", "cgqOSCgc8xc"), t("Côté Someone You Loved / Breathe Me / The Scientist.")],
+            [yt("Cesária Évora — Sodade", "Mo4dmYifj0U"), t("Nostalgie et manque, sans dramatisation pop.")],
+            [yt("Massive Attack — Teardrop", "u7K72X4eo_s"), t("Nuit, mystère, cinéma — le Rafael atmosphérique.")],
+            [yt("Bakar — Hell N Back", "BdrNvQ4YCng"), t("Mélancolie + mouvement + sortir de quelque chose.")],
+            [yt("Khruangbin, Leon Bridges — Texas Sun", "Whe7MURlKLw"), t("Sérénité qu’il cherche déjà chez Einaudi / Zimmer, avec du corps.")],
+            [yt("Leif Vollebekk — Vancouver Time", "gfTeQTd76xI"), t("Contemplatif et nostalgique, sans montée héroïque.")],
+          ])}
+          <div class="card">
+            <h3>${t("Ceux qui pourraient le surprendre")}</h3>
+            ${sigHtml([
+              [yt("Xavier Rudd — Follow The Sun", "0E1bNmyPWww"), t("Version Bram de sa quête de liberté (Freedom, Run Away, The Open Road, Running With The Wolves, Far From Home) : pars, respire, regarde le monde.")],
+              [yt("Nick Mulvey — In Your Hands", "fhJVRdf8b8k"), t("Spiritualité, intimité, lâcher-prise — sans la dramatisation habituelle.")],
+              ["Ocie Elliott — Be Around", t("Acoustique, fragile, amoureux — le Rafael de Bloom / Perfect / You Are The Reason.")],
+            ])}
+          </div>
+        `;
+      }
+      return `
+        <h2 class="sec">${t("Chez Rafael — pour Bram")} <span class="badge">${t("dans ses likes")}</span></h2>
+        ${sceneHtml("./paysage-rafael-mer.jpg", t("Le paysage de Rafael"))}
+        <p>${t("Pas les morceaux les plus dépressifs. Ceux qui apportent <strong>profondeur, atmosphère ou voyage</strong> sans casser le besoin de douceur. Tous dans les likes YouTube.")}</p>
+        ${tbl([t("Titre"), t("Fonction")], [
+          [yt("Angus & Julia Stone — Big Jet Plane", "yFTvbcNhEgc"), t("Déjà quasiment du territoire Bram.")],
+          [yt("Noir Désir — Le Vent Nous Portera", "NrgcRvBJYBE"), t("Liberté + mélancolie + mouvement. Excellent pont.")],
+          [yt("Petit Biscuit — Sunset Lover", "5hALH-s6ZkA"), t("Soleil, relâchement, électro douce — très compatible.")],
+          [yt("Milky Chance — Down By The River", "qlGQoxzdwP4"), t("Naturel, mouvement, soleil, mélancolie légère.")],
+          [yt("Vance Joy — Mess Is Mine", "1C816p-KTNk"), t("Déjà chez Bram aussi : chaleur, proximité.")],
+          [yt("The Paper Kites — Bloom", "8inJtTG_DuU"), t("Douceur, amour, nature.")],
+          [yt("Kid Francescoli — Moon", "fdixQDPA2h0"), t("Sensualité + nuit + contemplation.")],
+          [yt("French 79 — Hometown", "yAv5pLO37mE"), t("Nostalgie transformée en sensation de voyage.")],
+          ["Parra for Cuva — Swept Away", t("Côté contemplatif, électro qui n’agresse pas.")],
+          ["City of the Sun — Firefly", t("Instrumental, organique, atmosphérique sans être lourd.")],
+          [yt("Ludovico Einaudi — Experience", "hN_q-_nGv4U"), t("Le vrai pont : émotion plus profonde, pas agressivement triste.")],
+        ])}
+        <div class="callout">
+          <h2>${t("Le vrai pont : Einaudi")}</h2>
+          <p>${t("Bram a déjà Time in a Circle, The Memory of Our Love, Morning Sun, Only The Ocean, Floating, Beautiful Day. <em>Experience</em>, <em>Nuvole Bianche</em> ou <em>Giorni Dispari</em> peuvent fonctionner : plus profond, sans devenir une tristesse lourde.")}</p>
+        </div>
+      `;
+    }
     const GAYTITUDE = {
       rafael: {
         score: 81,
@@ -548,15 +646,15 @@
           <div class="stat"><strong>${g.score}%</strong><span>${t("Score composite IG")}</span></div>
           <div class="stat"><strong>${esc(t(g.label))}</strong><span>${t("Classe d’écoute")}</span></div>
         </div>
-        <div class="callout">
-          <h2>${t("Définition opérationnelle")}</h2>
+        <details class="fold callout">
+          <summary><h2>${t("Définition opérationnelle")}</h2></summary>
           <p>${t("L’Indice de Gaytitude (IG) est un score composite d’affinité de répertoire, borné sur [0, 100]. Il opérationnalise la proximité d’un corpus à un axe d’écoute <em>sensitive</em> attesté en pop contemporaine. Cinq indicateurs : (i) prévalence du mode mineur ; (ii) densité voix douce / piano / chanson ; (iii) charge d’artistes à affect élevé ; (iv) part de moods mélancoliques ; (v) inverse de la dureté club/EDM. L’IG n’est pas une mesure d’orientation sexuelle : c’est un indice d’écoute, calibré sur des marqueurs culturels du « gay listening » et de la <em>sensitive female / male lead</em>.")}</p>
-        </div>
-        <div class="card">
-          <h3>${t("Protocole")}</h3>
+        </details>
+        <details class="fold card">
+          <summary><h3>${t("Protocole")}</h3></summary>
           <p>${t(g.protocol)}</p>
           <p class="hint">${t("IG = 0.28·M + 0.22·V + 0.20·A + 0.15·E + 0.15·(100−C), où M = % mineur, V = voix/piano/chanson, A = artistes sensibles, E = moods mélancoliques, C = dureté club. Poids a priori (somme = 1). Arrondi à l’entier.")}</p>
-        </div>
+        </details>
         <h2 class="sec">${t("Décomposition du score")}</h2>
         <p class="hint">${t("Contribution observée = composante × poids. Le hard-club et l’acoustic « beach bro » réduisent le score ; le midtempo émotionnel et la chanson l’augmentent.")}</p>
         ${tbl([t("Composante"), t("Pts /100"), t("Contribution observée")], g.components.map((c) => [t(c.name), String(c.pts), t(c.why)]))}
@@ -620,9 +718,9 @@
     }
     const BRIEFS = {};
     const LIST_CACHE = {};
-    function copyBtn(id, text) {
+    function copyBtn(id, text, labelKey) {
       BRIEFS[id] = text;
-      const label = t("Copier le brief");
+      const label = t(labelKey || "Copier le brief");
       return `<button type="button" class="copy-btn" data-brief="${esc(id)}" data-idle="${esc(label)}">${esc(label)}</button>`;
     }
     function copyListBtn(src, label) {
@@ -790,6 +888,7 @@
                 ["Hans Zimmer — Time", t("Grandeur, reconstruction")],
               ])}
             </div>
+            ${crossTasteHtml("rafael")}
             <h2 class="sec">${t("Données")} <span class="badge ok">${t("mesuré")}</span></h2>
             <div class="grid-2">
               <div class="card"><h3>${t("Mode (726 pistes)")}</h3><div class="chart-box"><canvas id="rMode"></canvas></div><p class="hint">${t("58% mineur · chroma Krumhansl · librosa")}</p></div>
@@ -801,7 +900,8 @@
             </div>
             ${gaytitudeHtml("rafael")}
             <h2 class="sec">${t("Hors likes — paris")} <span class="badge">${t("estimé")}</span></h2>
-            <p class="hint">${t("Probabilité musicale, pas une certitude. Déjà dans les likes (exclus) : SYML, AURORA, Sleeping At Last, London Grammar, M83.")}</p>
+            ${sceneHtml("./paysage-rafael-route.jpg", t("Partir, ailleurs"))}
+            <p class="hint">${t("Tous absents des likes. Exclus (déjà likés) : SYML, AURORA, Sleeping At Last, London Grammar, M83.")}</p>
             ${tbl(["#", t("Artiste"), t("Test"), t("Pourquoi")], [
               ["1", "Ólafur Arnalds · 95%", yt("Near Light", "sxWE57RrsTw"), t("Pont Einaudi / ambient / ciné + électro discrète")],
               ["2", "RY X · 94%", yt("Only", "bbokXheXhxY"), t("Voix intime, aérien, presque cinématographique")],
@@ -812,6 +912,7 @@
           </div>
 
           <div class="subpanel" id="rafael-creation">
+            ${sceneHtml("./paysage-rafael-mer.jpg", t("Intensité devenue beauté"))}
             <div class="callout">
               <h2>${t("Brief studio Rafael — priorité #1")}</h2>
               <p>${t("Écris une chanson qui <strong>absorbe</strong> : intimité → espace → montée. EN, <strong>Cm–G#–D#–A#</strong>, <strong>116–120 BPM</strong>, voix vulnérable + pad. La tristesse doit devenir <strong>belle</strong>, pas s’installer dans le désespoir. Électro mélodique, pas club. La prod doit <strong>ouvrir un espace</strong> — partir ailleurs, pas durcir.")}</p>
@@ -910,6 +1011,7 @@
                 ["Khruangbin, Leon Bridges — Texas Sun", t("Désir + groove + atmosphère (pont Rafael)")],
               ])}
             </div>
+            ${crossTasteHtml("bram")}
             <h2 class="sec">${t("Données")} <span class="badge">${t("estimé")}</span></h2>
             <p class="hint">${t("Pas d’audio librosa (Spotify). Tempo ~90 et instruments = estimations. Le ranking d’artistes compte les 270 titres, un chacun.")}</p>
             <div class="grid-2">
@@ -921,17 +1023,19 @@
             <div class="card"><h3>${t("Top artistes (270 titres)")}</h3>${rankHtml(bArtists.map((x) => ({ name: x.name, n: x.count })), 270)}</div>
             ${gaytitudeHtml("bram")}
             <h2 class="sec">${t("Hors playlist — paris")} <span class="badge">${t("estimé")}</span></h2>
-            <p class="hint">${t("Pari #1 réel (absent) : Ben Howard. Harper / Bridges = approfondir, pas découvrir.")}</p>
+            ${sceneHtml("./paysage-bram-van.jpg", t("Route, soleil, mouvement"))}
+            <p class="hint">${t("Tous absents des 270. Exclus : Ben Harper, Leon Bridges, Josh Teskey, Trevor Hall (déjà dans la playlist) · Angus & Julia Stone (likes Rafael, voir échanges).")}</p>
             ${tbl(["#", t("Artiste"), t("Test"), t("Pourquoi")], [
               ["1", "Ben Howard · 93%", yt("Old Pine", "x8ccDb6n5Wg"), t("Folk / nature — croise González, Rudd, Johnson (aussi Rafael)")],
-              ["2", "Angus & Julia Stone · 92%", yt("Big Jet Plane", "yFTvbcNhEgc"), t("Été AU, douceur, mélancolie (Julia Stone déjà en collab)")],
-              ["3", "John Butler Trio · 91%", yt("Better Than", "79cG_F1GxfI"), t("Guitare, voyage, groove organique")],
-              ["4", "Amos Lee · 90%", yt("Windows Are Rolled Down", "F4xY__FoDzY"), t("Soul + folk, dimanche → coucher de soleil")],
-              ["5", "Durand Jones & The Indications · 86%", yt("Witchoo", "d7vTtnevlO4"), t("Soul / funk chaleureux, pas seulement triste")],
+              ["2", "John Butler Trio · 91%", yt("Better Than", "79cG_F1GxfI"), t("Guitare, voyage, groove organique")],
+              ["3", "Amos Lee · 90%", yt("Windows Are Rolled Down", "F4xY__FoDzY"), t("Soul + folk, dimanche → coucher de soleil")],
+              ["4", "Durand Jones & The Indications · 86%", yt("Witchoo", "d7vTtnevlO4"), t("Soul / funk chaleureux, pas seulement triste")],
+              ["5", "Gregory Alan Isakov · 85%", yt("The Stable Song", "AqyAmmEkVvI"), t("Nature, route, solitude tranquille — poche González / Rudd")],
             ])}
           </div>
 
           <div class="subpanel" id="bram-creation">
+            ${sceneHtml("./paysage-bram-cafe.jpg", t("La vie qui ralentit"))}
             <div class="callout ok">
               <h2>${t("Brief studio Bram — priorité #1")}</h2>
               <p>${t("<strong>Voix + guitare</strong>, chaleur → groove → liberté. Tempo ~85–95. Pas du lo-fi : rester <strong>exactement là</strong>. La prod <strong>donne du corps</strong>. Feel-good avec une petite ombre — mélancolie acceptée, désir charnel, pas de catharsis. NL ou EN. Si trop produit, enlever une couche.")}</p>
@@ -1019,9 +1123,60 @@
               <h3>${t("Pont hors listes")}</h3>
               <p>${t("<strong>Ben Howard</strong> est le seul pari fort des deux côtés : atmosphère (Rafael) × nature / guitare (Bram). Test commun :")} ${yt("Old Pine", "x8ccDb6n5Wg")}.</p>
             </div>
+            <h2 class="sec">${t("Échanges — dans les listes")}</h2>
+            <div class="emo-strip">
+              <figure>
+                <img src="./paysage-rafael-route.jpg" width="800" height="448" alt="" loading="lazy" />
+                <figcaption>Rafael → Bram — ${t("Partir, ailleurs")}</figcaption>
+              </figure>
+              <figure>
+                <img src="./paysage-bram-van.jpg" width="800" height="800" alt="" loading="lazy" />
+                <figcaption>Bram → Rafael — ${t("Dehors, la mer, la route")}</figcaption>
+              </figure>
+            </div>
+            <div class="callout ok">
+              <h2>${yt("José González — Heartbeats", "TOsRkcV8pCk")}</h2>
+              <p>${t("Le pont presque parfait. Intime, fragile et mélancolique (Rafael) × simplicité, chaleur, acoustique (Bram). Leurs deux paysages se rencontrent sans que l’un renonce à son univers. Dans la playlist Chill ; absent des likes Rafael.")}</p>
+            </div>
+            <div class="grid-2">
+              <div class="card">
+                <h3>${t("Rafael → Bram")}</h3>
+                <ol class="sig">
+                  <li>${yt("Noir Désir — Le Vent Nous Portera", "NrgcRvBJYBE")}</li>
+                  <li>${yt("Petit Biscuit — Sunset Lover", "5hALH-s6ZkA")}</li>
+                  <li>${yt("The Paper Kites — Bloom", "8inJtTG_DuU")}</li>
+                  <li>${yt("Michael Kiwanuka — Home Again", "kJ4s3G7hgR4")}</li>
+                  <li>${yt("José González — Heartbeats", "TOsRkcV8pCk")}</li>
+                  <li>${yt("Khruangbin, Leon Bridges — Texas Sun", "Whe7MURlKLw")}</li>
+                  <li>City of the Sun — Firefly</li>
+                  <li>${yt("French 79 — Hometown", "yAv5pLO37mE")}</li>
+                  <li>Parra for Cuva — Swept Away</li>
+                  <li>${yt("Ludovico Einaudi — Experience", "hN_q-_nGv4U")}</li>
+                </ol>
+                ${copyBtn("ex-r2b", t("Rafael → Bram\n1. Noir Désir — Le Vent Nous Portera\n2. Petit Biscuit — Sunset Lover\n3. The Paper Kites — Bloom\n4. Michael Kiwanuka — Home Again\n5. José González — Heartbeats\n6. Khruangbin, Leon Bridges — Texas Sun\n7. City of the Sun — Firefly\n8. French 79 — Hometown\n9. Parra for Cuva — Swept Away\n10. Ludovico Einaudi — Experience"), "Copier la playlist")}
+              </div>
+              <div class="card">
+                <h3>${t("Bram → Rafael")}</h3>
+                <ol class="sig">
+                  <li>${yt("Damien Rice — 9 Crimes", "cgqOSCgc8xc")}</li>
+                  <li>${yt("Cesária Évora — Sodade", "Mo4dmYifj0U")}</li>
+                  <li>${yt("Massive Attack — Teardrop", "u7K72X4eo_s")}</li>
+                  <li>${yt("José González — Heartbeats", "TOsRkcV8pCk")}</li>
+                  <li>${yt("Michael Kiwanuka — Home Again", "kJ4s3G7hgR4")}</li>
+                  <li>${yt("Bakar — Hell N Back", "BdrNvQ4YCng")}</li>
+                  <li>${yt("Donny Hathaway — Jealous Guy", "LfY4NLxl72g")}</li>
+                  <li>${yt("Bahamas — Lost In The Light", "jPJNt1eTVNY")}</li>
+                  <li>Ocie Elliott — Be Around</li>
+                  <li>${yt("Xavier Rudd — Follow The Sun", "0E1bNmyPWww")}</li>
+                </ol>
+                ${copyBtn("ex-b2r", t("Bram → Rafael\n1. Damien Rice — 9 Crimes\n2. Cesária Évora — Sodade\n3. Massive Attack — Teardrop\n4. José González — Heartbeats\n5. Michael Kiwanuka — Home Again\n6. Bakar — Hell N Back\n7. Donny Hathaway — Jealous Guy\n8. Bahamas — Lost In The Light\n9. Ocie Elliott — Be Around\n10. Xavier Rudd — Follow The Sun"), "Copier la playlist")}
+              </div>
+            </div>
+            <p class="hint">${t("Rafael → Bram mélange likes Rafael et Chill (Kiwanuka, González, Texas Sun) : ce sont les morceaux que Bram a déjà, plus ceux de Rafael qui lui conviennent. Bram → Rafael = uniquement Chill.")}</p>
           </div>
 
           <div class="subpanel" id="duo-roles">
+            ${sceneHtml("./paysage-rafael-piano.jpg", t("Un monde, deux mécaniques"))}
             ${tbl([t("Domaine"), t("Bram mène"), t("Rafael mène"), t("Ensemble")], [
               [t("Guitare / skeleton"), t("Oui"), t("Doubles / soutien"), t("Grille fixée à 2")],
               [t("Beat / groove"), t("Shaker, brush"), t("Kick/clap électro"), t("Layer progressif")],
@@ -1046,6 +1201,7 @@
           </div>
 
           <div class="subpanel" id="duo-session">
+            ${sceneHtml("./paysage-bram-van.jpg", t("Route sans fuite existentielle"))}
             <h2 class="sec">${t("Session type — 90 minutes")}</h2>
             ${tbl([t("Min"), t("Action"), t("Qui"), t("Livrable")], [
               ["0–10", t("Choisir grille + BPM 104"), "2", t("C–G–Am–F noté")],
@@ -1063,6 +1219,7 @@
           </div>
 
           <div class="subpanel" id="duo-concepts">
+            ${sceneHtml("./paysage-bram-cafe.jpg", t("Late light — rester, pas s’échapper"))}
             ${romansHowToHtml("duo")}
             <h2 class="sec">${t("Concepts prêts à composer")}</h2>
             <div class="grid-3">
