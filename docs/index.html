@@ -383,7 +383,7 @@
   <div class="wrap" id="app">
     <p class="sub">Chargement…</p>
   </div>
-  <script src="./i18n.js?v=5"></script>
+  <script src="./i18n.js?v=6"></script>
   <script>
     const accent = "#5b9fd4";
     const muted = "#8b9aab";
@@ -500,6 +500,68 @@
     }
     function yt(label, videoId) {
       return `<a class="yt" href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+    }
+    const GAYTITUDE = {
+      rafael: {
+        score: 81,
+        label: "Sensitive-pop (quartile supérieur)",
+        badge: "mesuré",
+        protocol: "Corpus A : n = 726 extraits audio (likes YouTube). Mode et tempo extraits par librosa (chroma Krumhansl ; onset). Cinq composantes scorées 0–100, puis combinées linéairement. Poids a priori, somme unitaire, fixés avant agrégation, non réestimés sur l’échantillon.",
+        components: [
+          { name: "Mode mineur (58%)", pts: 16.2, why: "423/726 = 58,3 % (IC 95 % binomial [54,7 ; 61,9]). Couleur harmonique introspective." },
+          { name: "Soft vocals / piano / chanson", pts: 18.5, why: "Densité conjointe : voix 108, piano 49, chanson FR 33, néo-classique 44." },
+          { name: "Artistes sensibles", pts: 17.2, why: "Sia, Pomme, HAEVN, Tom Odell, Alec Benjamin, Sheeran — charge affective élevée, lead exposé." },
+          { name: "Moods mélancoliques", pts: 15.0, why: "Intime/sombre + électro-mélancolie ≈ 45 % des quadrants d’écoute." },
+          { name: "Anti-club (100−hard)", pts: 14.1, why: "EDM présent mais non dominant face au midtempo émotionnel. C faible → contribution positive." },
+        ],
+      },
+      bram: {
+        score: 57,
+        label: "Chill-acoustic (quartile médian)",
+        badge: "estimé",
+        protocol: "Corpus B : n = 270 titres (playlist Spotify Chill, couverture 100 %). Pas d’audio : les composantes sont inférées du catalogue (artistes, genres, tempo déclaré ~90 BPM). Même vecteur de poids que le corpus A, pour comparabilité inter-sources.",
+        components: [
+          { name: "Soft acoustic / intimacy", pts: 18.0, why: "Guitare + voix proche = cœur du corpus (Johnson, Bahamas, Mayer). Intimité élevée." },
+          { name: "Artistes sensibles", pts: 11.0, why: "Froukje / Mayer / Jeangu — mais Johnson = craft guitare, pas drama-pop" },
+          { name: "Tempo lent émotionnel", pts: 14.0, why: "~90 BPM : écoute corporelle douce. Hors zone club, hors zone anthem." },
+          { name: "Blues/soul vulnerability", pts: 8.0, why: "Keb' Mo', Kiwanuka-adjacent pocket" },
+          { name: "Anti-club", pts: 6.0, why: "Quasi zéro EDM — le « dude with a guitar » baisse le score gay-coded" },
+        ],
+      },
+      duo: {
+        score: 69,
+        label: "Profil mixte, biais émotionnel",
+        badge: "estimé",
+        protocol: "IG_duo = (IG_A + IG_B) / 2 = (81 + 57) / 2 = 69. Moyenne arithmétique : un corpus, une voix. Aucun pondérateur d’exposition (durée d’écoute absente des deux sources).",
+        components: [
+          { name: "IG Rafael (corpus A)", pts: 81, why: "Sensitive-pop, quartile supérieur. Mode mineur mesuré 58,3 %." },
+          { name: "IG Bram (corpus B)", pts: 57, why: "Chill-acoustic, quartile médian. Suppresseur : acoustic guitar-bro." },
+          { name: "Moyenne arithmétique", pts: 69, why: "(81 + 57) / 2. Écart inter-corpus Δ = 24 points : même intimité vocale, régimes distincts." },
+        ],
+      },
+    };
+    function gaytitudeHtml(who) {
+      const g = GAYTITUDE[who];
+      return `
+        <h2 class="sec">${t("Indice de Gaytitude (IG)")} <span class="badge ${g.badge === "mesuré" ? "ok" : ""}">${t(g.badge)}</span></h2>
+        <div class="stats">
+          <div class="stat"><strong>${g.score}%</strong><span>${t("Score composite IG")}</span></div>
+          <div class="stat"><strong>${esc(t(g.label))}</strong><span>${t("Classe d’écoute")}</span></div>
+        </div>
+        <div class="callout">
+          <h2>${t("Définition opérationnelle")}</h2>
+          <p>${t("L’Indice de Gaytitude (IG) est un score composite d’affinité de répertoire, borné sur [0, 100]. Il opérationnalise la proximité d’un corpus à un axe d’écoute <em>sensitive</em> attesté en pop contemporaine. Cinq indicateurs : (i) prévalence du mode mineur ; (ii) densité voix douce / piano / chanson ; (iii) charge d’artistes à affect élevé ; (iv) part de moods mélancoliques ; (v) inverse de la dureté club/EDM. L’IG n’est pas une mesure d’orientation sexuelle : c’est un indice d’écoute, calibré sur des marqueurs culturels du « gay listening » et de la <em>sensitive female / male lead</em>.")}</p>
+        </div>
+        <div class="card">
+          <h3>${t("Protocole")}</h3>
+          <p>${t(g.protocol)}</p>
+          <p class="hint">${t("IG = 0.28·M + 0.22·V + 0.20·A + 0.15·E + 0.15·(100−C), où M = % mineur, V = voix/piano/chanson, A = artistes sensibles, E = moods mélancoliques, C = dureté club. Poids a priori (somme = 1). Arrondi à l’entier.")}</p>
+        </div>
+        <h2 class="sec">${t("Décomposition du score")}</h2>
+        <p class="hint">${t("Contribution observée = composante × poids. Le hard-club et l’acoustic « beach bro » réduisent le score ; le midtempo émotionnel et la chanson l’augmentent.")}</p>
+        ${tbl([t("Composante"), t("Pts /100"), t("Contribution observée")], g.components.map((c) => [t(c.name), String(c.pts), t(c.why)]))}
+        <p class="hint">${t("Limites. Validité de construit culturelle, non biologique. Les deux corpus ne sont pas observés avec le même instrument (audio vs métadonnées). Chez Bram, l’acoustic « dude with a guitar » fonctionne comme variable suppressrice : l’intimité vocale est élevée, le score reste médian. L’IG ne prédit pas une préférence titre par titre.")}</p>
+      `;
     }
     const BRIEFS = {};
     const LIST_CACHE = {};
@@ -682,6 +744,7 @@
               <div class="card"><h3>${t("Artistes récurrents")}</h3>${rankHtml(rArtists.map((x) => ({ name: x.name, n: x.count })), playlistN)}<p class="hint">${t("Chaque like = 1. Nightcore = style/label (remixes), pas un artiste unique. Le top n’est pas le corpus.")}</p></div>
               <div class="card"><h3>${t("Même boucle, autre départ")}</h3>${rankHtml(romans.map((x) => ({ name: x.name, n: x.count })))}<p class="hint">${t("vi–IV–I–V, IV–I–V–vi… = rotations du même cycle. Les chiffres romains (I, IV, V, vi) sont juste des numéros de marche dans la tonalité.")}</p></div>
             </div>
+            ${gaytitudeHtml("rafael")}
             <h2 class="sec">${t("Hors likes — paris")} <span class="badge">${t("estimé")}</span></h2>
             <p class="hint">${t("Probabilité musicale, pas une certitude. Déjà dans les likes (exclus) : SYML, AURORA, Sleeping At Last, London Grammar, M83.")}</p>
             ${tbl(["#", t("Artiste"), t("Test"), t("Pourquoi")], [
@@ -800,6 +863,7 @@
               </div>
             </div>
             <div class="card"><h3>${t("Top artistes (270 titres)")}</h3>${rankHtml(bArtists.map((x) => ({ name: x.name, n: x.count })), 270)}</div>
+            ${gaytitudeHtml("bram")}
             <h2 class="sec">${t("Hors playlist — paris")} <span class="badge">${t("estimé")}</span></h2>
             <p class="hint">${t("Pari #1 réel (absent) : Ben Howard. Harper / Bridges = approfondir, pas découvrir.")}</p>
             ${tbl(["#", t("Artiste"), t("Test"), t("Pourquoi")], [
@@ -870,6 +934,7 @@
           </div>
 
           <div class="subpanel active" id="duo-overlap">
+            ${gaytitudeHtml("duo")}
             <div class="grid-2">
               <div class="card"><h3>${t("Tempo — zone de rencontre")}</h3><div class="chart-box"><canvas id="duoBpm"></canvas></div><p class="hint">${t("Rafael mesuré · Bram estimé · pont 100–108")}</p></div>
               <div class="card"><h3>${t("IG comparé")}</h3><div class="chart-box"><canvas id="duoIg"></canvas></div>
