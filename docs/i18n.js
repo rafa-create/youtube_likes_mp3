@@ -1,7 +1,9 @@
 /* Dutch strings keyed by the French source text. Missing keys stay French. */
 const LIKED_NL = {
   "Chargement…": "Laden…",
-  "Paysages émotionnels · analyse · création": "Emotionele landschappen · analyse · creatie",
+  "Paysage émotionnel": "Emotioneel landschap",
+  "Mélancolie": "Melancholie",
+  "Amour": "Liefde",
   "Likes YouTube · 726 MP3 · paysage émotionnel, pas un genre": "YouTube-likes · 726 MP3 · emotioneel landschap, geen genre",
   "manque / souvenir": "gemis / herinnering",
   "évasion": "ontsnapping",
