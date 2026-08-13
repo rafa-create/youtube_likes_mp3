@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Profil musical — likes YouTube</title>
-  <meta name="description" content="Analyse du goût musical à partir des vidéos YouTube aimées : BPM, tonalités, artistes, styles." />
+  <meta name="description" content="Analyse du goût musical à partir des vidéos YouTube aimées : BPM, tonalités, artistes, instruments." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;700&display=swap" rel="stylesheet" />
@@ -13,14 +13,11 @@
     :root {
       --bg: #0f1419;
       --surface: #1a222c;
-      --surface-2: #222c38;
       --text: #e8eef4;
       --muted: #8b9aab;
       --accent: #5b9fd4;
       --accent-soft: rgba(91, 159, 212, 0.14);
       --line: #2a3542;
-      --ok: #6bbf8a;
-      --warn: #d4a35b;
     }
     * { box-sizing: border-box; }
     body {
@@ -34,11 +31,7 @@
       line-height: 1.5;
       min-height: 100vh;
     }
-    .wrap {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 40px 20px 80px;
-    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 40px 20px 80px; }
     h1 {
       font-family: "Fraunces", Georgia, serif;
       font-size: clamp(1.8rem, 4vw, 2.6rem);
@@ -46,7 +39,7 @@
       margin: 0 0 8px;
       letter-spacing: -0.02em;
     }
-    .sub { color: var(--muted); margin: 0 0 28px; max-width: 52ch; }
+    .sub { color: var(--muted); margin: 0 0 28px; max-width: 56ch; }
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -55,8 +48,7 @@
     }
     @media (max-width: 700px) {
       .stats { grid-template-columns: repeat(2, 1fr); }
-      .grid-2 { grid-template-columns: 1fr !important; }
-      .grid-3 { grid-template-columns: 1fr !important; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr !important; }
     }
     .stat {
       background: var(--surface);
@@ -67,10 +59,10 @@
     .stat strong {
       display: block;
       font-family: "Fraunces", Georgia, serif;
-      font-size: 1.75rem;
+      font-size: 1.55rem;
       font-weight: 700;
       color: var(--accent);
-      line-height: 1.1;
+      line-height: 1.15;
     }
     .stat span { color: var(--muted); font-size: 0.85rem; }
     .callout {
@@ -80,25 +72,11 @@
       padding: 16px 18px;
       margin-bottom: 24px;
     }
-    .callout h2 {
-      margin: 0 0 6px;
-      font-size: 0.95rem;
-      color: var(--accent);
-      font-weight: 600;
-    }
-    .callout p { margin: 0; color: var(--text); }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+    .callout h2 { margin: 0 0 6px; font-size: 0.95rem; color: var(--accent); }
+    .callout p { margin: 0; }
+    .callout ul { margin: 8px 0 0; padding-left: 1.1rem; color: var(--text); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
     .card {
       background: var(--surface);
       border: 1px solid var(--line);
@@ -106,11 +84,7 @@
       padding: 16px 18px;
       margin-bottom: 16px;
     }
-    .card h3 {
-      margin: 0 0 14px;
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
+    .card h3 { margin: 0 0 14px; font-size: 0.95rem; font-weight: 600; }
     .chart-box { position: relative; height: 240px; }
     .chart-box.tall { height: 280px; }
     .hint { color: var(--muted); font-size: 0.8rem; margin-top: 10px; }
@@ -122,260 +96,221 @@
     .pattern h4 { margin: 0 0 4px; font-size: 0.95rem; }
     .pattern p { margin: 0 0 12px; color: var(--muted); font-size: 0.88rem; }
     .pattern p:last-child { margin-bottom: 0; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
-    th, td {
-      text-align: left;
-      padding: 10px 8px;
-      border-bottom: 1px solid var(--line);
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); }
     th { color: var(--muted); font-weight: 500; font-size: 0.8rem; }
     footer {
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.85rem;
+      margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 0.85rem;
     }
     footer a { color: var(--accent); }
     .warn {
       background: rgba(212, 163, 91, 0.12);
       border: 1px solid rgba(212, 163, 91, 0.35);
-      border-radius: 12px;
-      padding: 14px 16px;
-      color: var(--text);
-      font-size: 0.9rem;
-      margin: 16px 0 24px;
+      border-radius: 12px; padding: 14px 16px; font-size: 0.9rem; margin: 16px 0 24px;
     }
+    .err { color: #f0a0a0; padding: 24px; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Profil musical — likes YouTube</h1>
-    <p class="sub">
-      776 likes / 726 MP3 · librosa sur 80 pistes (90&nbsp;s) · tonalité =
-      corrélation chroma (Krumhansl-Schmuckler)
-    </p>
-
-    <div class="stats">
-      <div class="stat"><strong>776</strong><span>Vidéos aimées</span></div>
-      <div class="stat"><strong>726</strong><span>MP3 locaux</span></div>
-      <div class="stat"><strong>118</strong><span>BPM médian</span></div>
-      <div class="stat"><strong>51%</strong><span>Mode mineur</span></div>
-    </div>
-
-    <div class="callout">
-      <h2>Verdict rapide</h2>
-      <p>
-        Équilibre majeur/mineur, tempo pop ~110–130 BPM, centres tonals G / C / A
-        (+ C# mineur). Mélancolie danceable + piano néo-classique + pop FR
-        (Pomme, Sia, Alan Walker, HAEVN).
-      </p>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <h3>Mode (échantillon audio)</h3>
-        <div class="chart-box"><canvas id="modeChart"></canvas></div>
-        <p class="hint">41 mineur / 39 majeur sur 80 pistes</p>
-      </div>
-      <div class="card">
-        <h3>Répartition BPM</h3>
-        <div class="chart-box"><canvas id="bpmChart"></canvas></div>
-        <p class="hint">Médiane 117.5 · P25–P75 : 99–129 BPM</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Tonalités les plus fréquentes</h3>
-      <div class="chart-box tall"><canvas id="keyChart"></canvas></div>
-      <p class="hint">Estimation chroma — tendances, pas un lead sheet exact</p>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <h3>Artistes récurrents</h3>
-        <div class="chart-box tall"><canvas id="artistChart"></canvas></div>
-      </div>
-      <div class="card">
-        <h3>Signaux de style (titres)</h3>
-        <div class="chart-box tall"><canvas id="genreChart"></canvas></div>
-      </div>
-    </div>
-
-    <section>
-      <h2>Patterns harmoniques utiles</h2>
-      <div class="grid-3">
-        <div class="card pattern">
-          <h3>Familles d’accords</h3>
-          <h4>G / Em / C / D</h4>
-          <p>Zone G majeur / E mineur — pop / folk</p>
-          <h4>A / F#m / D / E</h4>
-          <p>Centre A — ballades / midtempo</p>
-          <h4>C#m / E / B / A</h4>
-          <p>Couleur électro / triste brillante</p>
-        </div>
-        <div class="card pattern">
-          <h3>Progressions typiques</h3>
-          <p>
-            Like de « Axis of Awesome — 4 Four Chord Song » : la grille
-            <strong>I–V–vi–IV</strong> est dans l’ADN d’écoute.
-          </p>
-          <p>Autres candidats : vi–IV–I–V, i–VI–III–VII (pop mineure).</p>
-        </div>
-        <div class="card pattern">
-          <h3>Mood composite</h3>
-          <h4>Électro-mélancolie + piano</h4>
-          <p>
-            Walker / Lost Frequencies / Nightcore d’un côté ; piano
-            (Tony Ann, Einaudi…) et Pomme &amp; Sia au milieu.
-          </p>
-          <p>Tempo confort ~118 BPM : danceable sans hard EDM.</p>
-        </div>
-      </div>
-    </section>
-
-    <div class="warn">
-      Pour des grilles d’accords exactes : Chordify, Mixed In Key ou Cyanite.ai.
-      Librosa reste une estimation globale (BPM + tonalité).
-    </div>
-
-    <div class="card">
-      <h3>Exemples du sample audio</h3>
-      <table>
-        <thead>
-          <tr><th>Piste</th><th>Tonalité estimée</th><th>BPM</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Pomme — Umbrella (acoustique)</td><td>C major</td><td>99</td></tr>
-          <tr><td>[Ghost] Riders in the Sky</td><td>A# minor</td><td>108</td></tr>
-          <tr><td>Alan Walker — Faded</td><td>F# major*</td><td>89</td></tr>
-          <tr><td>AURORA — Running With The Wolves</td><td>A minor</td><td>83</td></tr>
-          <tr><td>Alec Benjamin — Devil Doesn't Bargain</td><td>D# major</td><td>123</td></tr>
-          <tr><td>Axis of Awesome — 4 Chord Song</td><td>E major</td><td>123</td></tr>
-          <tr><td>Ben Cocks — So Cold</td><td>A# major</td><td>76</td></tr>
-          <tr><td>André Rieu — The Lonely Shepherd</td><td>D minor</td><td>123</td></tr>
-        </tbody>
-      </table>
-      <p class="hint">*Estimation chroma parfois ambiguë (relatif majeur/mineur).</p>
-    </div>
-
-    <footer>
-      Source :
-      <a href="https://github.com/rafa-create/youtube_likes_mp3">rafa-create/youtube_likes_mp3</a>
-      · Données : music_profile.json
-    </footer>
+  <div class="wrap" id="app">
+    <p class="sub">Chargement du profil…</p>
   </div>
 
   <script>
-    const muted = "#8b9aab";
     const accent = "#5b9fd4";
+    const muted = "#8b9aab";
     const grid = "#2a3542";
     Chart.defaults.color = muted;
     Chart.defaults.borderColor = grid;
     Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
 
-    new Chart(document.getElementById("modeChart"), {
-      type: "doughnut",
-      data: {
-        labels: ["Mineur", "Majeur"],
-        datasets: [{
-          data: [41, 39],
-          backgroundColor: [accent, "#3d5166"],
-          borderWidth: 0,
-        }],
-      },
-      options: {
-        plugins: { legend: { position: "bottom" } },
-        cutout: "58%",
-      },
-    });
-
-    new Chart(document.getElementById("bpmChart"), {
-      type: "bar",
-      data: {
-        labels: ["<70", "70–90", "90–110", "110–130", "130–150", "150+"],
-        datasets: [{
-          label: "Pistes",
-          data: [2, 11, 16, 33, 7, 11],
-          backgroundColor: accent,
-          borderRadius: 6,
-        }],
-      },
-      options: {
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { display: false } },
-          y: { beginAtZero: true, ticks: { precision: 0 } },
+    function bar(id, labels, data, horizontal = false) {
+      new Chart(document.getElementById(id), {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{ label: "count", data, backgroundColor: accent, borderRadius: 6 }],
         },
-      },
-    });
-
-    new Chart(document.getElementById("keyChart"), {
-      type: "bar",
-      data: {
-        labels: ["G minor", "C# minor", "C major", "G major", "A major", "D# major", "B minor", "G# minor"],
-        datasets: [{
-          label: "Occurrences",
-          data: [7, 7, 6, 6, 5, 4, 4, 4],
-          backgroundColor: accent,
-          borderRadius: 6,
-        }],
-      },
-      options: {
-        indexAxis: "y",
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { beginAtZero: true, ticks: { precision: 0 } },
-          y: { grid: { display: false } },
+        options: {
+          indexAxis: horizontal ? "y" : "x",
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: { precision: 0 },
+              grid: { display: horizontal },
+            },
+            y: {
+              beginAtZero: true,
+              ticks: { precision: 0 },
+              grid: { display: !horizontal },
+            },
+          },
         },
-      },
-    });
+      });
+    }
 
-    new Chart(document.getElementById("artistChart"), {
-      type: "bar",
-      data: {
-        labels: ["Nightcore", "Sia", "Alan Walker", "HAEVN", "Ed Sheeran", "Pomme", "Lost Frequencies", "Milky Chance", "Tom Odell", "Tony Ann"],
-        datasets: [{
-          label: "Mentions",
-          data: [15, 13, 7, 7, 7, 6, 5, 5, 4, 4],
-          backgroundColor: accent,
-          borderRadius: 6,
-        }],
-      },
-      options: {
-        indexAxis: "y",
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { beginAtZero: true, ticks: { precision: 0 } },
-          y: { grid: { display: false } },
-        },
-      },
-    });
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      })[c]);
+    }
 
-    new Chart(document.getElementById("genreChart"), {
-      type: "bar",
-      data: {
-        labels: ["electronic / EDM", "piano / neo-classical", "pop", "french pop / chanson", "folk / acoustic", "cinematic", "ambient / chill"],
-        datasets: [{
-          label: "Hits",
-          data: [45, 44, 43, 33, 29, 21, 14],
-          backgroundColor: accent,
-          borderRadius: 6,
-        }],
-      },
-      options: {
-        indexAxis: "y",
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { beginAtZero: true, ticks: { precision: 0 } },
-          y: { grid: { display: false } },
+    async function loadProfile() {
+      const urls = [
+        "../music_profile.json",
+        "https://cdn.jsdelivr.net/gh/rafa-create/youtube_likes_mp3@main/music_profile.json",
+        "https://raw.githubusercontent.com/rafa-create/youtube_likes_mp3/main/music_profile.json",
+      ];
+      let lastErr;
+      for (const url of urls) {
+        try {
+          const res = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now());
+          if (!res.ok) throw new Error(res.status + " " + url);
+          return await res.json();
+        } catch (e) { lastErr = e; }
+      }
+      throw lastErr || new Error("profil introuvable");
+    }
+
+    function render(p) {
+      const modes = p.modes || [];
+      const keys = (p.keys || []).slice(0, 8);
+      const artists = (p.top_artists || []).slice(0, 10);
+      const genres = (p.genre_signals || []).filter((g) => g.name !== "autre / non classé").slice(0, 7);
+      const instruments = (p.instruments || []).slice(0, 7);
+      const bpmBuckets = p.bpm_buckets || [];
+      const bpmOrder = ["<70", "70–90", "90–110", "110–130", "130–150", "150+"];
+      const bpmMap = Object.fromEntries(
+        bpmBuckets.map((b) => {
+          const short = (b.name || "").split(" ")[0];
+          return [short, b.count];
+        })
+      );
+      // normalize bucket labels
+      const bpmLabels = [];
+      const bpmData = [];
+      for (const b of bpmBuckets) {
+        const m = (b.name || "").match(/^([^ (]+(?:–[^ (]+)?)/);
+        bpmLabels.push(m ? m[1] : b.name);
+        bpmData.push(b.count);
+      }
+      const pref = p.preferred_instrument || {};
+      const insights = p.insights || [];
+      const samples = (p.sample_tracks || []).slice(0, 8);
+      const minor = modes.find((m) => m.name === "minor")?.count || 0;
+      const major = modes.find((m) => m.name === "major")?.count || 0;
+      const minorPct = minor + major ? Math.round((100 * minor) / (minor + major)) : 0;
+
+      document.getElementById("app").innerHTML = `
+        <h1>Profil musical — likes YouTube</h1>
+        <p class="sub">
+          ${esc(p.playlist_count)} likes / ${esc(p.mp3_count)} MP3 ·
+          librosa sur ${esc(p.audio_sample_size)} pistes ·
+          page dynamique (lit <code>music_profile.json</code> sur main)
+        </p>
+
+        <div class="stats">
+          <div class="stat"><strong>${esc(p.playlist_count)}</strong><span>Vidéos aimées</span></div>
+          <div class="stat"><strong>${esc(p.mp3_count)}</strong><span>MP3 locaux</span></div>
+          <div class="stat"><strong>${esc(p.bpm_stats?.median ?? "—")}</strong><span>BPM médian</span></div>
+          <div class="stat"><strong>${esc(pref.name || "—")}</strong><span>Instrument préféré probable</span></div>
+        </div>
+
+        <div class="callout">
+          <h2>Verdict rapide</h2>
+          <ul>
+            ${insights.slice(0, 5).map((i) => `<li>${esc(i)}</li>`).join("")}
+          </ul>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Mode (échantillon audio)</h3>
+            <div class="chart-box"><canvas id="modeChart"></canvas></div>
+            <p class="hint">${minor} mineur / ${major} majeur · ${minorPct}% mineur</p>
+          </div>
+          <div class="card">
+            <h3>Instrument préféré probable</h3>
+            <div class="chart-box"><canvas id="instChart"></canvas></div>
+            <p class="hint">Heuristique titres/artistes · ${esc(p.instruments_untagged || 0)} titres non taggés</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Répartition BPM</h3>
+            <div class="chart-box"><canvas id="bpmChart"></canvas></div>
+            <p class="hint">Médiane ${esc(p.bpm_stats?.median)} · P25–P75 : ${esc(p.bpm_stats?.p25)}–${esc(p.bpm_stats?.p75)}</p>
+          </div>
+          <div class="card">
+            <h3>Tonalités fréquentes</h3>
+            <div class="chart-box"><canvas id="keyChart"></canvas></div>
+            <p class="hint">Estimation chroma</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Artistes récurrents</h3>
+            <div class="chart-box tall"><canvas id="artistChart"></canvas></div>
+          </div>
+          <div class="card">
+            <h3>Signaux de style</h3>
+            <div class="chart-box tall"><canvas id="genreChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="warn">
+          Instrument = détection par mots-clés des titres (pas un classifieur audio de timbre).
+          Accords exacts : Chordify / Mixed In Key / Cyanite.
+        </div>
+
+        <div class="card">
+          <h3>Exemples du sample audio</h3>
+          <table>
+            <thead><tr><th>Piste</th><th>Tonalité</th><th>BPM</th></tr></thead>
+            <tbody>
+              ${samples.map((t) => `
+                <tr>
+                  <td>${esc((t.file || "").replace(/\\.mp3$/i, ""))}</td>
+                  <td>${esc(t.key)} ${esc(t.mode)}</td>
+                  <td>${esc(t.bpm)}</td>
+                </tr>`).join("")}
+            </tbody>
+          </table>
+        </div>
+
+        <footer>
+          Source :
+          <a href="https://github.com/rafa-create/youtube_likes_mp3">rafa-create/youtube_likes_mp3</a>
+          · Données live : music_profile.json
+        </footer>
+      `;
+
+      new Chart(document.getElementById("modeChart"), {
+        type: "doughnut",
+        data: {
+          labels: ["Mineur", "Majeur"],
+          datasets: [{ data: [minor, major], backgroundColor: [accent, "#3d5166"], borderWidth: 0 }],
         },
-      },
-    });
+        options: { plugins: { legend: { position: "bottom" } }, cutout: "58%" },
+      });
+
+      bar("instChart", instruments.map((i) => i.name), instruments.map((i) => i.count), true);
+      bar("bpmChart", bpmLabels, bpmData, false);
+      bar("keyChart", keys.map((k) => k.name), keys.map((k) => k.count), true);
+      bar("artistChart", artists.map((a) => a.name), artists.map((a) => a.count), true);
+      bar("genreChart", genres.map((g) => g.name), genres.map((g) => g.count), true);
+    }
+
+    loadProfile()
+      .then(render)
+      .catch((e) => {
+        document.getElementById("app").innerHTML =
+          `<p class="err">Impossible de charger music_profile.json : ${esc(e.message)}</p>`;
+      });
   </script>
 </body>
 </html>

@@ -360,11 +360,56 @@
     }
   ],
   "insights": [
+    "Instrument preferé probable : voix / chant (~37.6% des titres taggés). Secondaire fort : synth / prod. electro.",
     "Équilibre majeur/mineur : tu mixes lumière et tension.",
     "Tempo médian ~118 BPM : zone pop / groove confortable.",
     "Tonalités fréquentes (échantillon) : G minor (7), C# minor (7), C major (6), G major (6), A major (5).",
     "Centres tonals récurrents : G, C#, C, A (utile pour improviser dans ces familles d'accords).",
     "Styles détectés dans les titres : autre / non classé, electronic / EDM, piano / neo-classical, pop, french chanson / pop FR.",
     "Pour les progressions d'accords exactes (I–V–vi–IV, ii–V–I…), un outil dédié type Chordify / Mixed In Key / Cyanite est plus précis que l'estimation chroma seule."
-  ]
+  ],
+  "instruments": [
+    {
+      "name": "voix / chant",
+      "count": 108,
+      "share_tagged_pct": 37.6
+    },
+    {
+      "name": "synth / prod. electro",
+      "count": 71,
+      "share_tagged_pct": 24.7
+    },
+    {
+      "name": "piano",
+      "count": 49,
+      "share_tagged_pct": 17.1
+    },
+    {
+      "name": "guitare",
+      "count": 31,
+      "share_tagged_pct": 10.8
+    },
+    {
+      "name": "cordes (violon/cello/harpe)",
+      "count": 24,
+      "share_tagged_pct": 8.4
+    },
+    {
+      "name": "ambiant / bowls",
+      "count": 2,
+      "share_tagged_pct": 0.7
+    },
+    {
+      "name": "vents",
+      "count": 2,
+      "share_tagged_pct": 0.7
+    }
+  ],
+  "instruments_untagged": 544,
+  "preferred_instrument": {
+    "name": "voix / chant",
+    "count": 108,
+    "share_tagged_pct": 37.6,
+    "method": "heuristique titres/artistes (pas classification audio timbre)"
+  }
 }

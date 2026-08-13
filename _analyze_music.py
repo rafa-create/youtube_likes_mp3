@@ -35,6 +35,17 @@ GENRE_RULES = [
     ("ambient / chill", ["relax", "sleep", "chill", "ambient", "meditation", "417hz", "tibetan"]),
 ]
 
+INSTRUMENT_RULES = [
+    ("piano", ["piano", "einaudi", "gibran alcocer", "ludovico", "yiruma", "tony ann", "jacob", "pianoforte"]),
+    ("voix / chant", ["cover vocal", "a cappella", "acapella", "singing", "voix", "vocal", "lyrics", "pomme", "sia", "adele", "lana del rey", "aurora", "imany"]),
+    ("guitare", ["guitar", "guitare", "fingerstyle", "acoustic", "spanish guitar", "ukulele", "banjo"]),
+    ("synth / prod. electro", ["alan walker", "remix", "edm", "synth", "electronic", "lost frequencies", "nightcore", "monstercat", "dubstep", "house"]),
+    ("cordes (violon/cello/harpe)", ["violin", "violon", "cello", "violoncelle", "harp", "harpe", "orchestre", "orchestra", "strings"]),
+    ("batterie / rythme", ["drums", "batterie", "percussion", "drum"]),
+    ("vents", ["flute", "flûte", "saxophone", "sax", "trumpet", "trompette", "clarinet", "shepherd"]),
+    ("ambiant / bowls", ["singing bowl", "tibetan", "417hz", "ambient pad", "meditation"]),
+]
+
 
 def split_artist_title(raw: str) -> tuple[str, str]:
     raw = raw.strip()
@@ -54,6 +65,15 @@ def guess_genres(text: str) -> list[str]:
         if any(k in low for k in keys):
             hits.append(name)
     return hits or ["autre / non classé"]
+
+
+def guess_instruments(text: str) -> list[str]:
+    low = text.casefold()
+    hits = []
+    for name, keys in INSTRUMENT_RULES:
+        if any(k in low for k in keys):
+            hits.append(name)
+    return hits
 
 
 def estimate_key(y: np.ndarray, sr: int) -> tuple[str, str, float]:
@@ -132,6 +152,8 @@ def main() -> None:
 
     artists: Counter[str] = Counter()
     genres: Counter[str] = Counter()
+    instruments: Counter[str] = Counter()
+    instruments_untagged = 0
     for title in titles:
         artist, _ = split_artist_title(title)
         if artist:
@@ -141,6 +163,12 @@ def main() -> None:
                 artists[base] += 1
         for g in guess_genres(title):
             genres[g] += 1
+        inst_hits = guess_instruments(title)
+        if inst_hits:
+            for inst in inst_hits:
+                instruments[inst] += 1
+        else:
+            instruments_untagged += 1
 
     # --- Audio sample ---
     files = sorted(MP3_DIR.glob("*.mp3"))
@@ -171,6 +199,17 @@ def main() -> None:
     top_keys = key_counts.most_common(8)
     top_artists = artists.most_common(15)
     top_genres = genres.most_common(10)
+    top_instruments = instruments.most_common()
+    tagged_inst = sum(instruments.values()) or 1
+    instruments_payload = [
+        {
+            "name": n,
+            "count": c,
+            "share_tagged_pct": round(100 * c / tagged_inst, 1),
+        }
+        for n, c in top_instruments
+    ]
+    preferred = instruments_payload[0] if instruments_payload else None
 
     profile = {
         "playlist_count": len(titles),
@@ -178,6 +217,14 @@ def main() -> None:
         "audio_sample_size": len(audio_rows),
         "top_artists": [{"name": n, "count": c} for n, c in top_artists],
         "genre_signals": [{"name": n, "count": c} for n, c in top_genres],
+        "instruments": instruments_payload,
+        "instruments_untagged": instruments_untagged,
+        "preferred_instrument": {
+            "name": preferred["name"] if preferred else None,
+            "count": preferred["count"] if preferred else 0,
+            "share_tagged_pct": preferred["share_tagged_pct"] if preferred else 0,
+            "method": "heuristique titres/artistes (pas classification audio timbre)",
+        },
         "modes": [{"name": n, "count": c} for n, c in mode_counts.most_common()],
         "keys": [{"name": n, "count": c} for n, c in top_keys],
         "bpm_buckets": [{"name": n, "count": c} for n, c in bpm_counts.most_common()],
@@ -192,6 +239,15 @@ def main() -> None:
     }
 
     insights = []
+    if preferred:
+        line = (
+            f"Instrument préféré probable : {preferred['name']} "
+            f"(~{preferred['share_tagged_pct']}% des titres taggés)."
+        )
+        if len(instruments_payload) > 1 and instruments_payload[1]["share_tagged_pct"] >= preferred["share_tagged_pct"] * 0.55:
+            line += f" Secondaire fort : {instruments_payload[1]['name']}."
+        insights.append(line)
+
     if minor + maj:
         ratio = minor / (minor + maj)
         if ratio >= 0.55:
