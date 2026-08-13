@@ -1,10 +1,16 @@
+# runtime / secrets
 .venv/
 mp3/
 cookies.txt
 downloaded.txt
-_playlist.tsv
-_playlist_err.txt
-_build_reports.py
 __pycache__/
 *.pyc
 .DS_Store
+
+# generated intermediates
+_playlist.tsv
+_playlist_err.txt
+_canvas_data.json
+_sp_*
+_spotify_*
+_dbg_*
