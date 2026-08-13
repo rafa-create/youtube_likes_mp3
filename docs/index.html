@@ -64,6 +64,7 @@
       margin-right: -16px;
       padding-left: 16px;
       padding-right: 16px;
+      align-items: center;
     }
     .tab {
       border: 1px solid var(--line);
@@ -198,6 +199,8 @@
     @media (max-width: 700px) {
       .table-wrap { overflow: visible; }
       .table-wrap thead { display: none; }
+      .table-wrap { margin-bottom: 6px; }
+      h2.sec { margin-top: 28px; }
       .table-wrap tr {
         display: block;
         background: var(--surface);
@@ -277,6 +280,19 @@
       padding: 14px;
       margin-bottom: 16px;
     }
+    .cover.hero {
+      grid-template-columns: 1fr;
+      padding: 0;
+      overflow: hidden;
+      gap: 0;
+    }
+    .cover.hero img.cover-photo {
+      width: 100%;
+      height: 200px;
+      border-radius: 0;
+      display: block;
+    }
+    .cover.hero .cover-body { padding: 14px 16px 16px; }
     .cover img, .cover .cover-mark {
       width: 96px; height: 96px; border-radius: 12px;
       object-fit: cover;
@@ -291,6 +307,22 @@
     }
     .cover h2 { margin: 0 0 4px; font-size: 1.15rem; font-family: "Fraunces", Georgia, serif; }
     .cover p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .emo-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 0 0 16px;
+    }
+    .emo-strip figure { margin: 0; }
+    .emo-strip img {
+      width: 100%;
+      height: 132px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      display: block;
+    }
+    .emo-strip img.tall { object-position: center 72%; }
     .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
     .chip {
       font-size: 0.75rem;
@@ -300,11 +332,48 @@
       border-radius: 999px;
       padding: 4px 10px;
     }
-    .list-link { margin: -4px 0 16px; font-size: 0.88rem; }
+    .list-link {
+      margin: -4px 0 16px;
+      font-size: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 12px;
+    }
     .list-link a { color: var(--accent); }
+    .list-link .copy-btn { margin-top: 0; }
+    .sig { margin: 0; padding-left: 1.15em; }
+    .sig li { margin: 0 0 8px; line-height: 1.4; }
+    .sig li:last-child { margin-bottom: 0; }
+    .lang-switch {
+      display: inline-flex;
+      margin-left: auto;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .lang-btn {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 12px;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+    }
+    .lang-btn.active {
+      background: var(--accent-soft);
+      color: var(--text);
+    }
     @media (max-width: 700px) {
       .cover { grid-template-columns: 72px 1fr; }
       .cover img, .cover .cover-mark { width: 72px; height: 72px; }
+      .cover.hero { grid-template-columns: 1fr; }
+      .cover.hero img.cover-photo { width: 100%; height: 150px; }
+      .emo-strip img { height: 100px; }
     }
   </style>
 </head>
@@ -312,6 +381,7 @@
   <div class="wrap" id="app">
     <p class="sub">Chargement…</p>
   </div>
+  <script src="./i18n.js?v=4"></script>
   <script>
     const accent = "#5b9fd4";
     const muted = "#8b9aab";
@@ -319,6 +389,41 @@
     Chart.defaults.color = muted;
     Chart.defaults.borderColor = grid;
     Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+
+    let profileCache = null;
+    let hashHandler = null;
+    function readLang() {
+      const q = new URLSearchParams(location.search).get("lang");
+      if (q === "nl" || q === "fr") return q;
+      return localStorage.getItem("liked-lang") === "nl" ? "nl" : "fr";
+    }
+    let lang = readLang();
+    document.documentElement.lang = lang;
+    function t(s) {
+      if (lang !== "nl" || s == null) return s;
+      return (typeof LIKED_NL !== "undefined" && LIKED_NL[s]) || s;
+    }
+    function langSwitchHtml() {
+      return `<div class="lang-switch" role="group" aria-label="${esc(t("Langue"))}">
+        <button type="button" class="lang-btn${lang === "fr" ? " active" : ""}" data-set-lang="fr" aria-pressed="${lang === "fr"}">FR</button>
+        <button type="button" class="lang-btn${lang === "nl" ? " active" : ""}" data-set-lang="nl" aria-pressed="${lang === "nl"}">NL</button>
+      </div>`;
+    }
+    function setLang(next) {
+      if (next !== "fr" && next !== "nl") return;
+      if (next === lang) return;
+      lang = next;
+      localStorage.setItem("liked-lang", lang);
+      document.documentElement.lang = lang;
+      const url = new URL(location.href);
+      url.searchParams.set("lang", lang);
+      history.replaceState(null, "", url.pathname + url.search + url.hash);
+      document.title = t("Rafael × Bram — playlists & création");
+      if (profileCache) render(profileCache);
+    }
+    document.title = t("Rafael × Bram — playlists & création");
+    const boot = document.querySelector("#app .sub");
+    if (boot) boot.textContent = t("Chargement…");
 
     const charts = [];
     function clearCharts() {
@@ -392,9 +497,50 @@
       </table></div>`;
     }
     const BRIEFS = {};
+    const LIST_CACHE = {};
     function copyBtn(id, text) {
       BRIEFS[id] = text;
-      return `<button type="button" class="copy-btn" data-brief="${esc(id)}">Copier le brief</button>`;
+      const label = t("Copier le brief");
+      return `<button type="button" class="copy-btn" data-brief="${esc(id)}" data-idle="${esc(label)}">${esc(label)}</button>`;
+    }
+    function copyListBtn(src, label) {
+      return `<button type="button" class="copy-btn" data-list="${esc(src)}" data-idle="${esc(label)}">${esc(label)}</button>`;
+    }
+    function tracksFromMd(raw) {
+      return raw.split(/\r?\n/).filter((line) => {
+        const t = line.trim();
+        if (!t) return false;
+        if (t.startsWith("#")) return false;
+        if (t.startsWith("http")) return false;
+        if (/titres/i.test(t) && t.length < 80) return false;
+        if (/^Copier /i.test(t)) return false;
+        return true;
+      }).join("\n");
+    }
+    async function fetchListText(src) {
+      if (LIST_CACHE[src]) return LIST_CACHE[src];
+      const urls = [
+        src,
+        "https://raw.githubusercontent.com/rafa-create/youtube_likes_mp3/main/docs/" + src.replace(/^\.\//, ""),
+      ];
+      let lastErr;
+      for (const url of urls) {
+        try {
+          const sep = url.includes("?") ? "&" : "?";
+          const res = await fetch(url + sep + "t=" + Date.now(), { cache: "no-store" });
+          if (!res.ok) throw new Error(res.status + " " + url);
+          const body = tracksFromMd(await res.text());
+          if (!body) throw new Error("liste vide");
+          LIST_CACHE[src] = body;
+          return body;
+        } catch (err) {
+          lastErr = err;
+        }
+      }
+      throw lastErr || new Error(src);
+    }
+    function sigHtml(rows) {
+      return `<ol class="sig">${rows.map(([title, why]) => `<li><strong>${title}</strong> — ${why}</li>`).join("")}</ol>`;
     }
     function rankHtml(items, total) {
       const max = Math.max(...items.map((x) => x.n), 1);
@@ -402,7 +548,7 @@
         const pct = total ? `${(100 * x.n / total).toFixed(1).replace(".", ",")}%` : "";
         return `
         <div class="rank-row">
-          <span class="rank-name">${esc(x.name)}</span>
+          <span class="rank-name">${esc(t(x.name))}</span>
           <span class="rank-bar"><i style="width:${((100 * x.n) / max).toFixed(1)}%"></i></span>
           <span class="rank-n">${x.n}${pct ? `<small>${pct}</small>` : ""}</span>
         </div>`;
@@ -427,77 +573,21 @@
       throw lastErr || new Error("profil introuvable");
     }
 
-    const GAYTITUDE = {
-      rafael: {
-        score: 81, label: "Sensitive-pop (quartile supérieur)",
-        rows: [
-          ["Mode mineur (58%)", "16.2", "423/726 pistes mineures — couleur introspective"],
-          ["Soft vocals / piano / chanson", "18.5", "Voix 108 + piano 49 + FR chanson 33 + neo-classical 44"],
-          ["Artistes sensibles", "17.2", "Sia, Pomme, HAEVN, Tom Odell, Alec Benjamin, Sheeran…"],
-          ["Moods mélancoliques", "15.0", "Intime/sombre + électro-mélancolie ≈ 45% des quadrants"],
-          ["Anti-club (100−hard)", "14.1", "EDM présent mais pas dominant vs émotion midtempo"],
-        ],
-      },
-      bram: {
-        score: 57, label: "Chill-acoustic (quartile médian)",
-        rows: [
-          ["Soft acoustic / intimacy", "18.0", "Guitare + voix soft = cœur Chill (Johnson, Bahamas, Mayer)"],
-          ["Artistes sensibles", "11.0", "Froukje / Mayer / Jeangu — mais Johnson = craft guitare, pas drama-pop"],
-          ["Tempo lent émotionnel", "14.0", "~90 BPM → écoute corporelle douce, pas flex"],
-          ["Blues/soul vulnerability", "8.0", "Keb' Mo', Kiwanuka-adjacent pocket"],
-          ["Anti-club", "6.0", "Quasi zéro EDM — le « dude with a guitar » baisse le score gay-coded"],
-        ],
-      },
-      duo: {
-        score: 69, label: "Profil mixte, biais émotionnel",
-        rows: [
-          ["Moyenne pondérée R/B", "69.0", "0.6×81 (Rafael) + 0.4×57 (Bram) — Rafael tire vers sensitive-pop"],
-        ],
-      },
-    };
-
-    function gaytitudeHtml(who) {
-      const g = GAYTITUDE[who];
-      return `
-        <h2 class="sec">Indice de Gaytitude (IG)</h2>
-        <div class="stats">
-          <div class="stat"><strong>${g.score}%</strong><span>Score composite IG</span></div>
-          <div class="stat"><strong>${esc(g.label)}</strong><span>Classe d’écoute</span></div>
-        </div>
-        <div class="callout">
-          <h2>Définition opérationnelle</h2>
-          <p>L’IG mesure l’affinité d’un corpus pour un répertoire <em>sensitive</em> : mode mineur, voix/piano, artistes à charge émotionnelle élevée, moods mélancoliques, faible densité club/EDM. C’est un indice d’écoute, calibré sur des marqueurs culturels du « gay listening » et de la <em>sensitive female / male lead</em> en pop contemporaine.</p>
-        </div>
-        <p class="hint">Cinq composantes pondérées. Le hard-club et l’acoustic « beach bro » réduisent le score ; le midtempo émotionnel et la chanson l’augmentent.</p>
-        <div class="card">
-          <h3>Décomposition du score</h3>
-          ${tbl(["Composante", "Pts /100", "Contribution observée"], g.rows.map((r) => [esc(r[0]), r[1], esc(r[2])]))}
-          <p class="hint">IG = 0.28·Mineur% + 0.22·SoftVocals + 0.20·ArtistesSensibles + 0.15·MoodMélancolique + 0.15·(100−ClubHard). Échelle 0–100, arrondi à l’entier.</p>
-        </div>`;
-    }
-
     function render(p) {
       const chords = p.chord_progressions || {};
-      const recipes = (chords.creation_recipes || []).slice(0, 6);
-      const loops = (chords.top_chord_loops || []).slice(0, 6);
-      const langs = (chords.languages || []).slice(0, 5);
       const romans = (chords.top_progressions || []).slice(0, 6);
       const bram = p.bram || {};
       const bArtists = (bram.top_artists || []).slice(0, 10);
       const rArtists = (p.top_artists || []).slice(0, 8);
-      const rGenres = (p.genre_signals || []).filter((g) => !/autre/i.test(g.name)).slice(0, 7);
-      const rKeys = (p.keys || []).slice(0, 6);
-      const rInst = (p.instruments || []).slice(0, 5);
-      const rMood = ((p.mood || {}).quadrants || []).slice(0, 5);
       const playlistN = p.playlist_count || 776;
-      const audioN = p.mp3_count || 726;
 
+      document.title = t("Rafael × Bram — playlists & création");
       document.getElementById("app").innerHTML = `
         <div class="brand">
           <img class="brand-logo" src="./logo.jpg" width="56" height="56" alt="Logo Rafael × Bram" />
           <div>
             <h1>Rafael × Bram</h1>
-            <p class="sub" style="margin:4px 0 0">Playlists · analyse · création</p>
+            <p class="sub" style="margin:4px 0 0">${t("Paysages émotionnels · analyse · création")}</p>
           </div>
           <img class="brand-fav" src="./favicon.svg" width="44" height="44" alt="" />
         </div>
@@ -505,474 +595,357 @@
         <div class="tabs" id="person-tabs">
           <button class="tab active" data-person="rafael">Rafael</button>
           <button class="tab" data-person="bram">Bram</button>
-          <button class="tab" data-person="duo">À deux</button>
+          <button class="tab" data-person="duo">${t("À deux")}</button>
+          ${langSwitchHtml()}
         </div>
 
         <div class="panel active" id="person-rafael">
           <div class="stats">
-            <div class="stat"><strong>776</strong><span>Likes YT</span></div>
-            <div class="stat"><strong>726</strong><span>MP3 analysés</span></div>
-            <div class="stat"><strong>~118</strong><span>BPM médian</span></div>
-            <div class="stat"><strong>81%</strong><span>Gaytitude IG</span></div>
+            <div class="stat"><strong>776</strong><span>${t("Likes YT")}</span></div>
+            <div class="stat"><strong>726</strong><span>${t("MP3 analysés")}</span></div>
+            <div class="stat"><strong>~118</strong><span>${t("BPM médian")}</span></div>
+            <div class="stat"><strong>81%</strong><span>${t("Gaytitude IG")}</span></div>
           </div>
-          <p class="list-link"><a href="./liste_rafael.md">Liste brute des 776 titres</a> — une ligne par morceau, prêt à copier-coller</p>
+          <p class="list-link"><a href="./liste_rafael.md">${t("Liste brute des 776 titres")}</a>${copyListBtn("./liste_rafael.md", t("Copier la liste"))}</p>
           <div class="tabs" id="rafael-mode-tabs">
-            <button class="tab" data-sub="rafael-analyse">Analyse playlist</button>
-            <button class="tab active" data-sub="rafael-creation">Création artistique</button>
+            <button class="tab active" data-sub="rafael-analyse">${t("Analyse playlist")}</button>
+            <button class="tab" data-sub="rafael-creation">${t("Création artistique")}</button>
           </div>
 
-          <div class="subpanel" id="rafael-analyse">
-            <div class="cover">
-              <div class="cover-mark">R</div>
-              <div>
-                <h2>Fiche d’écoute — Rafael</h2>
-                <p>Likes YouTube · 726 MP3 (librosa) · émotion > genre</p>
+          <div class="subpanel active" id="rafael-analyse">
+            <div class="cover hero">
+              <img class="cover-photo" src="./paysage-rafael-piano.jpg" width="1600" height="900" alt="" />
+              <div class="cover-body">
+                <h2>${t("Fiche d’écoute — Rafael")}</h2>
+                <p>${t("Likes YouTube · 726 MP3 · paysage émotionnel, pas un genre")}</p>
                 <div class="chips">
                   <span class="chip">~118 BPM</span>
                   <span class="chip">58% mineur</span>
-                  <span class="chip">voix vulnérables</span>
-                  <span class="chip">piano / ciné</span>
-                  <span class="chip">électro mélodique</span>
-                  <span class="chip">covers</span>
+                  <span class="chip">${t("manque / souvenir")}</span>
+                  <span class="chip">${t("piano / ciné")}</span>
+                  <span class="chip">${t("évasion")}</span>
+                  <span class="chip">${t("acoustic / slowed")}</span>
                 </div>
               </div>
             </div>
             <div class="callout">
-              <h2>Verdict playlist Rafael</h2>
-              <p>Moins un genre qu’un <strong>état</strong> : nostalgie + espace + intensité douce. Les genres divergent (Walker, Einaudi, Billie, Sia, Zimmer) mais convergent. Signature : <strong>intimité → espace → montée → émotion</strong>. « Donne-moi une musique qui me fait voyager quelque part où je ne suis jamais allé. »</p>
-              <p class="hint" style="margin-top:8px">Deux piliers : <strong>cinéma / piano</strong> et <strong>électro mélodique</strong> — rarement du club pur. La production <strong>ouvre un espace</strong>. La voix est fragile, intime. La langue passe après l’atmosphère.</p>
+              <h2>${t("Verdict playlist Rafael")}</h2>
+              <p>${t("Variété immense, mais aimantée par la <strong>perte</strong> : quelqu’un est parti, quelque chose n’a pas été dit. Il ne cherche pas le désespoir — il cherche des émotions <strong>intenses, cinématographiques, transformées en beauté</strong>. Acoustic, piano, slowed, live : pas seulement la chanson, l’immersion. Signature : <strong>intimité → espace → montée → émotion</strong>. « Donne-moi une musique qui me fait voyager quelque part où je ne suis jamais allé. »")}</p>
             </div>
-            ${tbl(["Facette", "Exemples", "Rôle"], [
-              ["Rêveur ciné / piano", "Einaudi (8), Zimmer (7), Tony Ann (6), Gibran Alcocer", "Paysage mental, pas piste de danse"],
-              ["Mélancolique vocal", "Sia, Billie Eilish, Pomme, HAEVN, Tom Odell, Alec Benjamin", "Voix exposée, versions live / acoustic"],
-              ["Évadé électro", "Alan Walker, Lost Frequencies, Kygo, Avicii, Vibfy", "Mélodique / nostalgique, pas hard-club"],
-              ["Énergie / forme", "Nightcore (15), remixes, slowed/reverb", "Même émotion, autre costume — pas le centre"],
-            ])}
-            <p class="hint">Poche rock nostalgique (Dylan, Collins, Floyd…) = 1–2 titres chacun : réelle, trop mince pour en faire un pilier. Poche FR réelle : Pomme, Cœur de Pirate, Angèle…</p>
-            <div class="grid-2">
-              <div class="card"><h3>Émotions</h3><p>Mélancolie · nostalgie · émerveillement · solitude · espoir / dépassement</p><p class="hint">Nuit, espace, pluie, grande scène, voyage intérieur</p></div>
-              <div class="card"><h3>5 titres-signature</h3>
-                ${tbl(["Titre", "Pourquoi"], [
-                  ["Einaudi — Experience", "Piano + montée + immensité"],
-                  ["Billie Eilish — ocean eyes", "Voix intime, espace"],
-                  ["Alan Walker — Alone", "Électro mélodique, pas club"],
-                  ["Sia — Breathe Me", "Vulnérabilité vocale"],
-                  ["Hans Zimmer — Time", "Crescendo cinématographique"],
-                ])}
-                <p class="hint">Représentatifs de la signature, pas un palmarès. Tous dans les 776 likes.</p>
+            <div class="card">
+              <h3>${t("Paysage émotionnel")}</h3>
+              <div class="emo-strip">
+                <figure>
+                  <img src="./paysage-rafael-mer.jpg" width="1600" height="1066" alt="" loading="lazy" />
+                  <figcaption>${t("Intensité devenue beauté")}</figcaption>
+                </figure>
+                <figure>
+                  <img src="./paysage-rafael-route.jpg" width="800" height="448" alt="" loading="lazy" />
+                  <figcaption>${t("Partir, ailleurs")}</figcaption>
+                </figure>
               </div>
-            </div>
-            <div class="callout">
-              <h2>Covers &amp; réinterprétations</h2>
-              <p>Dans les 776 likes : <strong>53 covers</strong>, 40 live, 36 « piano » dans le titre, 25 remixes, 22 acoustic. Ce n’est pas seulement « la chanson » — c’est comment une même émotion change de forme (piano, cello, slowed, live).</p>
-            </div>
-            ${gaytitudeHtml("rafael")}
-            <h2 class="sec">Couverture &amp; signal</h2>
-            <div class="grid-2">
-              <div class="card"><h3>Mode (726 pistes) <span class="badge ok">mesuré</span></h3><div class="chart-box"><canvas id="rMode"></canvas></div><p class="hint">58% mineur · chroma Krumhansl · librosa</p></div>
-              <div class="card"><h3>BPM (buckets) <span class="badge ok">mesuré</span></h3><div class="chart-box"><canvas id="rBpm"></canvas></div><p class="hint">Médiane 117.5 · P25–P75 96–136</p></div>
-            </div>
-            <div class="grid-2">
-              <div class="card"><h3>Artistes récurrents</h3>${rankHtml(rArtists.map((x) => ({ name: x.name, n: x.count })), playlistN)}<p class="hint">Chaque like = 1. Nightcore = style/label (remixes), pas un artiste unique. Le top n’est pas le corpus.</p></div>
-              <div class="card"><h3>Signaux de style</h3>${rankHtml(rGenres.map((x) => ({ name: x.name, n: x.count })), playlistN)}<p class="hint">Hors « autre / non classé » · heuristique titres</p></div>
-            </div>
-            <div class="grid-2">
-              <div class="card"><h3>Tonalités fréquentes <span class="badge ok">mesuré</span></h3>${rankHtml(rKeys.map((x) => ({ name: x.name, n: x.count })), audioN)}</div>
-              <div class="card"><h3>Instruments (titres)</h3>${rankHtml(rInst.map((x) => ({ name: x.name, n: x.count })))}<p class="hint">Voix 37,6% des taggés · 544 non taggés · heuristique titres</p></div>
-            </div>
-            <h2 class="sec">Mood &amp; clusters</h2>
-            <div class="grid-2">
-              <div class="card"><h3>Quadrants mood <span class="badge ok">mesuré</span></h3>${rankHtml(rMood.map((x) => ({ name: x.name, n: x.count })), audioN)}<p class="hint">Énergie moy. 0.54 · valence moy. 0.47</p></div>
-              <div class="card"><h3>Clusters de goût</h3>
-                ${tbl(["Cluster", "Part", "BPM", "% min"], [
-                  ["Équilibré midtempo", "32%", "109", "72%"],
-                  ["Uplift / dance", "24%", "137", "0%"],
-                  ["Électro mélancolique", "24%", "142", "100%"],
-                  ["Intime / sombre", "20%", "77", "58%"],
-                ])}
-              </div>
-            </div>
-            <h2 class="sec">Harmonie détectée (617/703 filtrées) <span class="badge ok">mesuré</span></h2>
-            <p class="hint">À gauche : les suites telles quelles (Cm–G#–D#–A#, etc.). À droite : la même chose <strong>indépendamment de la tonalité</strong> — I = accord « maison » de la chanson, vi = relatif mineur, IV et V = les deux autres piliers pop. Ça sert à voir que Rafael n’a pas 6 recettes : c’est <strong>une seule boucle</strong> (vi–IV–I–V), commencée à des endroits différents. Couplet vs refrain = changer le point d’entrée, pas la grille.</p>
-            <div class="grid-2">
-              <div class="card"><h3>Suites en notes</h3>${rankHtml(loops.map((x) => ({ name: x.name, n: x.count })))}</div>
-              <div class="card"><h3>Même boucle, autre départ</h3>${rankHtml(romans.map((x) => ({ name: x.name, n: x.count })))}<p class="hint">vi–IV–I–V, IV–I–V–vi… = rotations du même cycle. Les chiffres romains (I, IV, V, vi) sont juste des numéros de marche dans la tonalité.</p></div>
-            </div>
-            <div class="card"><h3>Langues</h3>${rankHtml(langs.map((x) => ({ name: x.name, n: x.count })))}</div>
-            <div class="card"><h3>Exemples piste → suite</h3>
-              ${tbl(["Piste", "Suite", "BPM", "Lang", "Key"], [
-                ["Kid Francescoli — Moon", "G-Bm-D-G", "118", "en", "Bm"],
-                ["Alec Benjamin — Devil Doesn't Bargain", "Cm-G#-D#-A#", "~118", "en", "D#"],
-                ["Loner Deer — Joline", "Cm-D#-A#-Fm", "92", "en", "A#"],
-                ["Billie Eilish — True Blue", "D-Am-C-Em", "103", "?", "Am"],
-                ["Einaudi — Nuvole Bianche", "Fm-C#-G#-D#", "123", "?", "G#"],
-                ["Alan Walker — The Spectre", "C#m-A-E-B", "~121", "en", "E"],
+              ${sigHtml([
+                [t("Mélancolie / manque"), t("Noyau. Pas une tristesse abstraite : absence d’une personne.")],
+                [t("Nostalgie"), t("Le passé est chargé. Il revisite la même émotion (piano, acoustic, slowed).")],
+                [t("Liberté"), t("Partir, courir, ailleurs — une évasion contre quelque chose, pas « je suis bien ici ».")],
+                [t("Apaisement"), t("Contrepoids : douleur → intensification → beauté → calme (Einaudi, Zimmer).")],
+                [t("Grandeur"), t("Héroïsme de film. L’énergie relève après la vulnérabilité — pas du club.")],
               ])}
             </div>
-            <h2 class="sec">Hors likes — paris <span class="badge">estimé</span></h2>
-            <p class="hint">Probabilité musicale, pas une certitude. Mécanisme : Einaudi → piano+espace → Ólafur Arnalds · voix intime (Billie / HAEVN) → RY X / Novo Amor · Zimmer → Cinematic Orchestra / Richter. Déjà dans les likes (exclus) : SYML, AURORA, Sleeping At Last, London Grammar, M83.</p>
-            ${tbl(["#", "Artiste", "Test", "Pourquoi"], [
-              ["1", "Ólafur Arnalds · 95%", "Near Light", "Pont Einaudi / ambient / ciné + électro discrète"],
-              ["2", "RY X · 94%", "—", "Voix intime, aérien, presque cinématographique"],
-              ["3", "Ben Howard · 92%", "Old Pine", "Folk atmosphérique — pont acoustique (aussi Bram)"],
-              ["4", "Novo Amor · 91%", "—", "Voix fragile + réverb + paysage"],
-              ["5", "The Cinematic Orchestra · 90%", "—", "Électro + jazz + cinéma"],
-              ["6", "Patrick Watson · 89%", "—", "Piano intime qui s’ouvre vers le ciné"],
-              ["7", "Agnes Obel · 88%", "—", "Piano de chambre, voix mystérieuse"],
-              ["8", "Max Richter · 82%", "—", "Récit sans paroles, côté Zimmer / Einaudi"],
+            ${tbl([t("Facette"), t("Exemples"), t("Rôle")], [
+              [t("Rêveur ciné / piano"), "Einaudi (8), Zimmer (7), Tony Ann (6), Gibran Alcocer", t("Rendre la douleur belle, immense, puis apaisante")],
+              [t("Mélancolique vocal"), "Sia, Billie Eilish, Pomme, HAEVN, Tom Odell, Alec Benjamin", t("Manque, amour fragile — voix exposée, live / acoustic")],
+              [t("Évadé électro"), "Alan Walker, Lost Frequencies, Kygo, Avicii, Vibfy", t("Partir / courir — mélodique, pas hard-club")],
+              [t("Énergie / forme"), "Nightcore (15), remixes, slowed/reverb", t("Même émotion, autre costume — ou se relever. Pas le centre")],
             ])}
-            <p class="hint">Pari #1 : Ólafur Arnalds — si Near Light passe, l’ADN « spatial et progressif » est confirmé. Suite plus risquée : Tycho, Explosions in the Sky, Hammock, James Blake, Woodkid, Sigur Rós.</p>
+            <div class="card">
+              <h3>${t("5 titres-signature")}</h3>
+              ${sigHtml([
+                ["Einaudi — Experience", t("Douleur devenue immensité")],
+                ["Billie Eilish — ocean eyes", t("Intimité, manque contenu")],
+                ["Alan Walker — Alone", t("Solitude + évasion, pas club")],
+                ["Sia — Breathe Me", t("Immersion dans la vulnérabilité")],
+                ["Hans Zimmer — Time", t("Grandeur, reconstruction")],
+              ])}
+            </div>
+            <h2 class="sec">${t("Données")} <span class="badge ok">${t("mesuré")}</span></h2>
+            <div class="grid-2">
+              <div class="card"><h3>${t("Mode (726 pistes)")}</h3><div class="chart-box"><canvas id="rMode"></canvas></div><p class="hint">${t("58% mineur · chroma Krumhansl · librosa")}</p></div>
+              <div class="card"><h3>${t("BPM (buckets)")}</h3><div class="chart-box"><canvas id="rBpm"></canvas></div><p class="hint">${t("Médiane 117.5 · P25–P75 96–136")}</p></div>
+            </div>
+            <div class="grid-2">
+              <div class="card"><h3>${t("Artistes récurrents")}</h3>${rankHtml(rArtists.map((x) => ({ name: x.name, n: x.count })), playlistN)}<p class="hint">${t("Chaque like = 1. Nightcore = style/label (remixes), pas un artiste unique. Le top n’est pas le corpus.")}</p></div>
+              <div class="card"><h3>${t("Même boucle, autre départ")}</h3>${rankHtml(romans.map((x) => ({ name: x.name, n: x.count })))}<p class="hint">${t("vi–IV–I–V, IV–I–V–vi… = rotations du même cycle. Les chiffres romains (I, IV, V, vi) sont juste des numéros de marche dans la tonalité.")}</p></div>
+            </div>
+            <h2 class="sec">${t("Hors likes — paris")} <span class="badge">${t("estimé")}</span></h2>
+            <p class="hint">${t("Probabilité musicale, pas une certitude. Déjà dans les likes (exclus) : SYML, AURORA, Sleeping At Last, London Grammar, M83.")}</p>
+            ${tbl(["#", t("Artiste"), t("Test"), t("Pourquoi")], [
+              ["1", "Ólafur Arnalds · 95%", "Near Light", t("Pont Einaudi / ambient / ciné + électro discrète")],
+              ["2", "RY X · 94%", "—", t("Voix intime, aérien, presque cinématographique")],
+              ["3", "Ben Howard · 92%", "Old Pine", t("Folk atmosphérique — pont acoustique (aussi Bram)")],
+              ["4", "Novo Amor · 91%", "—", t("Voix fragile + réverb + paysage")],
+              ["5", "Max Richter · 82%", "—", t("Récit sans paroles, côté Zimmer / Einaudi")],
+            ])}
           </div>
 
-          <div class="subpanel active" id="rafael-creation">
+          <div class="subpanel" id="rafael-creation">
             <div class="callout">
-              <h2>Brief studio Rafael — priorité #1</h2>
-              <p>Écris une chanson qui <strong>absorbe</strong> : intimité → espace → montée. EN, <strong>Cm–G#–D#–A#</strong>, <strong>116–120 BPM</strong>, voix vulnérable + pad. Électro mélodique, pas club. G#–D#–A#–Cm = les <strong>mêmes 4 accords</strong>, commencés ailleurs (refrain vs couplet). La prod doit <strong>ouvrir un espace</strong>.</p>
+              <h2>${t("Brief studio Rafael — priorité #1")}</h2>
+              <p>${t("Écris une chanson qui <strong>absorbe</strong> : intimité → espace → montée. EN, <strong>Cm–G#–D#–A#</strong>, <strong>116–120 BPM</strong>, voix vulnérable + pad. La tristesse doit devenir <strong>belle</strong>, pas s’installer dans le désespoir. Électro mélodique, pas club. La prod doit <strong>ouvrir un espace</strong> — partir ailleurs, pas durcir.")}</p>
             </div>
-            <h2 class="sec">4 lanes de création</h2>
+            <h2 class="sec">${t("4 lanes de création")}</h2>
             <div class="grid-3">
-              <div class="card lane"><h3>#1 Pop mineure brillante</h3><strong>Cm – G# – D# – A#</strong><p class="hint">~118 BPM · EN · D# · voix vulnérable + pad. Hook sur D#/A# · couplet plus sombre sur Cm. Lyric : distance / nuit / désir contenu.</p>${copyBtn("r1", "Rafael #1 — Pop mineure brillante\nCm–G#–D#–A#\n~118 BPM · EN · D#\nMêmes 4 accords que G#–D#–A#–Cm : couplet vs refrain = autre départ.\nVoix vulnérable + pad. Hook sur D#/A#, couplet plus sombre sur Cm.\nLyric : distance / nuit / désir contenu.")}</div>
-              <div class="card lane"><h3>#2 Piano / paysage</h3><strong>Fm – C# – G# – D#</strong><p class="hint">~90–110 BPM · instrumental d’abord (Einaudi / Ólafur Arnalds / Tony Ann / Zimmer). Piano minimal → légèrement dramatique. Voix optionnelle, très sparse.</p>${copyBtn("r2", "Rafael #2 — Piano / paysage\nFm–C#–G#–D#\n~90–110 BPM · instrumental d’abord\nPiano minimaliste → mélodique → un peu dramatique (Einaudi / Ólafur / Tony Ann / Zimmer).\nVoix optionnelle, sparse.")}</div>
-              <div class="card lane"><h3>#3 Électro mélodique</h3><strong>C#m – A – E – B</strong><p class="hint">~121 BPM · EN. Walker / Lost Freq. : filter, nostalgie, pas de drop club. Lyric : escape / neon / running — toujours de l’espace.</p>${copyBtn("r3", "Rafael #3 — Électro mélodique\nC#m–A–E–B\n~121 BPM · EN\nFilter, nostalgie, pas de drop club (Walker / Lost Frequencies).\nLyric : escape / neon / running — garder de l’espace.")}</div>
-              <div class="card lane"><h3>#4 Pop / folk D</h3><strong>G – D – A – Bm</strong><p class="hint">~112 BPM · EN · D major. Refrain anthem, couplet Bm. Lyric : route / promesse / light after rain.</p>${copyBtn("r4", "Rafael #4 — Pop / folk D\nG–D–A–Bm\n~112 BPM · EN · D major\nRefrain anthem, couplet Bm.\nLyric : route / promesse / light after rain.")}</div>
+              <div class="card lane"><h3>${t("#1 Pop mineure brillante")}</h3><strong>Cm – G# – D# – A#</strong><p class="hint">${t("~118 BPM · EN · D# · voix vulnérable + pad. Hook sur D#/A# · couplet plus sombre sur Cm. Lyric : distance / nuit / désir contenu.")}</p>${copyBtn("r1", t("Rafael #1 — Pop mineure brillante\nCm–G#–D#–A#\n~118 BPM · EN · D#\nMêmes 4 accords que G#–D#–A#–Cm : couplet vs refrain = autre départ.\nVoix vulnérable + pad. Hook sur D#/A#, couplet plus sombre sur Cm.\nLyric : distance / nuit / désir contenu."))}</div>
+              <div class="card lane"><h3>${t("#2 Piano / paysage")}</h3><strong>Fm – C# – G# – D#</strong><p class="hint">${t("~90–110 BPM · instrumental d’abord (Einaudi / Ólafur Arnalds / Tony Ann / Zimmer). Piano minimal → légèrement dramatique. Voix optionnelle, très sparse.")}</p>${copyBtn("r2", t("Rafael #2 — Piano / paysage\nFm–C#–G#–D#\n~90–110 BPM · instrumental d’abord\nPiano minimaliste → mélodique → un peu dramatique (Einaudi / Ólafur / Tony Ann / Zimmer).\nVoix optionnelle, sparse."))}</div>
+              <div class="card lane"><h3>${t("#3 Électro mélodique")}</h3><strong>C#m – A – E – B</strong><p class="hint">${t("~121 BPM · EN. Walker / Lost Freq. : filter, nostalgie, pas de drop club. Lyric : escape / neon / running — toujours de l’espace.")}</p>${copyBtn("r3", t("Rafael #3 — Électro mélodique\nC#m–A–E–B\n~121 BPM · EN\nFilter, nostalgie, pas de drop club (Walker / Lost Frequencies).\nLyric : escape / neon / running — garder de l’espace."))}</div>
+              <div class="card lane"><h3>${t("#4 Pop / folk D")}</h3><strong>G – D – A – Bm</strong><p class="hint">${t("~112 BPM · EN · D major. Refrain anthem, couplet Bm. Lyric : route / promesse / light after rain.")}</p>${copyBtn("r4", t("Rafael #4 — Pop / folk D\nG–D–A–Bm\n~112 BPM · EN · D major\nRefrain anthem, couplet Bm.\nLyric : route / promesse / light after rain."))}</div>
             </div>
-            <div class="card"><h3>Recettes suite × tempo × langue</h3>
-              ${tbl(["Suite", "Cycle", "BPM", "Langue", "Vu"], recipes.map((r) => [
-                `<strong>${esc(r.chords)}</strong>`, esc(r.degrees || "—"), esc(r.bpm_median ?? "—"), esc(r.language || "—"), esc(r.count) + "×",
-              ]))}
-              <p class="hint">Colonne Cycle = degrés (I = maison, vi = mineur relatif). Plusieurs lignes = la même boucle, autre note de départ. ${esc(chords.coverage_note || "")}</p>
-            </div>
-            <h2 class="sec">Checklist DAW (45–90 min)</h2>
-            ${tbl(["Étape", "Action concrète", "Critère OK"], [
-              ["1. Tempo", "Click 118 BPM", "Body groove sans hard EDM"],
-              ["2. Grille", "Cm–G#–D#–A# × 8 barres", "Boucle collante seule"],
-              ["3. Voix guide", "Hum / oooh 2 motifs", "1 motif couplet, 1 refrain"],
-              ["4. Pad / piano", "Pad mineur + piano sparse", "Ne pas masquer la voix"],
-              ["5. Beat", "Kick soft + clap 2/4", "Moins dense que Walker club"],
-              ["6. Langue", "EN draft 8 lignes", "FR = variante B / pont"],
-              ["7. Arrangement", "Verse dry → chorus +1 couche", "Lift audible"],
+            <h2 class="sec">${t("Structure song suggérée")}</h2>
+            ${tbl([t("Section"), t("Barres"), "Prod"], [
+              [t("Intro"), "4–8", t("Pad + motif guitare/piano")],
+              [t("Verse 1"), "8", t("Voix dry, kick soft")],
+              [t("Chorus"), "8", t("+clap, doubles voix")],
+              [t("Bridge"), "8", t("FR optionnel · strip")],
+              [t("Final chorus"), "8–16", t("Ad-libs · open end")],
             ])}
-            <h2 class="sec">Structure song suggérée</h2>
-            ${tbl(["Section", "Barres", "Accords", "Prod"], [
-              ["Intro", "4–8", "Cm–G# (half)", "Pad + motif guitare/piano"],
-              ["Verse 1", "8", "Cm–G#–D#–A#", "Voix dry, kick soft"],
-              ["Pre", "4", "G#–D#–A#", "Build filter"],
-              ["Chorus", "8", "D#–A#–Cm–G# (rotation)", "+clap, doubles voix"],
-              ["Verse 2", "8", "comme V1", "+contre-mélodie"],
-              ["Chorus 2", "8", "rotation", "+synth lead léger"],
-              ["Bridge", "8", "Am-ish / half-time", "FR optionnel · strip"],
-              ["Final chorus", "8–16", "plein", "Ad-libs · open end"],
-            ])}
-            <div class="grid-2">
-              <div class="card"><h3>Prompts d’écriture EN</h3>
-                <p>« I keep the lights low so I don’t see… »</p>
-                <p>« We talk in circles around the quiet… »</p>
-                <p>« Drive until the city forgets my name… »</p>
-                <p class="hint">Thèmes valence ~0.47 + mineur : tendresse + distance</p>
-              </div>
-              <div class="card"><h3>Variante FR (pont)</h3>
-                <p>Même grille · 4–8 barres FR</p>
-                <p>« On parle bas pour pas réveiller… »</p>
-                <p>« La ville oublie nos prénoms… »</p>
-                <p class="hint">Pomme / Vitaa pocket — pas tout le titre en FR dès la v1</p>
-              </div>
-            </div>
             <div class="callout warn">
-              <h2>Pièges Rafael</h2>
-              <p>Trop de nightcore/EDM dès l’intro. Grille trop complexe (4 accords suffisent). FR partout trop tôt. Durcir pour « faire club » casse le lien ciné + électro mélodique. Une version piano / acoustic de la même chanson doit encore tenir — c’est comme ça que tu écoutes.</p>
+              <h2>${t("Pièges Rafael")}</h2>
+              <p>${t("Trop de nightcore/EDM dès l’intro. Grille trop complexe (4 accords suffisent). FR partout trop tôt. Durcir pour « faire club » casse le lien ciné. Une version piano / acoustic doit encore tenir. Tristesse plate, sans beauté ni montée : ce n’est pas son paysage.")}</p>
             </div>
           </div>
         </div>
 
         <div class="panel" id="person-bram">
           <div class="stats">
-            <div class="stat"><strong>270/270</strong><span>Titres (playlist entière)</span></div>
-            <div class="stat"><strong>NL</strong><span>Origine</span></div>
-            <div class="stat"><strong>~90</strong><span>BPM estimé</span></div>
-            <div class="stat"><strong>57%</strong><span>Gaytitude IG</span></div>
+            <div class="stat"><strong>270/270</strong><span>${t("Titres (playlist entière)")}</span></div>
+            <div class="stat"><strong>NL</strong><span>${t("Origine")}</span></div>
+            <div class="stat"><strong>~90</strong><span>${t("BPM estimé")}</span></div>
+            <div class="stat"><strong>57%</strong><span>${t("Gaytitude IG")}</span></div>
           </div>
-          <p class="list-link"><a href="./liste_bram.md">Liste brute des titres</a> — une ligne par morceau, prêt à copier-coller (270/270)</p>
+          <p class="list-link"><a href="./liste_bram.md">${t("Liste brute des titres")}</a>${copyListBtn("./liste_bram.md", t("Copier la liste"))}</p>
           <div class="tabs" id="bram-mode-tabs">
-            <button class="tab" data-sub="bram-analyse">Analyse playlist</button>
-            <button class="tab active" data-sub="bram-creation">Création artistique</button>
+            <button class="tab active" data-sub="bram-analyse">${t("Analyse playlist")}</button>
+            <button class="tab" data-sub="bram-creation">${t("Création artistique")}</button>
           </div>
 
-          <div class="subpanel" id="bram-analyse">
-            <div class="cover">
-              <div class="cover-mark">B</div>
-              <div>
-                <h2>Fiche d’écoute — Bram van Beurden</h2>
-                <p>Spotify Chill · 270/270 titres · chill organique · NL</p>
+          <div class="subpanel active" id="bram-analyse">
+            <div class="cover hero">
+              <img class="cover-photo" src="./paysage-bram-van.jpg" width="1000" height="667" alt="" />
+              <div class="cover-body">
+                <h2>${t("Fiche d’écoute — Bram van Beurden")}</h2>
+                <p>${t("Spotify Chill · 270/270 · un climat à habiter")}</p>
                 <div class="chips">
-                  <span class="chip">chill organique</span>
-                  <span class="chip">océan / route</span>
-                  <span class="chip">groove</span>
+                  <span class="chip">${t("chill organique")}</span>
+                  <span class="chip">${t("océan / route")}</span>
+                  <span class="chip">${t("désir tranquille")}</span>
                   <span class="chip">soul / blues</span>
-                  <span class="chip">Afrique</span>
+                  <span class="chip">${t("Afrique")}</span>
                   <span class="chip">NL / FR</span>
                 </div>
               </div>
             </div>
             <div class="callout">
-              <h2>Verdict playlist Bram</h2>
-              <p>Le nom « Chill » trompe : ce n’est pas du lo-fi d’étude. C’est du <strong>chill organique</strong> — journée chaude, trajet, terrasse, océan. Signature : <strong>chaleur → groove → liberté → nostalgie</strong>. « Donne-moi une musique qui me donne envie de rester exactement là où je suis. » <strong>La mer est un personnage</strong>.</p>
-              <p class="hint" style="margin-top:8px">Pas « je veux être heureux » : <strong>être bien, même quand c’est compliqué</strong>. La production <strong>donne du corps</strong> (pas un espace infini). Il écoute avec le corps. NL = maison ; l’EN des titres = catalogue US/UK.</p>
-              <p class="hint" style="margin-top:8px"><a href="${esc(bram.source || "https://open.spotify.com/playlist/7prdtzDctYFscp8PgFsp6i")}" style="color:var(--accent)">Playlist Spotify Chill</a> · 270/270 titres</p>
+              <h2>${t("Verdict playlist Bram")}</h2>
+              <p>${t("Pas du lo-fi d’étude : un <strong>climat dans lequel rester</strong>. Relâchement — « je veux que la vie ralentisse » — plutôt que traverser des abysses. Signature : <strong>chaleur → groove → liberté → nostalgie</strong>. « Donne-moi une musique qui me donne envie de rester exactement là où je suis. » Liberté = dehors, respirer, bouger. La mélancolie est <strong>acceptée</strong>, le désir plus charnel. <strong>La mer est un personnage</strong>.")}</p>
+              <p class="hint" style="margin-top:8px"><a href="${esc(bram.source || "https://open.spotify.com/playlist/7prdtzDctYFscp8PgFsp6i")}" style="color:var(--accent)">${t("Playlist Spotify Chill")}</a> · ${t("270/270 titres")}</p>
             </div>
-            ${tbl(["Facette", "Exemples", "Rôle"], [
-              ["Surf / folk / océan", "Jack Johnson (12), Bobby Alu (5), Bahamas (4), Frankenreiter, Xavier Rudd, The Beautiful Girls", "Cœur : soleil, guitare, trajet"],
-              ["Soul / blues", "Keb' Mo', B.B. King, Bobby Womack, Nina Simone, Bill Withers, Donny Hathaway, Kiwanuka", "2e colonne — grain, voix humaine"],
-              ["Afrique", "Bonga (3), Cesária Évora, Blick Bassy (3), Mulatu Astatke, Geoffrey Oryema, Victor Démé", "2e soleil : dansant et nostalgique"],
-              ["Maison EU", "Froukje, Fresku, Snelle, Chef'Special, Vianney, Gaël Faye, Angèle", "NL / FR laid-back, pas agressif"],
-              ["Rap posé", "Loyle Carner, Bakar, Dominic Fike, Jurassic 5, Pete Rock", "Même chaleur que le reste — pas un 2e goût"],
-            ])}
-            <div class="grid-2">
-              <div class="card"><h3>Émotions</h3><p>Sérénité · joie tranquille · liberté · nostalgie douce · chaleur / affection</p><p class="hint">Plage, après-midi d’été, road trip, terrasse, nature</p></div>
-              <div class="card"><h3>5 titres-signature</h3>
-                ${tbl(["Titre", "Pourquoi"], [
-                  ["Jack Johnson — Banana Pancakes", "Soleil, guitare, simplicité"],
-                  ["Xavier Rudd — Follow The Sun", "Voyage, océan, liberté"],
-                  ["Bahamas — Lost In The Light", "Nostalgie douce"],
-                  ["Michael Kiwanuka — Home Again", "Soul, chaleur humaine"],
-                  ["Khruangbin, Leon Bridges — Texas Sun", "Groove + atmosphère (pont Rafael)"],
-                ])}
-                <p class="hint">Tous dans les 270. Quintette craft : Johnson, Bahamas, Bobby Alu, Kiwanuka, Xavier Rudd.</p>
+            <div class="card">
+              <h3>${t("Paysage émotionnel")}</h3>
+              <div class="emo-strip">
+                <figure>
+                  <img src="./paysage-bram-cote.jpg" class="tall" width="640" height="1018" alt="" loading="lazy" />
+                  <figcaption>${t("Dehors, la mer, la route")}</figcaption>
+                </figure>
+                <figure>
+                  <img src="./paysage-bram-cafe.jpg" width="1290" height="860" alt="" loading="lazy" />
+                  <figcaption>${t("La vie qui ralentit")}</figcaption>
+                </figure>
               </div>
-            </div>
-            ${gaytitudeHtml("bram")}
-            <h2 class="sec">D’où vient l’écoute (pas seulement le top 1)</h2>
-            <div class="grid-2">
-              <div class="card"><h3>Top artistes (270 titres)</h3>${rankHtml(bArtists.map((x) => ({ name: x.name, n: x.count })), 270)}<p class="hint">Chaque titre = 1. Jack Johnson 12× (4,4%, collabs inclus) — identité, pas une collection « relax ».</p></div>
-              <div class="card"><h3>Origine des actes</h3><div class="chart-box"><canvas id="bOrigin"></canvas></div>
-                <p class="hint">NL = Froukje, Fresku, Chef'Special, Son Mieux… · Afrique = Bonga, Cesária, Blick Bassy · DE = Sido</p>
-              </div>
-            </div>
-            <h2 class="sec">Langue des titres ≠ langue du listener</h2>
-            <div class="grid-2">
-              <div class="card"><h3>Langue des chansons</h3><div class="chart-box"><canvas id="bLang"></canvas></div>
-                <p class="hint">Beaucoup d’EN parce que le catalogue écouté est US/UK — pas parce que Bram « est anglais ». Poche NL : Froukje, Fresku, Eigenlijk Wel.</p>
-              </div>
-              <div class="card"><h3>Instruments — ce que Bram fait <span class="badge">estimé</span></h3>${rankHtml((bram.instruments_likely || []).map((x) => ({ name: x.name, n: x.share_pct })))}<p class="hint">Pas d’audio librosa. Centre = voix + guitare, mais le groove (basse / batterie) n’est pas décor : il écoute avec le corps.</p></div>
-            </div>
-            <h2 class="sec">Références (craft, pas costume)</h2>
-            ${tbl(["Titre", "Pourquoi"], [
-              ["Jack Johnson — Banana Pancakes / Only The Ocean", "Déclaration d’intention : soleil + mer + guitare"],
-              ["Bobby Alu / Xavier Rudd / The Beautiful Girls", "Californie / Australie / océan — le noyau"],
-              ["Bonga + Cesária Évora — Sodade", "Afrique : dansant et profondément nostalgique"],
-              ["Froukje / Fresku / Eigenlijk Wel", "NL contemporain — sa scène"],
-              ["Bobby Womack / Nina Simone / Keb' Mo'", "Soul et blues : voix qui ont du grain"],
-              ["Loyle Carner — Still / lyin", "Rap qui cohabite avec Johnson, même chaleur"],
-              ["Vulfpeck / Khruangbin / Black Pumas", "Groove > refrain spectaculaire"],
-            ])}
-            <h2 class="sec">Hors playlist — paris <span class="badge">estimé</span></h2>
-            <p class="hint">Mécanisme de chaleur : Johnson → Ben Howard / John Butler · Womack / Black Pumas → Durand Jones · Rudd / Alu / Sticky Fingers → Ocean Alley / Angus &amp; Julia Stone. <strong>Pas des découvertes</strong> (déjà dans les 270) : Ben Harper (If Ever), Leon Bridges (Texas Sun), Trevor Hall, Josh Teskey — le catalogue solo reste un prolongement.</p>
-            ${tbl(["#", "Artiste", "Test", "Pourquoi"], [
-              ["1", "Ben Howard · 93%", "Old Pine", "Folk / nature — croise González, Rudd, Johnson (aussi Rafael)"],
-              ["2", "Angus & Julia Stone · 92%", "Big Jet Plane", "Été AU, douceur, mélancolie (Julia Stone déjà en collab)"],
-              ["3", "John Butler Trio · 91%", "Better Than", "Guitare, voyage, groove organique"],
-              ["4", "Amos Lee · 90%", "—", "Soul + folk, dimanche → coucher de soleil"],
-              ["5", "Ray LaMontagne · 87%", "—", "Voix grave, analogique — poche Kiwanuka"],
-              ["6", "Durand Jones & The Indications · 86%", "—", "Soul / funk chaleureux, pas seulement triste"],
-              ["7", "Ocean Alley · 82%", "—", "AU / reggae / océan — Rudd, Sticky Fingers, Alu"],
-              ["8", "Hermanos Gutiérrez · 70%", "—", "Pari : road-trip instrumental, désert, lenteur"],
-            ])}
-            <p class="hint">Pari #1 réel (absent) : Ben Howard. Harper / Bridges = approfondir, pas découvrir. Suite : Isakov, Paper Kites, Jordan Rakei, Nick Drake, Yussef Dayes.</p>
-            <div class="callout">
-              <h2>Limite</h2>
-              <p>Pas d’audio librosa (Spotify). Tempo ~90 et instruments = estimations. Le ranking d’artistes compte les 270 titres, un chacun.</p>
-            </div>
-          </div>
-
-          <div class="subpanel active" id="bram-creation">
-            <div class="callout ok">
-              <h2>Brief studio Bram — priorité #1</h2>
-              <p><strong>Voix + guitare</strong>, chaleur → groove → liberté. Tempo ~85–95. Pas du lo-fi : rester <strong>exactement là</strong> (terrasse, mer, trajet). La prod <strong>donne du corps</strong>, n’ouvre pas un ciel. Feel-good avec une petite ombre. NL ou EN. Si trop produit, enlever une couche.</p>
-            </div>
-            <h2 class="sec">4 lanes de création</h2>
-            <div class="grid-3">
-              <div class="card lane"><h3>#1 Surf / journée</h3><strong>G – C – D – Em</strong><p class="hint">~90 BPM · NL ou EN. Fingerstyle, soleil, mer, dimanche. Johnson / Alu / Xavier Rudd — simplicité, pas démonstration.</p>${copyBtn("b1", "Bram #1 — Surf / journée\nG–C–D–Em\n~90 BPM · NL ou EN\nFingerstyle, proche micro. Soleil, mer, dimanche matin.\nJack Johnson / Bobby Alu — simplicité, pas démonstration.")}</div>
-              <div class="card lane"><h3>#2 Chanson NL contemporaine</h3><strong>C – G – Am – F</strong><p class="hint">~88 BPM · <strong>néerlandais</strong>. Même craft, langue vraie. Froukje / Eigenlijk Wel / Fresku posé — laid-back, pas agressif.</p>${copyBtn("b2", "Bram #2 — Chanson NL contemporaine\nC–G–Am–F\n~88 BPM · néerlandais\nVoix + guitare. Poche Froukje / Eigenlijk Wel / Fresku posé.")}</div>
-              <div class="card lane"><h3>#3 Soul / grain</h3><strong>Am – G – C – F</strong><p class="hint">~78 BPM · EN ou NL. Womack / Nina / Keb' Mo' / Kiwanuka / Bonga. Voix qui a du grain, nostalgie qui danse encore.</p>${copyBtn("b3", "Bram #3 — Soul / grain\nAm–G–C–F\n~78 BPM · EN ou NL\nWomack / Nina / Keb' Mo' / Kiwanuka / Bonga.\nVoix grain, nostalgie qui danse encore.")}</div>
-              <div class="card lane"><h3>#4 Groove organique</h3><strong>Em – G – C – D</strong><p class="hint">~92 BPM · EN. Basse + batterie d’abord, puis guitare. Vulfpeck / Khruangbin / Black Pumas — le corps avant le refrain.</p>${copyBtn("b4", "Bram #4 — Groove organique\nEm–G–C–D\n~92 BPM · EN\nBasse + batterie d’abord, puis guitare.\nVulfpeck / Khruangbin / Black Pumas — le corps avant le refrain.")}</div>
-            </div>
-            <div class="card"><h3>Recettes</h3>
-              ${tbl(["Suite", "BPM", "Langue cible", "Instrument", "Usage"], [
-                ["G–C–D–Em", "90", "NL ou EN", "voix + guitare", "Lane #1 — surf / journée"],
-                ["C–G–Am–F", "88", "NL d’abord", "voix + guitare", "Lane #2 — chanson maison"],
-                ["Am–G–C–F", "78", "EN / NL", "voix + guitare", "Lane #3 — soul / Afrique"],
-                ["Em–G–C–D", "92", "EN", "basse + guitare", "Lane #4 — groove organique"],
-                ["G–Em–C–D", "104", "EN (duo Rafael)", "guitare + pad", "Pont avec Rafael"],
+              ${sigHtml([
+                [t("Apaisement"), t("Émotion dominante. Pas « oublier la douleur » : habiter un calme.")],
+                [t("Liberté"), t("Être dehors, voyager, respirer — beaucoup moins dramatique que chez Rafael.")],
+                [t("Joie / désir"), t("Légèreté terrestre : soleil, café, route, corps. Amour de proximité, pas de tragédie.")],
+                [t("Contemplation"), t("Présence au monde. Regarder le soleil, laisser passer le temps.")],
+                [t("Mélancolie douce"), t("La douceur de quelque chose de terminé. Le sombre est domestiqué, pas cathartique.")],
               ])}
             </div>
-            <h2 class="sec">Checklist DAW Bram</h2>
-            ${tbl(["Étape", "Action", "Critère OK"], [
-              ["Tempo", "Click ~90 BPM", "On peut marcher / chanter dessus"],
-              ["Guitare", "Voicing ouvert, fingerstyle", "Belle seule, sans beat"],
-              ["Voix", "Proche micro, peu de reverb", "On entend que c’est lui qui chante"],
-              ["Langue", "Draft NL <em>et</em> EN sur la même grille", "La version NL doit tenir"],
-              ["Perc", "Shaker / brush / groove léger", "Le corps bouge, pas de drop 808"],
-              ["Espace", "Couper 1 élément", "Respiration audible"],
+            ${tbl([t("Facette"), t("Exemples"), t("Rôle")], [
+              [t("Surf / folk / océan"), "Jack Johnson (12), Bobby Alu (5), Bahamas (4), Frankenreiter, Xavier Rudd, The Beautiful Girls", t("Climat : soleil, guitare, trajet")],
+              [t("Soul / blues"), "Keb' Mo', B.B. King, Bobby Womack, Nina Simone, Bill Withers, Donny Hathaway, Kiwanuka", t("Grain, désir, mélancolie qui tient encore debout")],
+              [t("Afrique"), "Bonga (3), Cesária Évora, Blick Bassy (3), Mulatu Astatke, Geoffrey Oryema, Victor Démé", t("Dansant et nostalgique — chaleur, pas détresse")],
+              [t("Maison EU"), "Froukje, Fresku, Snelle, Chef'Special, Vianney, Gaël Faye, Angèle", t("Joie quotidienne NL / FR, laid-back")],
+              [t("Rap posé"), "Loyle Carner, Bakar, Dominic Fike, Jurassic 5, Pete Rock", t("Même chaleur que le reste — pas un 2e goût")],
             ])}
-            <h2 class="sec">Structure song</h2>
-            ${tbl(["Section", "Barres", "Idée"], [
-              ["Intro guitare", "4–8", "Motif fingerstyle seul"],
-              ["Verse", "8–16", "Voix + guitare · presque dry"],
-              ["Chorus", "8", "Ouvre la voix · +shaker"],
-              ["Verse 2", "8", "Petite contre-ligne"],
-              ["Bridge", "8", "NL si couplets EN (ou l’inverse)"],
-              ["Final", "8–16", "Revenir nu ou +1 harmonie"],
-            ])}
+            <div class="card">
+              <h3>${t("5 titres-signature")}</h3>
+              ${sigHtml([
+                ["Jack Johnson — Banana Pancakes", t("Relâchement, cuisine, dimanche")],
+                ["Xavier Rudd — Follow The Sun", t("Liberté dehors, pas une fuite")],
+                ["Bahamas — Lost In The Light", t("Mélancolie douce, teinte du présent")],
+                ["Michael Kiwanuka — Home Again", t("Chaleur humaine, souvenir qui réchauffe")],
+                ["Khruangbin, Leon Bridges — Texas Sun", t("Désir + groove + atmosphère (pont Rafael)")],
+              ])}
+            </div>
+            <h2 class="sec">${t("Données")} <span class="badge">${t("estimé")}</span></h2>
+            <p class="hint">${t("Pas d’audio librosa (Spotify). Tempo ~90 et instruments = estimations. Le ranking d’artistes compte les 270 titres, un chacun.")}</p>
             <div class="grid-2">
-              <div class="card"><h3>Prompts NL</h3>
-                <p>« Ik zing het zacht, de keuken is nog licht… »</p>
-                <p>« Ramen open, de zee ergens achter de dijk… »</p>
-                <p>« Eigenlijk wel — we laten de dag langzaam… »</p>
-              </div>
-              <div class="card"><h3>Prompts EN (même chanson)</h3>
-                <p>« Bare feet on the kitchen floor… »</p>
-                <p>« Windows down, the ocean somewhere to the left… »</p>
-                <p>« I’m alright in a world that isn’t perfect… »</p>
+              <div class="card"><h3>${t("Origine des actes")}</h3><div class="chart-box"><canvas id="bOrigin"></canvas></div></div>
+              <div class="card"><h3>${t("Langue des chansons")}</h3><div class="chart-box"><canvas id="bLang"></canvas></div>
+                <p class="hint">${t("Beaucoup d’EN parce que le catalogue écouté est US/UK — pas parce que Bram « est anglais ». Poche NL : Froukje, Fresku, Eigenlijk Wel.")}</p>
               </div>
             </div>
+            <div class="card"><h3>${t("Top artistes (270 titres)")}</h3>${rankHtml(bArtists.map((x) => ({ name: x.name, n: x.count })), 270)}</div>
+            <h2 class="sec">${t("Hors playlist — paris")} <span class="badge">${t("estimé")}</span></h2>
+            <p class="hint">${t("Pari #1 réel (absent) : Ben Howard. Harper / Bridges = approfondir, pas découvrir.")}</p>
+            ${tbl(["#", t("Artiste"), t("Test"), t("Pourquoi")], [
+              ["1", "Ben Howard · 93%", "Old Pine", t("Folk / nature — croise González, Rudd, Johnson (aussi Rafael)")],
+              ["2", "Angus & Julia Stone · 92%", "Big Jet Plane", t("Été AU, douceur, mélancolie (Julia Stone déjà en collab)")],
+              ["3", "John Butler Trio · 91%", "Better Than", t("Guitare, voyage, groove organique")],
+              ["4", "Amos Lee · 90%", "—", t("Soul + folk, dimanche → coucher de soleil")],
+              ["5", "Durand Jones & The Indications · 86%", "—", t("Soul / funk chaleureux, pas seulement triste")],
+            ])}
+          </div>
+
+          <div class="subpanel" id="bram-creation">
+            <div class="callout ok">
+              <h2>${t("Brief studio Bram — priorité #1")}</h2>
+              <p>${t("<strong>Voix + guitare</strong>, chaleur → groove → liberté. Tempo ~85–95. Pas du lo-fi : rester <strong>exactement là</strong>. La prod <strong>donne du corps</strong>. Feel-good avec une petite ombre — mélancolie acceptée, désir charnel, pas de catharsis. NL ou EN. Si trop produit, enlever une couche.")}</p>
+            </div>
+            <h2 class="sec">${t("4 lanes de création")}</h2>
+            <div class="grid-3">
+              <div class="card lane"><h3>${t("#1 Surf / journée")}</h3><strong>G – C – D – Em</strong><p class="hint">${t("~90 BPM · NL ou EN. Fingerstyle, soleil, mer, dimanche. Johnson / Alu / Xavier Rudd — simplicité, pas démonstration.")}</p>${copyBtn("b1", t("Bram #1 — Surf / journée\nG–C–D–Em\n~90 BPM · NL ou EN\nFingerstyle, proche micro. Soleil, mer, dimanche matin.\nJack Johnson / Bobby Alu — simplicité, pas démonstration."))}</div>
+              <div class="card lane"><h3>${t("#2 Chanson NL contemporaine")}</h3><strong>C – G – Am – F</strong><p class="hint">${t("~88 BPM · <strong>néerlandais</strong>. Même craft, langue vraie. Froukje / Eigenlijk Wel / Fresku posé — laid-back, pas agressif.")}</p>${copyBtn("b2", t("Bram #2 — Chanson NL contemporaine\nC–G–Am–F\n~88 BPM · néerlandais\nVoix + guitare. Poche Froukje / Eigenlijk Wel / Fresku posé."))}</div>
+              <div class="card lane"><h3>${t("#3 Soul / grain")}</h3><strong>Am – G – C – F</strong><p class="hint">${t("~78 BPM · EN ou NL. Womack / Nina / Keb' Mo' / Kiwanuka / Bonga. Voix qui a du grain, nostalgie qui danse encore.")}</p>${copyBtn("b3", t("Bram #3 — Soul / grain\nAm–G–C–F\n~78 BPM · EN ou NL\nWomack / Nina / Keb' Mo' / Kiwanuka / Bonga.\nVoix grain, nostalgie qui danse encore."))}</div>
+              <div class="card lane"><h3>${t("#4 Groove organique")}</h3><strong>Em – G – C – D</strong><p class="hint">${t("~92 BPM · EN. Basse + batterie d’abord, puis guitare. Vulfpeck / Khruangbin / Black Pumas — le corps avant le refrain.")}</p>${copyBtn("b4", t("Bram #4 — Groove organique\nEm–G–C–D\n~92 BPM · EN\nBasse + batterie d’abord, puis guitare.\nVulfpeck / Khruangbin / Black Pumas — le corps avant le refrain."))}</div>
+            </div>
+            <h2 class="sec">${t("Checklist DAW Bram")}</h2>
+            ${tbl([t("Étape"), t("Action"), t("Critère OK")], [
+              [t("Tempo"), t("Click ~90 BPM"), t("On peut marcher / chanter dessus")],
+              [t("Guitare"), t("Voicing ouvert, fingerstyle"), t("Belle seule, sans beat")],
+              [t("Voix"), t("Proche micro, peu de reverb"), t("On entend que c’est lui qui chante")],
+              [t("Langue"), t("Draft NL <em>et</em> EN sur la même grille"), t("La version NL doit tenir")],
+              [t("Perc"), t("Shaker / brush / groove léger"), t("Le corps bouge, pas de drop 808")],
+              [t("Espace"), t("Couper 1 élément"), t("Respiration audible")],
+            ])}
             <div class="callout warn">
-              <h2>Pièges Bram</h2>
-              <p>Lo-fi / musique d’étude. Positivité plastique. Trop produit. Drop 808. Masquer le groove sous un refrain « spectaculaire ». Jack Johnson en costume, pas en craft.</p>
+              <h2>${t("Pièges Bram")}</h2>
+              <p>${t("Lo-fi / musique d’étude. Positivité plastique. Trop produit. Drop 808. Catharsis « je suis détruit ». Grandeur Gladiator / Interstellar. Jack Johnson en costume, pas en craft.")}</p>
             </div>
           </div>
         </div>
 
         <div class="panel" id="person-duo">
           <div class="stats">
-            <div class="stat"><strong>100–108</strong><span>BPM pont</span></div>
-            <div class="stat"><strong>EN / NL / FR</strong><span>Langues</span></div>
-            <div class="stat"><strong>69%</strong><span>Gaytitude duo</span></div>
-            <div class="stat"><strong>Guit+pad</strong><span>Timbre mix</span></div>
+            <div class="stat"><strong>100–108</strong><span>${t("BPM pont")}</span></div>
+            <div class="stat"><strong>${t("EN / NL / FR")}</strong><span>${t("Langues")}</span></div>
+            <div class="stat"><strong>69%</strong><span>${t("Gaytitude duo")}</span></div>
+            <div class="stat"><strong>Guit+pad</strong><span>${t("Timbre mix")}</span></div>
           </div>
-          <p class="list-link"><a href="./liste_rafael.md">Liste Rafael</a> · <a href="./liste_bram.md">Liste Bram</a> — brut, prêt à copier-coller</p>
+          <p class="list-link"><a href="./liste_rafael.md">${t("Liste Rafael")}</a>${copyListBtn("./liste_rafael.md", t("Copier Rafael"))}<a href="./liste_bram.md">${t("Liste Bram")}</a>${copyListBtn("./liste_bram.md", t("Copier Bram"))}</p>
           <div class="callout">
-            <h2>Objectif duo</h2>
-            <p>Terrain commun = <strong>créer un monde</strong>, pas le même mécanisme. Rafael : mélodie → espace → émotion (~118). Bram : rythme → groove → chaleur (~90). Rencontre à <strong>100–108 BPM</strong>, voix + guitare. Langues : EN ensemble, NL côté Bram, FR côté Rafael.</p>
+            <h2>${t("Objectif duo")}</h2>
+            <p>${t("<strong>Rafael</strong> explore et transforme des émotions intenses (vertical, cinématographique). <strong>Bram</strong> installe un état de vie agréable (horizontal, terrestre). Les deux aiment la mélancolie et la liberté — chez Rafael elles appellent l’évasion et la reconstruction ; chez Bram elles teintent le moment présent. Rencontre à <strong>100–108 BPM</strong>, voix + guitare. EN ensemble, NL Bram, FR Rafael.")}</p>
+            <p class="hint" style="margin-top:8px">${t("Texas Sun : groove Bram + atmosphère Rafael")}</p>
+          </div>
+          <div class="emo-strip">
+            <figure>
+              <img src="./paysage-rafael-piano.jpg" width="1000" height="667" alt="" loading="lazy" />
+              <figcaption>Rafael — ${t("montagnes et horizons")}</figcaption>
+            </figure>
+            <figure>
+              <img src="./paysage-bram-cote.jpg" class="tall" width="640" height="1018" alt="" loading="lazy" />
+              <figcaption>Bram — ${t("paysage côtier")}</figcaption>
+            </figure>
           </div>
           <div class="tabs" id="duo-tabs">
-            <button class="tab" data-sub="duo-overlap">Analyse croisée</button>
-            <button class="tab" data-sub="duo-roles">Qui fait quoi</button>
-            <button class="tab" data-sub="duo-session">Session</button>
-            <button class="tab active" data-sub="duo-concepts">Concepts</button>
+            <button class="tab active" data-sub="duo-overlap">${t("Analyse croisée")}</button>
+            <button class="tab" data-sub="duo-roles">${t("Qui fait quoi")}</button>
+            <button class="tab" data-sub="duo-session">${t("Session")}</button>
+            <button class="tab" data-sub="duo-concepts">${t("Concepts")}</button>
           </div>
 
-          <div class="subpanel" id="duo-overlap">
-            <div class="cover">
-              <img src="./logo.jpg" width="96" height="96" alt="" />
-              <div>
-                <h2>À deux — terrain commun</h2>
-                <p>Deux ambiances · NL × FR · 100–108 BPM</p>
-                <div class="chips">
-                  <span class="chip">nuit × soleil</span>
-                  <span class="chip">voix + guitare</span>
-                  <span class="chip">EN ensemble</span>
-                  <span class="chip">NL Bram · FR Rafael</span>
-                </div>
-              </div>
-            </div>
-            ${gaytitudeHtml("duo")}
-            <div class="card"><h3>IG comparé</h3><div class="chart-box"><canvas id="duoIg"></canvas></div>
-              <p class="hint">Rafael tire vers sensitive-pop (nuit) ; Bram ramène vers groove solaire. Ensemble = émotion accessible, pas club.</p>
-            </div>
-            <h2 class="sec">Comparaison playlist → création</h2>
-            ${tbl(["Axe", "Rafael", "Bram", "Pont duo"], [
-              ["Cœur", "Émotion + espace + montée", "Sensation + groove + chaleur", "Un monde, deux mécaniques"],
-              ["Phrase", "Voyager où je ne suis jamais allé", "Envie de rester exactement là", "Texas Sun : groove Bram + atmosphère Rafael"],
-              ["Source", "776 likes YT / 726 MP3", "270 Spotify Chill", "Goûts réels des deux"],
-              ["Tempo", "~118 (100–140)", "~90 (80–100)", "100–108 BPM"],
-              ["Langue", "EN + poche FR", "NL (écoute aussi EN/DE)", "EN ensemble · NL Bram · FR Rafael"],
-              ["Timbre", "piano / synth · ouvre l’espace", "guitare · donne du corps", "guitare + pad"],
-              ["Harmonie", "4 accords, plusieurs départs (D#/E)", "campfire I–IV–V", "C–G–Am–F · Am–F–C–G"],
-              ["Mood", "nuit / étoiles / introspection", "soleil / mer / route / présent", "mélancolie chaude"],
-              ["Densité", "plus produite", "organique / room", "dry verse → wet chorus"],
-              ["Risque", "trop EDM", "trop plat / demo", "garder les 2 tests"],
-            ])}
+          <div class="subpanel active" id="duo-overlap">
             <div class="grid-2">
-              <div class="card"><h3>Tempo — zone de rencontre</h3><div class="chart-box"><canvas id="duoBpm"></canvas></div><p class="hint">Rafael mesuré · Bram estimé · pont 100–108</p></div>
-              <div class="card"><h3>Grilles communes</h3>
-                <p><strong>C – G – Am – F</strong><br><span class="hint">Bram campfire · Rafael, même 4 accords en C</span></p>
-                <p><strong>Am – F – C – G</strong><br><span class="hint">Même boucle, départ mineur · Bram ballade</span></p>
-                <p><strong>G – Em – C – D</strong><br><span class="hint">Bram island · Rafael arpèges synth</span></p>
+              <div class="card"><h3>${t("Tempo — zone de rencontre")}</h3><div class="chart-box"><canvas id="duoBpm"></canvas></div><p class="hint">${t("Rafael mesuré · Bram estimé · pont 100–108")}</p></div>
+              <div class="card"><h3>${t("IG comparé")}</h3><div class="chart-box"><canvas id="duoIg"></canvas></div>
+                <p class="hint">${t("Rafael : intensité verticale. Bram : climat horizontal. Ensemble = émotion accessible, pas club.")}</p>
               </div>
             </div>
-            <div class="callout ok">
-              <h2>Style croisé qui résonne</h2>
-              <p><strong>Rafael :</strong> « Donne-moi une musique qui me fait voyager quelque part où je ne suis jamais allé. » <strong>Bram :</strong> « Donne-moi une musique qui me donne envie de rester exactement là où je suis. » Même envie d’un monde ; Rafael le construit en mélodie/espace, Bram en rythme/chaleur. Pont in-playlist : <em>Texas Sun</em>. Pont hors liste : Ben Howard — <em>Old Pine</em>.</p>
+            <h2 class="sec">${t("Comparaison playlist → création")}</h2>
+            ${tbl([t("Axe"), "Rafael", "Bram", t("Pont duo")], [
+              [t("Cœur"), t("Ressentir profondément, transformer"), t("Se sentir bien quelque part"), t("Un monde, deux mécaniques")],
+              [t("Liberté"), t("Partir / s’échapper"), t("Être dehors / respirer"), t("Route sans fuite existentielle")],
+              [t("Mélancolie"), t("Manque, revisiter"), t("Teinte du présent"), t("Texas Sun")],
+              [t("Amour"), t("Fragile, perdu, menacé"), t("Proximité + désir"), t("Chaleur sans tragédie")],
+              [t("Tempo"), t("~118 (100–140)"), t("~90 (80–100)"), "100–108 BPM"],
+              [t("Langue"), t("EN + poche FR"), t("NL (écoute aussi EN/DE)"), t("EN ensemble · NL Bram · FR Rafael")],
+              [t("Timbre"), t("piano / synth · ouvre l’espace"), t("guitare · donne du corps"), t("guitare + pad")],
+              [t("Harmonie"), t("4 accords, plusieurs départs (D#/E)"), t("campfire I–IV–V"), "C–G–Am–F · Am–F–C–G"],
+            ])}
+            <div class="card"><h3>${t("Grilles communes")}</h3>
+              <p><strong>C – G – Am – F</strong> · ${t("Bram campfire · Rafael, même 4 accords en C")}</p>
+              <p><strong>Am – F – C – G</strong> · ${t("Même boucle, départ mineur · Bram ballade")}</p>
+              <p><strong>G – Em – C – D</strong> · ${t("Bram island · Rafael arpèges synth")}</p>
             </div>
             <div class="card">
-              <h3>Pont hors listes</h3>
-              <p><strong>Ben Howard</strong> est le seul pari fort des deux côtés : atmosphère (Rafael) × nature / guitare (Bram). Test commun : <em>Old Pine</em>.</p>
-              <p class="hint">Rafael → Ólafur Arnalds (<em>Near Light</em>) · Bram → approfondir Ben Harper / Leon Bridges (déjà en collab) puis Ben Howard en vrai absent.</p>
+              <h3>${t("Pont hors listes")}</h3>
+              <p>${t("<strong>Ben Howard</strong> est le seul pari fort des deux côtés : atmosphère (Rafael) × nature / guitare (Bram). Test commun : <em>Old Pine</em>.")}</p>
             </div>
           </div>
 
           <div class="subpanel" id="duo-roles">
-            ${tbl(["Domaine", "Bram mène", "Rafael mène", "Ensemble"], [
-              ["Guitare / skeleton", "Oui", "Doubles / soutien", "Grille fixée à 2"],
-              ["Beat / groove", "Shaker, brush", "Kick/clap électro", "Layer progressif"],
-              ["Synth / pads", "Rare", "Oui — atmosphère", "Entre au 2e couplet"],
-              ["Voix lead", "Soft / grain", "Pop / stacks", "Duo refrain"],
-              ["Paroles EN", "Oui", "Oui", "Co-write"],
-              ["Paroles FR", "Support", "Oui (pont)", "4–8 barres max v1"],
-              ["Structure", "Forme A–B acoustique", "Lift chorus", "A–A–B + lift"],
-              ["Mix", "Room, dry", "Width, FX", "Dry→wet"],
+            ${tbl([t("Domaine"), t("Bram mène"), t("Rafael mène"), t("Ensemble")], [
+              [t("Guitare / skeleton"), t("Oui"), t("Doubles / soutien"), t("Grille fixée à 2")],
+              [t("Beat / groove"), t("Shaker, brush"), t("Kick/clap électro"), t("Layer progressif")],
+              [t("Synth / pads"), t("Rare"), t("Oui — atmosphère"), t("Entre au 2e couplet")],
+              [t("Voix lead"), t("Soft / grain"), t("Pop / stacks"), t("Duo refrain")],
+              [t("Paroles EN"), t("Oui"), t("Oui"), t("Co-write")],
+              [t("Paroles FR"), t("Support"), t("Oui (pont)"), t("4–8 barres max v1")],
+              [t("Structure"), t("Forme A–B acoustique"), t("Lift chorus"), t("A–A–B + lift")],
+              [t("Mix"), t("Room, dry"), t("Width, FX"), t("Dry→wet")],
             ])}
             <div class="grid-2">
-              <div class="card"><h3>Leadership Bram</h3><p>Groove organique, mer / route, blues soft, tempo lent, guitare, lyrics du quotidien, le corps d’abord.</p></div>
-              <div class="card"><h3>Leadership Rafael</h3><p>Couleur 4 chords pop, synth/piano, arrangement, énergie mid, option FR, finish streaming.</p></div>
+              <div class="card"><h3>${t("Leadership Bram")}</h3><p>${t("Groove organique, mer / route, blues soft, tempo lent, guitare, lyrics du quotidien, le corps d’abord.")}</p></div>
+              <div class="card"><h3>${t("Leadership Rafael")}</h3><p>${t("Couleur 4 chords pop, synth/piano, arrangement, énergie mid, option FR, finish streaming.")}</p></div>
             </div>
-            <h2 class="sec">Pièges duo</h2>
-            ${tbl(["Piège", "Fix"], [
-              ["128 BPM EDM d’emblée", "Cap ~110 sur la v1"],
-              ["Trop de couches au départ", "Guitare + voix d’abord 20 min"],
-              ["Grille chromatique complexe", "Max 4 accords diatoniques"],
-              ["FR sur tout le titre", "FR = pont / ad-lib seulement"],
+            <h2 class="sec">${t("Pièges duo")}</h2>
+            ${tbl([t("Piège"), t("Fix")], [
+              [t("128 BPM EDM d’emblée"), t("Cap ~110 sur la v1")],
+              [t("Trop de couches au départ"), t("Guitare + voix d’abord 20 min")],
+              [t("Grille chromatique complexe"), t("Max 4 accords diatoniques")],
+              [t("FR sur tout le titre"), t("FR = pont / ad-lib seulement")],
             ])}
           </div>
 
           <div class="subpanel" id="duo-session">
-            <h2 class="sec">Session type — 90 minutes</h2>
-            ${tbl(["Min", "Action", "Qui", "Livrable"], [
-              ["0–10", "Choisir grille + BPM 104", "2", "C–G–Am–F noté"],
-              ["10–25", "Guitare + click + groove", "Bram", "Boucle 8 barres"],
-              ["25–40", "Hum mélodie EN", "2", "2 motifs (V/C)"],
-              ["40–55", "Pad + kick soft + delay", "Rafael", "Lift audible"],
-              ["55–70", "Paroles EN + test FR pont", "2", "8+4 lignes"],
-              ["70–85", "Arrange verse dry / chorus wet", "Rafael", "Diff sections"],
-              ["85–90", "Export rough + notes", "2", "WAV + grille/BPM"],
+            <h2 class="sec">${t("Session type — 90 minutes")}</h2>
+            ${tbl([t("Min"), t("Action"), t("Qui"), t("Livrable")], [
+              ["0–10", t("Choisir grille + BPM 104"), "2", t("C–G–Am–F noté")],
+              ["10–25", t("Guitare + click + groove"), "Bram", t("Boucle 8 barres")],
+              ["25–40", t("Hum mélodie EN"), "2", t("2 motifs (V/C)")],
+              ["40–55", t("Pad + kick soft + delay"), "Rafael", t("Lift audible")],
+              ["55–70", t("Paroles EN + test FR pont"), "2", t("8+4 lignes")],
+              ["70–85", t("Arrange verse dry / chorus wet"), "Rafael", t("Diff sections")],
+              ["85–90", t("Export rough + notes"), "2", t("WAV + grille/BPM")],
             ])}
             <div class="callout ok">
-              <h2>Double test de réussite</h2>
-              <p>1) Sans synth, la chanson tient (Bram). 2) Sans guitare, émotion/prod tient (Rafael). Les deux doivent passer avant de figer.</p>
+              <h2>${t("Double test de réussite")}</h2>
+              <p>${t("1) Sans synth, la chanson tient (Bram). 2) Sans guitare, émotion/prod tient (Rafael). Les deux doivent passer avant de figer.")}</p>
             </div>
           </div>
 
-          <div class="subpanel active" id="duo-concepts">
-            <h2 class="sec">Concepts prêts à composer</h2>
+          <div class="subpanel" id="duo-concepts">
+            <h2 class="sec">${t("Concepts prêts à composer")}</h2>
             <div class="grid-3">
-              <div class="card"><h3>1 — Late light</h3><p><strong>C–G–Am–F · 104 BPM · EN</strong></p><p>Bram fingerstyle C. Rafael pad + clap. Refrain duo.</p><p class="hint">Lyric : « leave the porch light on for me… »</p>${copyBtn("d1", "Duo — Late light\nC–G–Am–F · 104 BPM · EN\nBram fingerstyle C. Rafael pad + clap. Refrain duo.\nLyric : leave the porch light on for me…")}</div>
-              <div class="card"><h3>2 — Warm minor</h3><p><strong>Am–F–C–G · 100 BPM · EN + FR pont</strong></p><p>Plus « Rafael émotion ». Bram Am fingerstyle. Pont FR 4–8 barres.</p><p class="hint">Lyric : « we talk in circles around the quiet… »</p>${copyBtn("d2", "Duo — Warm minor\nAm–F–C–G · 100 BPM · EN + FR pont\nBram Am fingerstyle. Rafael émotion. Pont FR 4–8 barres.\nLyric : we talk in circles around the quiet…")}</div>
-              <div class="card"><h3>3 — Island lift</h3><p><strong>G–Em–C–D · 108 BPM · EN</strong></p><p>Bram island groove. Rafael arpège synth sur Em/C.</p><p class="hint">Lyric : « salt on the window, soft radio… »</p>${copyBtn("d3", "Duo — Island lift\nG–Em–C–D · 108 BPM · EN\nBram island groove. Rafael arpège synth sur Em/C.\nLyric : salt on the window, soft radio…")}</div>
+              <div class="card"><h3>1 — Late light</h3><p><strong>C–G–Am–F · 104 BPM · EN</strong></p><p>${t("Bram fingerstyle C. Rafael pad + clap. Refrain duo.")}</p><p class="hint">Lyric : « leave the porch light on for me… »</p>${copyBtn("d1", t("Duo — Late light\nC–G–Am–F · 104 BPM · EN\nBram fingerstyle C. Rafael pad + clap. Refrain duo.\nLyric : leave the porch light on for me…"))}</div>
+              <div class="card"><h3>2 — Warm minor</h3><p><strong>Am–F–C–G · 100 BPM · EN + FR pont</strong></p><p>${t("Plus « Rafael émotion ». Bram Am fingerstyle. Pont FR 4–8 barres.")}</p><p class="hint">Lyric : « we talk in circles around the quiet… »</p>${copyBtn("d2", t("Duo — Warm minor\nAm–F–C–G · 100 BPM · EN + FR pont\nBram Am fingerstyle. Rafael émotion. Pont FR 4–8 barres.\nLyric : we talk in circles around the quiet…"))}</div>
+              <div class="card"><h3>3 — Island lift</h3><p><strong>G–Em–C–D · 108 BPM · EN</strong></p><p>${t("Bram island groove. Rafael arpège synth sur Em/C.")}</p><p class="hint">Lyric : « salt on the window, soft radio… »</p>${copyBtn("d3", t("Duo — Island lift\nG–Em–C–D · 108 BPM · EN\nBram island groove. Rafael arpège synth sur Em/C.\nLyric : salt on the window, soft radio…"))}</div>
             </div>
-            <h2 class="sec">Recette d’écriture à deux</h2>
-            ${tbl(["Bloc", "Contenu", "Owner"], [
-              ["Titre de travail", "3 mots max", "2"],
-              ["Promesse émotionnelle", "1 phrase", "2"],
-              ["Grille + BPM + key", "ex. C · 104 · C major", "2"],
-              ["Hook 1 ligne", "EN", "Qui a l’idée"],
-              ["Couplet images", "4 lignes concrètes", "Bram draft"],
-              ["Refrain abstract", "4 lignes émotion", "Rafael draft"],
-              ["Pont", "EN ou FR", "Rafael si FR"],
-            ])}
           </div>
         </div>
 
         <footer>
-          Sources : likes YouTube Rafael (726 MP3, librosa) · Spotify Chill Bram (270 titres) · IG = indice composite pondéré (0–100).
+          ${t("Sources : likes YouTube Rafael (726 MP3, librosa) · Spotify Chill Bram (270 titres) · IG = indice composite pondéré (0–100).")}
           <a href="https://github.com/rafa-create/youtube_likes_mp3">repo</a>
         </footer>
       `;
@@ -983,7 +956,7 @@
         paintCharts();
         if (!skipHash) {
           const sub = document.querySelector("#person-" + name + " .subpanel.active")?.id;
-          if (sub) history.replaceState(null, "", "#" + sub);
+          if (sub) history.replaceState(null, "", location.pathname + location.search + "#" + sub);
         }
       }
       function showSub(id, tabGroup, skipHash) {
@@ -992,7 +965,7 @@
         const person = group.closest(".panel");
         person.querySelectorAll(".subpanel").forEach((s) => s.classList.toggle("active", s.id === id));
         paintCharts();
-        if (!skipHash) history.replaceState(null, "", "#" + id);
+        if (!skipHash) history.replaceState(null, "", location.pathname + location.search + "#" + id);
       }
 
       const SUB_TO_PERSON = {
@@ -1031,12 +1004,12 @@
         const person = document.querySelector(".panel.active")?.id;
         const sub = document.querySelector(".panel.active .subpanel.active")?.id;
         if (person === "person-rafael" && sub === "rafael-analyse") {
-          doughnut("rMode", ["Mineur", "Majeur"], [423, 303]);
+          doughnut("rMode", [t("Mineur"), t("Majeur")], [423, 303]);
           bar("rBpm", ["<80", "80–100", "100–120", "120–140", "140+"], [54, 145, 126, 175, 117]);
         }
         if (person === "person-bram" && sub === "bram-analyse") {
-          doughnut("bOrigin", ["US/UK/CA", "NL / Benelux", "DE", "World / autre"], [38, 14, 3, 8]);
-          doughnut("bLang", ["EN (titres US/UK)", "NL", "DE", "FR", "ES / world"], [210, 22, 8, 12, 18]);
+          doughnut("bOrigin", ["US/UK/CA", "NL / Benelux", "DE", t("World / autre")], [38, 14, 3, 8]);
+          doughnut("bLang", [t("EN (titres US/UK)"), "NL", "DE", "FR", "ES / world"], [210, 22, 8, 12, 18]);
         }
         if (person === "person-duo" && sub === "duo-overlap") {
           bar("duoIg", ["Bram", "Duo", "Rafael"], [57, 69, 81]);
@@ -1044,33 +1017,51 @@
         }
       }
       applyHash();
+      if (hashHandler) window.removeEventListener("hashchange", hashHandler);
+      hashHandler = applyHash;
       window.addEventListener("hashchange", applyHash);
       requestAnimationFrame(paintCharts);
     }
 
     document.getElementById("app").addEventListener("click", async (e) => {
+      const langBtn = e.target.closest("[data-set-lang]");
+      if (langBtn) {
+        setLang(langBtn.dataset.setLang);
+        return;
+      }
       const btn = e.target.closest(".copy-btn");
       if (!btn) return;
-      const text = BRIEFS[btn.dataset.brief];
-      if (!text) return;
+      const idle = btn.dataset.idle || t("Copier le brief");
       try {
+        let text;
+        if (btn.dataset.list) {
+          btn.textContent = "…";
+          text = await fetchListText(btn.dataset.list);
+        } else {
+          text = BRIEFS[btn.dataset.brief];
+        }
+        if (!text) return;
         await navigator.clipboard.writeText(text);
-        btn.textContent = "Copié";
+        btn.textContent = t("Copié");
         btn.classList.add("done");
         setTimeout(() => {
-          btn.textContent = "Copier le brief";
+          btn.textContent = idle;
           btn.classList.remove("done");
         }, 1600);
       } catch (_) {
-        btn.textContent = "Échec";
+        btn.textContent = t("Échec");
+        setTimeout(() => { btn.textContent = idle; }, 1600);
       }
     });
 
     loadProfile()
-      .then(render)
+      .then((p) => {
+        profileCache = p;
+        render(p);
+      })
       .catch((e) => {
         document.getElementById("app").innerHTML =
-          `<p class="err">Impossible de charger music_profile.json : ${esc(e.message)}</p>`;
+          `<p class="err">${t("Impossible de charger music_profile.json : ")}${esc(e.message)}</p>`;
       });
   </script>
 </body>
