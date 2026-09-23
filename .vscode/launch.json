@@ -7,7 +7,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/youtube_likes_mp3.py",
       "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "args": ["--once"],
+      "args": [
+        "--once"
+      ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     },
@@ -17,6 +19,31 @@
       "request": "launch",
       "program": "${workspaceFolder}/youtube_likes_mp3.py",
       "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Playlist YouTube MP3 (une fois)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/youtube_likes_mp3.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "args": [
+        "--playlist",
+        "--once"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Playlist YouTube MP3 (boucle)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/youtube_likes_mp3.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "args": [
+        "--playlist"
+      ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     }
