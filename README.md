@@ -2,11 +2,11 @@
 
 <div align="center">
 
-# 🎧 YouTube Likes → MP3
+# 🎧 YouTube Playlists → MP3
 
-### Tes vidéos YouTube « J'aime », directement en MP3.
+### Tes vidéos « J'aime » **ou toute playlist YouTube accessible**, en MP3.
 
-Un petit téléchargeur Python pour récupérer **tes vidéos aimées sur YouTube**, en extraire l'audio et les enregistrer dans un dossier local. Pas de site web, pas de compte à créer sur un service tiers : tout tourne **sur ton PC**.
+Un petit téléchargeur Python pour récupérer **tes vidéos aimées ou une playlist YouTube de ton choix**, en extraire l'audio et les enregistrer dans un dossier local. Pas de site web : tout tourne **sur ton PC**.
 
 **🪟 Windows** · **🐍 Python 3.12** · **💻 VS Code** · **🎵 MP3**
 
@@ -14,17 +14,17 @@ Un petit téléchargeur Python pour récupérer **tes vidéos aimées sur YouTub
 
 **Salut Rémy 👋** Ce guide est pour toi. Suis les étapes dans l'ordre : une fois la configuration faite, tu pourras relancer le programme en un clic.
 
-[Installation](#-1--préparer-ton-pc) · [Cookies YouTube](#-3--récupérer-ton-fichier-cookiestxt) · [Lancement](#-4--lancer-le-téléchargement) · [Dépannage](#-en-cas-de-problème)
+[Installation](#-1--préparer-ton-pc) · [Cookies YouTube](#-3--récupérer-ton-fichier-cookiestxt) · [Lancement et playlists](#-4--lancer-le-téléchargement) · [Dépannage](#-en-cas-de-problème)
 
 </div>
 
 > [!IMPORTANT]
-> Ce projet est prévu **pour Windows** : le lanceur `run.bat`, le chemin de Python et la détection de FFmpeg sont conçus pour cet environnement. Le programme télécharge les **vidéos que ton propre compte YouTube a aimées**, pas une playlist publique choisie à la main. N'utilise le téléchargement que pour les contenus dont tu as le droit de faire une copie.
+> Ce projet est prévu **pour Windows** : le lanceur `run.bat`, le chemin de Python et la détection de FFmpeg sont conçus pour cet environnement. Il télécharge tes vidéos « J'aime » **ou une playlist YouTube publique / privée à laquelle ton compte a accès**. N'utilise le téléchargement que pour les contenus dont tu as le droit de faire une copie.
 
 ## ✨ Ce que fait le programme
 
 ```text
-Tes vidéos « J'aime » sur YouTube
+Tes vidéos « J'aime » OU une playlist YouTube
                 │
                 ▼
        yt-dlp récupère l'audio
@@ -37,8 +37,8 @@ Tes vidéos « J'aime » sur YouTube
 ```
 
 - Enregistre les fichiers dans le dossier **`mp3/`** du projet, en **MP3 à 192 kb/s** (qualité demandée au convertisseur, sans améliorer artificiellement la source).
-- Garde la trace des vidéos déjà traitées dans **`downloaded.txt`**, pour éviter de tout retélécharger à chaque fois.
-- Peut faire **un seul passage** ou revérifier tes « J'aime » **toutes les 5 minutes**.
+- Garde la trace des vidéos déjà traitées dans **`downloaded.txt`**, pour éviter de tout retélécharger à chaque fois, **même si elles apparaissent dans plusieurs playlists**. Tous les MP3 vont dans le même dossier `mp3/`.
+- Peut faire **un seul passage** ou revérifier la playlist choisie **toutes les 5 minutes**.
 - Le dossier `mp3/`, le fichier `cookies.txt` et l'archive `downloaded.txt` sont ignorés par Git : ils restent sur ton PC.
 
 ## 🧰 1 — Préparer ton PC
@@ -109,7 +109,7 @@ Dans VS Code, fais **Ctrl + Maj + P → Python: Select Interpreter** et choisis 
 
 ## 🍪 3 — Récupérer ton fichier `cookies.txt`
 
-Pour lire ta liste privée de vidéos « J'aime », le programme doit être connecté **à ton propre compte YouTube**. On utilise pour cela un **fichier texte exporté depuis ton navigateur**, pas un dossier à copier depuis Windows.
+Pour lire ta liste privée de vidéos « J'aime » ou une **playlist privée accessible par ton compte**, le programme doit être connecté **à ton propre compte YouTube**. On utilise pour cela un **fichier texte exporté depuis ton navigateur**, pas un dossier à copier depuis Windows. **Pour une playlist publique, tu peux ignorer cette étape si tu n'as pas de `cookies.txt`.**
 
 ### Option recommandée : exporter uniquement les cookies YouTube
 
@@ -152,28 +152,48 @@ Guide de référence : [yt-dlp — Exporting YouTube cookies](https://github.com
 
 ### Mode simple : double-clic
 
-Dans l'explorateur Windows, ouvre le dossier du projet et **double-clique sur `run.bat`**.
+Dans l'explorateur Windows, ouvre le dossier du projet et **double-clique sur `run.bat`**. Le programme te propose ce menu :
 
-Le script démarre, vérifie ta liste « J'aime », télécharge les nouveaux audios et recommence **toutes les 5 minutes**. Pour l'arrêter, ferme la fenêtre ou utilise **Ctrl + C** dans son terminal.
+| Choix | Action |
+| :---: | :--- |
+| **1** | Télécharger tes vidéos « J'aime » et revérifier toutes les 5 minutes. |
+| **2** | **Télécharger une playlist YouTube au choix, une seule fois.** |
+| **3** | Télécharger une playlist YouTube au choix et revérifier toutes les 5 minutes. |
+
+Pour les choix **2** et **3**, colle simplement l'URL de la playlist quand le terminal te la demande, puis appuie sur **Entrée**. Pour arrêter le mode continu, ferme la fenêtre ou utilise **Ctrl + C** dans son terminal.
 
 ### Depuis le terminal de VS Code
 
-**Un seul passage** — pratique pour vérifier que tout fonctionne :
+**Un seul passage sur tes « J'aime »** :
 
 ```powershell
 .\.venv\Scripts\python.exe youtube_likes_mp3.py --once
 ```
 
-**Surveillance continue** — nouvelle vérification toutes les 5 minutes :
+**Surveillance continue de tes « J'aime »** — nouvelle vérification toutes les 5 minutes :
 
 ```powershell
 .\.venv\Scripts\python.exe youtube_likes_mp3.py
 ```
 
-Tu peux aussi ouvrir l'onglet **Exécuter et déboguer** dans VS Code et choisir **« YouTube Likes MP3 (une fois) »** ou **« YouTube Likes MP3 (boucle) »**.
+**Une playlist de ton choix, une seule fois** — remplace l'URL par la tienne (les guillemets protègent le `&` éventuel dans le lien) :
+
+```powershell
+.\.venv\Scripts\python.exe youtube_likes_mp3.py --playlist "https://www.youtube.com/playlist?list=PL..." --once
+```
+
+Tu peux également demander au programme de te poser la question dans le terminal :
+
+```powershell
+.\.venv\Scripts\python.exe youtube_likes_mp3.py --playlist --once
+```
+
+Pour **revérifier cette playlist toutes les 5 minutes**, utilise `--playlist "URL"` sans `--once`. Le script accepte les liens de la forme `youtube.com/playlist?list=...` et les liens de vidéo YouTube qui contiennent `&list=...` : il téléchargera la **playlist**, pas uniquement la vidéo. Les liens Spotify, Deezer et les URL de vidéo sans paramètre `list` ne sont pas acceptés.
+
+Dans l'onglet **Exécuter et déboguer** de VS Code, tu trouveras également **« Playlist YouTube MP3 (une fois) »** et **« Playlist YouTube MP3 (boucle) »** : colle le lien dans le terminal après avoir lancé la configuration.
 
 > [!TIP]
-> Les MP3 apparaissent progressivement dans **`mp3/`**. Le programme conserve un fichier `downloaded.txt` : ne le supprime pas si tu veux éviter de retélécharger les vidéos déjà traitées. Les vidéos supprimées, privées ou indisponibles peuvent être ignorées avec un message d'erreur.
+> Les MP3 apparaissent progressivement dans **`mp3/`**. Le programme conserve un fichier `downloaded.txt` **commun à toutes les playlists** : ne le supprime pas si tu veux éviter de retélécharger les vidéos déjà traitées. Une vidéo déjà récupérée depuis tes « J'aime » sera ignorée dans une autre playlist. Les vidéos supprimées, privées ou indisponibles peuvent être ignorées avec un message d'erreur.
 
 ## 🧯 En cas de problème
 
@@ -182,7 +202,8 @@ Tu peux aussi ouvrir l'onglet **Exécuter et déboguer** dans VS Code et choisir
 | `py -3.12` introuvable | Installe **Python 3.12 pour Windows** et rouvre VS Code. Vérifie avec `py -3.12 --version`. |
 | `Python du venv introuvable` | Reviens à l'étape 2 : `py -3.12 -m venv .venv`. |
 | `No module named yt_dlp` | Réinstalle-le avec `.\.venv\Scripts\python.exe -m pip install --upgrade "yt-dlp[default]"`. |
-| `cookies.txt` manquant | Vérifie le **nom exact** et l'emplacement du fichier à côté du script. |
+| `cookies.txt` manquant pour les « J'aime » | Vérifie le **nom exact** et l'emplacement du fichier à côté du script. Une playlist **publique** peut se télécharger sans cookies. |
+| Lien de playlist invalide | Copie un lien **YouTube** contenant `list=...` ; si tu le passes en argument PowerShell, entoure-le de guillemets. |
 | Connexion YouTube refusée / cookies invalides | Exporte à nouveau les cookies **de ton propre compte** ; consulte la méthode de navigation privée ci-dessus. |
 | `ffmpeg introuvable` | Installe-le avec `winget install --id Gyan.FFmpeg -e` et relance VS Code. |
 | Erreur JavaScript / `node` introuvable | Installe **Node.js LTS**, rouvre VS Code puis teste `node --version`. |
