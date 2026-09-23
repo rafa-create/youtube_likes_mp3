@@ -111,10 +111,27 @@ Dans VS Code, fais **Ctrl + Maj + P → Python: Select Interpreter** et choisis 
 
 Pour lire ta liste privée de vidéos « J'aime » ou une **playlist privée accessible par ton compte**, le programme doit être connecté **à ton propre compte YouTube**. On utilise pour cela un **fichier texte exporté depuis ton navigateur**, pas un dossier à copier depuis Windows. **Pour une playlist publique, tu peux ignorer cette étape si tu n'as pas de `cookies.txt`.**
 
+### 🔐 Rémy, faut-il des cookies pour ta playlist ?
+
+| Ce que tu souhaites télécharger | Fichier `cookies.txt` ? |
+| :--- | :--- |
+| **Playlist publique** (visible par tous) | **Non, en général.** Tu peux simplement coller son URL. |
+| **Playlist non répertoriée** (accessible par son lien) | **Généralement non**, si son lien donne accès aux vidéos. |
+| **Ta playlist privée** | **Oui.** Exporte les cookies du compte YouTube qui peut voir cette playlist. |
+| **Tes vidéos « J'aime »** | **Oui.** Elles sont liées à ton compte YouTube. |
+| **Une vidéo privée dans une playlist** | **Oui, et uniquement si ton compte a le droit de voir cette vidéo.** |
+
+> [!IMPORTANT]
+> **La confidentialité de la playlist et celle de chaque vidéo sont deux choses différentes.** Même si tu connais l'URL de la playlist, les cookies ne donnent pas accès aux vidéos privées d'un autre compte sans autorisation. Une vidéo supprimée ou inaccessible ne pourra pas être téléchargée.
+
+**Pour toi, Rémy :** si tes musiques sont dans **ta playlist privée**, connecte-toi à **ton propre compte YouTube** dans le navigateur, suis les étapes d'export ci-dessous, puis dépose `cookies.txt` à côté de `youtube_likes_mp3.py`. Lance `run.bat`, choisis **2** (un téléchargement) ou **3** (vérification toutes les 5 minutes), puis colle le lien de ta playlist.
+
+Le script détecte automatiquement `cookies.txt` lorsqu'il existe. **Tu n'as rien d'autre à configurer.** Pour une playlist publique, le fichier n'est pas obligatoire.
+
 ### Option recommandée : exporter uniquement les cookies YouTube
 
 1. Dans **Chrome, Brave ou Edge**, installe l'extension **[Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)**. Vérifie soigneusement son nom : **« LOCALLY »** fait partie du nom de l'extension recommandée.
-2. Ouvre [youtube.com](https://www.youtube.com/) et connecte-toi au compte dont tu veux récupérer les vidéos « J'aime ».
+2. Ouvre [youtube.com](https://www.youtube.com/) et connecte-toi au compte dont tu veux récupérer les vidéos « J'aime » **ou qui a accès à ta playlist privée**.
 3. Depuis un onglet **YouTube**, ouvre l'extension et choisis l'exportation des cookies **du site courant uniquement**, au format **Netscape / cookies.txt** (l'intitulé exact dépend de la version de l'extension). N'exporte pas les cookies de tous tes sites.
 4. Dans les téléchargements de ton navigateur, récupère le fichier `.txt` exporté. Renomme-le **`cookies.txt`** — vérifie qu'il ne s'appelle pas `cookies.txt.txt`.
 5. Place ce fichier **à la racine du projet**, juste à côté de `youtube_likes_mp3.py`.
